@@ -1,0 +1,28 @@
+{
+  "summary": "Describe the AI-assisted change in one or two sentences.",
+  "commands": [
+    {
+      "command": "command that was run",
+      "result": "passed"
+    }
+  ],
+  "files_touched": [
+    "path/to/changed-file.ext"
+  ],
+  "tests": [
+    {
+      "name": "name of validation check",
+      "status": "passed"
+    }
+  ],
+  "risks": [
+    "none"
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "reviewer-name"
+  },
+  "public_safety": {
+    "private_data_reviewed": true
+  }
+}

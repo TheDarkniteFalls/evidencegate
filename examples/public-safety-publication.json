@@ -1,0 +1,46 @@
+{
+  "summary": "Prepared a public-safe README and template update after checking synthetic fixtures and repository safety gates.",
+  "commands": [
+    {
+      "command": "python3 ../scripts/publicctl.py prepush .",
+      "result": "passed"
+    },
+    {
+      "command": "gitleaks detect --source . --redact",
+      "result": "passed"
+    },
+    {
+      "command": "python3 evidencegate.py examples/public-safety-publication.json",
+      "result": "passed"
+    }
+  ],
+  "files_touched": [
+    "README.md",
+    "SECURITY.md",
+    "templates/public-fixture.json"
+  ],
+  "tests": [
+    {
+      "name": "publication prepush gate",
+      "status": "passed"
+    },
+    {
+      "name": "secret scan",
+      "status": "passed"
+    },
+    {
+      "name": "EvidenceGate fixture validation",
+      "status": "passed"
+    }
+  ],
+  "risks": [
+    "Future examples using real data still require manual privacy review before publication."
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "maintainer"
+  },
+  "public_safety": {
+    "private_data_reviewed": true
+  }
+}

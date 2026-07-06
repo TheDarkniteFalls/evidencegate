@@ -1,0 +1,38 @@
+{
+  "summary": "Fixed an AI-assisted browser route regression by replacing brittle text matching with structural Playwright assertions.",
+  "commands": [
+    {
+      "command": "npx playwright test tests/browser-route.spec.ts",
+      "result": "passed"
+    },
+    {
+      "command": "python3 evidencegate.py examples/browser-qa-regression.json",
+      "result": "passed"
+    }
+  ],
+  "files_touched": [
+    "tests/browser-route.spec.ts",
+    "src/ui/route-view.ts",
+    "README.md"
+  ],
+  "tests": [
+    {
+      "name": "browser route regression test",
+      "status": "passed"
+    },
+    {
+      "name": "EvidenceGate fixture validation",
+      "status": "passed"
+    }
+  ],
+  "risks": [
+    "Viewport and browser coverage was limited to the configured Playwright project set."
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "maintainer"
+  },
+  "public_safety": {
+    "private_data_reviewed": true
+  }
+}

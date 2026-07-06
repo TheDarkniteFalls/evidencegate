@@ -1,0 +1,47 @@
+{
+  "summary": "Fixed a CLI export-path bug and added a regression check using synthetic fixtures only.",
+  "commands": [
+    {
+      "command": "python3 -m pytest tests/test_export_paths.py",
+      "result": "passed"
+    },
+    {
+      "command": "python3 docs_export.py --input examples/demo-project --out /tmp/docs-export",
+      "result": "passed"
+    },
+    {
+      "command": "python3 evidencegate.py examples/python-cli-bugfix.json",
+      "result": "passed"
+    }
+  ],
+  "files_touched": [
+    "docs_export.py",
+    "tests/test_export_paths.py",
+    "examples/demo-project/config.json",
+    "CHANGELOG.md"
+  ],
+  "tests": [
+    {
+      "name": "export path regression test",
+      "status": "passed"
+    },
+    {
+      "name": "synthetic demo export smoke test",
+      "status": "passed"
+    },
+    {
+      "name": "EvidenceGate fixture validation",
+      "status": "passed"
+    }
+  ],
+  "risks": [
+    "Windows path handling was reviewed through pathlib cases but not run on a Windows host."
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "maintainer"
+  },
+  "public_safety": {
+    "private_data_reviewed": true
+  }
+}

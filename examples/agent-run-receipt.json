@@ -1,0 +1,39 @@
+{
+  "summary": "Added Agent Run Receipt templates and documentation to EvidenceGate using synthetic examples only.",
+  "commands": [
+    {
+      "command": "python3 evidencegate.py examples/agent-run-receipt.json",
+      "result": "passed"
+    },
+    {
+      "command": "python3 evidencegate.py --self-test",
+      "result": "passed"
+    }
+  ],
+  "files_touched": [
+    "README.md",
+    "docs/review-checklist.md",
+    "examples/agent-run-receipt.json",
+    "templates/agent-run-receipt.template.json"
+  ],
+  "tests": [
+    {
+      "name": "receipt fixture validates",
+      "status": "passed"
+    },
+    {
+      "name": "self-test",
+      "status": "passed"
+    }
+  ],
+  "risks": [
+    "none"
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "maintainer"
+  },
+  "public_safety": {
+    "private_data_reviewed": true
+  }
+}

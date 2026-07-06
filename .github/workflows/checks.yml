@@ -14,4 +14,8 @@ jobs:
           python-version: "3.x"
       - run: python3 evidencegate.py --self-test
       - run: python3 evidencegate.py examples/good-run.json
+      - run: python3 evidencegate.py examples/agent-run-receipt.json
+      - run: python3 evidencegate.py examples/python-cli-bugfix.json
+      - run: python3 evidencegate.py examples/browser-qa-regression.json
+      - run: python3 evidencegate.py examples/public-safety-publication.json
       - run: python3 -m py_compile evidencegate.py

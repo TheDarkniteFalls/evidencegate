@@ -16,6 +16,10 @@ checks, risks, human approval, and public-safety review.
 
 ```sh
 python3 evidencegate.py examples/good-run.json
+python3 evidencegate.py examples/agent-run-receipt.json
+python3 evidencegate.py examples/python-cli-bugfix.json
+python3 evidencegate.py examples/browser-qa-regression.json
+python3 evidencegate.py examples/public-safety-publication.json
 python3 evidencegate.py --self-test
 ```
 
@@ -24,6 +28,22 @@ Expected result:
 ```text
 PASS EvidenceGate
 ```
+
+## Agent Run Receipts
+
+Use an Agent Run Receipt after an AI-assisted coding session to leave a compact
+review trail:
+
+- `templates/agent-run-receipt.template.json` is a copyable starting point.
+- `examples/agent-run-receipt.json` is a valid filled example.
+- `examples/python-cli-bugfix.json` is a more realistic bug-fix receipt.
+- `examples/browser-qa-regression.json` shows a browser QA regression receipt.
+- `examples/public-safety-publication.json` shows a public-safe publication receipt.
+- `docs/review-checklist.md` is the human review checklist.
+
+The receipt is intentionally boring: what changed, which commands ran, which
+files changed, which checks passed, what risks remain, who reviewed it, and
+whether public-safety review happened.
 
 ## Packet Shape
 
@@ -47,5 +67,9 @@ compact receipt before trusting an agent-assisted change.
 ```sh
 python3 evidencegate.py --self-test
 python3 evidencegate.py examples/good-run.json
+python3 evidencegate.py examples/agent-run-receipt.json
+python3 evidencegate.py examples/python-cli-bugfix.json
+python3 evidencegate.py examples/browser-qa-regression.json
+python3 evidencegate.py examples/public-safety-publication.json
 python3 -m py_compile evidencegate.py
 ```
