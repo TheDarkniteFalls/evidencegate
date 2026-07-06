@@ -1,0 +1,38 @@
+{
+  "summary": "Added a synthetic local-model validation demo with no private data.",
+  "commands": [
+    {
+      "command": "python3 reliability_demo.py --self-test",
+      "result": "passed"
+    },
+    {
+      "command": "python3 reliability_demo.py examples/model_outputs.jsonl",
+      "result": "passed"
+    }
+  ],
+  "files_touched": [
+    "README.md",
+    "reliability_demo.py",
+    "examples/model_outputs.jsonl"
+  ],
+  "tests": [
+    {
+      "name": "self-test",
+      "status": "passed"
+    },
+    {
+      "name": "sample fixture validation",
+      "status": "passed"
+    }
+  ],
+  "risks": [
+    "none"
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "maintainer"
+  },
+  "public_safety": {
+    "private_data_reviewed": true
+  }
+}
