@@ -45,6 +45,18 @@ The receipt is intentionally boring: what changed, which commands ran, which
 files changed, which checks passed, what risks remain, who reviewed it, and
 whether public-safety review happened.
 
+## How These Fit Together
+
+EvidenceGate is one piece of a small public toolkit:
+
+- [Public Repo Safety Kit](https://github.com/TheDarkniteFalls/public-repo-safety-kit)
+  checks a public-candidate repo before publishing.
+- EvidenceGate records the evidence and checks behind an AI-assisted change.
+- [Local Model Reliability Example](https://github.com/TheDarkniteFalls/local-model-reliability-example)
+  validates structured model output before trusting it.
+- [Context Boundary Examples](https://github.com/TheDarkniteFalls/context-boundary-examples)
+  checks whether an answer stays inside supplied evidence.
+
 ## Packet Shape
 
 A packet is intentionally small:
