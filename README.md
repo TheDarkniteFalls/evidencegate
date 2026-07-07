@@ -56,6 +56,8 @@ EvidenceGate is one piece of a small public toolkit:
   validates structured model output before trusting it.
 - [Context Boundary Examples](https://github.com/TheDarkniteFalls/context-boundary-examples)
   checks whether an answer stays inside supplied evidence.
+- [Green-Spine QA Pattern](https://github.com/TheDarkniteFalls/green-spine-qa-pattern)
+  bundles the important path behind one repeatable command.
 
 ## Packet Shape
 
