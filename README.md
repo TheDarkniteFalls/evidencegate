@@ -1,16 +1,19 @@
 # EvidenceGate
 
-A tiny CLI for checking whether an AI-assisted run has enough evidence for a
-human reviewer.
+AI-assisted work should leave a receipt.
 
-It validates a JSON packet that lists what was run, which files changed, what
-checks passed, what risks remain, and whether a human has approved the result.
+EvidenceGate is a small public pattern for human-reviewed agent work. A receipt
+records what changed, what was checked, what remains risky, and who approved it.
+
+The included Python CLI is deliberately tiny: it validates one JSON receipt
+shape so maintainers, solo builders, agent-framework authors, and AI coding
+agent users can try the pattern before adapting it.
 
 ## Why It Exists
 
-AI-assisted work should leave a receipt. EvidenceGate is a small pattern for
-turning an agent run into something a maintainer can review: commands, files,
-checks, risks, human approval, and public-safety review.
+Agent-assisted changes are easier to trust when the evidence is reviewable. A
+receipt puts commands, files, checks, risks, human approval, and public-safety
+review in one compact record.
 
 ## Run
 
@@ -76,8 +79,9 @@ A packet is intentionally small:
 
 ## Scope
 
-This is a minimal pattern, not a platform. It is useful when a reviewer needs a
-compact receipt before trusting an agent-assisted change.
+This is a minimal pattern, not a platform or an autonomous approval system. It
+is useful when a reviewer needs a compact receipt before trusting an
+agent-assisted change. Examples in this repo are synthetic.
 
 ## Quality Checks
 
