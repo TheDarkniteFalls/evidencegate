@@ -12,6 +12,33 @@ a receipt or make publication decisions.
 
 ## Quick Start
 
+Run the complete v1 lifecycle against a temporary synthetic Git repository:
+
+```sh
+python3 -B examples/run-v1-reference.py
+```
+
+Expected result:
+
+```text
+PASS focused_check
+PASS receipt_structure
+PASS repository_verification
+PASS stale_head_rejected
+PASS omitted_path_rejected
+PASS protected_path_rejected
+PASS v1_reference_run
+```
+
+The reference run creates real base and head commits, runs a focused check,
+writes a detached receipt outside the synthetic repository, verifies it, and
+then proves that three known-bad variants fail. It uses no model or network and
+deletes the temporary files afterward. Human and public-safety decisions are
+prominently labelled as simulated; the passing demo does not authenticate
+them.
+
+## Validate And Render A Static Receipt
+
 Validate the v1 shape and its internal evidence references:
 
 ```sh
@@ -44,9 +71,9 @@ Expected result for a review-ready receipt that matches the checkout:
 PASS EvidenceGate v1 repository verification
 ```
 
-The checked-in v1 examples use obviously synthetic SHAs, so they demonstrate
-`validate` and `render`; the automated tests create temporary Git repositories
-to exercise `verify --repo` end to end.
+The checked-in JSON examples use obviously synthetic SHAs, so they demonstrate
+`validate` and `render`; the reference run demonstrates `verify --repo` end to
+end with actual temporary commits.
 
 ## Three Operations
 
@@ -174,6 +201,7 @@ All checked-in examples are synthetic.
 ```sh
 python3 -B evidencegate.py --self-test
 python3 -B -m unittest discover -s tests -v
+python3 -B examples/run-v1-reference.py
 python3 -B evidencegate.py validate examples/v1-review-ready.json
 python3 -B evidencegate.py render examples/v1-review-ready.json
 python3 -B evidencegate.py examples/good-run.json
