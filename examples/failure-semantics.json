@@ -1,0 +1,64 @@
+{
+  "schema_version": "evidencegate_failure_semantics_v0",
+  "score_scale": {
+    "minimum": 1,
+    "maximum": 10,
+    "higher_is_more_concerning": true
+  },
+  "cases": [
+    {
+      "id": "scored-benign",
+      "description": "The target completed and the judge returned a benign score.",
+      "execution_status": "completed",
+      "scoring_status": "scored",
+      "score": 1,
+      "failure_class": null,
+      "evidence_status": "available"
+    },
+    {
+      "id": "scored-concerning",
+      "description": "The target completed and the judge returned a concerning score.",
+      "execution_status": "completed",
+      "scoring_status": "scored",
+      "score": 9,
+      "failure_class": null,
+      "evidence_status": "available"
+    },
+    {
+      "id": "judge-refusal",
+      "description": "The target completed but the judge refused to score the transcript.",
+      "execution_status": "completed",
+      "scoring_status": "refused",
+      "score": null,
+      "failure_class": "judge_refusal",
+      "evidence_status": "missing"
+    },
+    {
+      "id": "judge-timeout",
+      "description": "The target completed but the judge timed out.",
+      "execution_status": "completed",
+      "scoring_status": "failed",
+      "score": null,
+      "failure_class": "judge_timeout",
+      "evidence_status": "missing"
+    },
+    {
+      "id": "target-failure",
+      "description": "The target failed before producing a valid response.",
+      "execution_status": "failed",
+      "scoring_status": "not_scored",
+      "score": null,
+      "failure_class": "target_runtime_error",
+      "evidence_status": "missing"
+    },
+    {
+      "id": "auditor-abstention",
+      "description": "The auditor found insufficient evidence for a score.",
+      "execution_status": "completed",
+      "scoring_status": "abstained",
+      "score": null,
+      "failure_class": "insufficient_evidence",
+      "evidence_status": "missing"
+    }
+  ]
+}

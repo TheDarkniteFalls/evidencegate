@@ -122,6 +122,25 @@ Negative fixtures make important failures visible:
 - [not review-ready](examples/v1-not-review-ready.json) preserves a failed
   required check, requested changes, and pending public-safety review.
 
+## Failure Semantics Research Slice
+
+[Missing Evidence Is Not Safety](docs/missing-evidence-is-not-safety.md) is a
+small companion experiment for agent-audit maintainers. It separates target
+execution, evaluator scoring, and evidence availability so that refusals,
+timeouts, failed target runs, and abstentions cannot silently become evidence
+of safety.
+
+Run its six synthetic cases with:
+
+```sh
+python3 -B examples/check_failure_semantics.py
+```
+
+The checker reports scoring coverage, explicit status and failure-class counts,
+the observed mean over scored cases, and best/worst-case sensitivity bounds. It
+is an experimental public pattern, not a change to the EvidenceGate v1 receipt
+schema.
+
 ## Legacy Receipts
 
 The original examples and
@@ -202,6 +221,7 @@ All checked-in examples are synthetic.
 python3 -B evidencegate.py --self-test
 python3 -B -m unittest discover -s tests -v
 python3 -B examples/run-v1-reference.py
+python3 -B examples/check_failure_semantics.py
 python3 -B evidencegate.py validate examples/v1-review-ready.json
 python3 -B evidencegate.py render examples/v1-review-ready.json
 python3 -B evidencegate.py examples/good-run.json
