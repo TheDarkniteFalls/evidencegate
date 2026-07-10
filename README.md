@@ -15,6 +15,10 @@ Agent-assisted changes are easier to trust when the evidence is reviewable. A
 receipt puts commands, files, checks, risks, human approval, and public-safety
 review in one compact record.
 
+Read [Why AI-Assisted Work Should Leave a Receipt](docs/why-receipts.md) for a
+practical good-versus-incomplete comparison, a copyable workflow, and the
+limits of structural validation.
+
 ## Run
 
 ```sh
@@ -42,6 +46,8 @@ review trail:
 - `examples/python-cli-bugfix.json` is a more realistic bug-fix receipt.
 - `examples/browser-qa-regression.json` shows a browser QA regression receipt.
 - `examples/public-safety-publication.json` shows a public-safe publication receipt.
+- `examples/incomplete-agent-run.json` is a deliberately incomplete receipt
+  covered as an expected failure by the self-test.
 - `docs/review-checklist.md` is the human review checklist.
 
 The receipt is intentionally boring: what changed, which commands ran, which

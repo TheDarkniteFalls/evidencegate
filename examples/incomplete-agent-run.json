@@ -1,0 +1,29 @@
+{
+  "summary": "Prepared an AI-assisted export-path fix, but focused verification and review are still pending.",
+  "commands": [
+    {
+      "command": "python3 -m py_compile docs_export.py",
+      "result": "passed"
+    }
+  ],
+  "files_touched": [
+    "docs_export.py",
+    "tests/test_export_paths.py"
+  ],
+  "tests": [
+    {
+      "name": "export path regression test",
+      "status": "not_run"
+    }
+  ],
+  "risks": [
+    "The focused regression test has not run, so the export-path behavior remains unverified."
+  ],
+  "human_review": {
+    "status": "pending",
+    "reviewer": ""
+  },
+  "public_safety": {
+    "private_data_reviewed": false
+  }
+}

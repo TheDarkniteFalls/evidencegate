@@ -80,6 +80,16 @@ def self_test() -> None:
     assert validate_packet(good) == []
     assert validate_packet(bad)
 
+    incomplete_path = (
+        Path(__file__).resolve().parent / "examples" / "incomplete-agent-run.json"
+    )
+    incomplete_errors = set(validate_packet(load_packet(incomplete_path)))
+    assert {
+        "tests[1] must name a passed check",
+        "human_review.status must be approved",
+        "public_safety.private_data_reviewed must be true",
+    } <= incomplete_errors
+
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
