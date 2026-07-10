@@ -8,7 +8,7 @@
     },
     {
       "id": "duplicate-key-rejected",
-      "receipt": "invalid-duplicate-key.json",
+      "receipt": "invalid-duplicate-field.json",
       "expected": "load_error",
       "contains": "duplicate JSON object key: schema_version"
     },

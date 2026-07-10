@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
 import evidencegate  # noqa: E402
-from attestation_profile import (  # noqa: E402
+from attestation_contract import (  # noqa: E402
     PREDICATE_TYPE,
     PROFILE,
     RECEIPT_MEDIA_TYPE,

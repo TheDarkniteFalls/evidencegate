@@ -54,7 +54,7 @@ jobs:
           examples/run-v1-reference.py
           examples/check_failure_semantics.py
           tools/check_conformance.py
-          tools/attestation_profile.py
+          tools/attestation_contract.py
           tools/create_attestation_statement.py
           tools/check_attestation_conformance.py
           tools/prepare_reviewer_study.py
@@ -63,7 +63,7 @@ jobs:
           tools/check_remarkable_candidate.py
           tests/test_evidencegate.py
           tests/test_conformance.py
-          tests/test_attestation_profile.py
+          tests/test_attestation_contract.py
           tests/test_reference_run.py
           tests/test_failure_semantics.py
           tests/test_reviewer_study.py

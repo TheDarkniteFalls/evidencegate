@@ -19,7 +19,7 @@ SCHEMA = ROOT / "schemas" / "evidencegate-attestation-v0.schema.json"
 CHECKER = ROOT / "tools" / "check_attestation_conformance.py"
 sys.path.insert(0, str(ROOT / "tools"))
 
-import attestation_profile  # noqa: E402
+import attestation_contract  # noqa: E402
 from create_attestation_statement import create_statement  # noqa: E402
 
 
@@ -27,14 +27,14 @@ class AttestationProfileTests(unittest.TestCase):
     def test_schema_fields_match_runtime_profile(self) -> None:
         schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
 
-        self.assertEqual(set(schema["properties"]), attestation_profile.TOP_FIELDS)
+        self.assertEqual(set(schema["properties"]), attestation_contract.TOP_FIELDS)
         predicate = schema["properties"]["predicate"]
         self.assertEqual(
-            set(predicate["properties"]), attestation_profile.PREDICATE_FIELDS
+            set(predicate["properties"]), attestation_contract.PREDICATE_FIELDS
         )
         self.assertEqual(
             set(predicate["properties"]["receipt"]["properties"]),
-            attestation_profile.RECEIPT_FIELDS,
+            attestation_contract.RECEIPT_FIELDS,
         )
 
     @unittest.skipIf(Draft202012Validator is None, "install .[test] for meta-validation")
@@ -81,7 +81,7 @@ class AttestationProfileTests(unittest.TestCase):
         )
 
         self.assertEqual(
-            attestation_profile.validate_attestation(
+            attestation_contract.validate_attestation(
                 statement,
                 receipt,
                 expected_subject=subject,
@@ -121,7 +121,7 @@ class AttestationProfileTests(unittest.TestCase):
             self.assertIn("UNAUTHENTICATED", result.stdout)
             self.assertEqual(
                 json.loads(output.read_text(encoding="utf-8"))["_type"],
-                attestation_profile.STATEMENT_TYPE,
+                attestation_contract.STATEMENT_TYPE,
             )
 
 

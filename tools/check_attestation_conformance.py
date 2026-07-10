@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "attestation" / "v0"
 sys.path.insert(0, str(ROOT / "tools"))
 
-from attestation_profile import validate_attestation  # noqa: E402
+from attestation_contract import validate_attestation  # noqa: E402
 
 sys.path.insert(0, str(ROOT))
 import evidencegate  # noqa: E402

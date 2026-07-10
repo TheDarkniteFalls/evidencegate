@@ -39,7 +39,7 @@ verify a standard envelope.
 Check the valid fixture directly at its deterministic policy time:
 
 ```sh
-python3 -B tools/attestation_profile.py \
+python3 -B tools/attestation_contract.py \
   attestation/v0/valid-unsigned.json \
   conformance/v1/valid-minimal.json \
   --expected-subject git+https://github.com/TheDarkniteFalls/evidencegate \
