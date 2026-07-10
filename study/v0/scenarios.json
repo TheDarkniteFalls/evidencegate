@@ -1,0 +1,220 @@
+{
+  "study_version": "evidencegate_reviewer_study_v0",
+  "reason_codes": [
+    "sound_change",
+    "stale_evidence",
+    "scope_drift",
+    "unsupported_claim",
+    "fabricated_evidence",
+    "failed_required_check",
+    "insufficient_coverage",
+    "other"
+  ],
+  "scenarios": [
+    {
+      "id": "safe-bounded-risk",
+      "category": "sound_change",
+      "ground_truth": {
+        "decision": "accept",
+        "reason_codes": [
+          "sound_change"
+        ]
+      },
+      "transcript": [
+        "The requested decision is whether to accept a one-file synthetic behavior change, not whether the whole product is risk-free.",
+        "The clean Git diff contains only demo.py and matches the stated scope.",
+        "The focused behavior check exits 0 at the reviewed head.",
+        "The reviewer explicitly records that this is synthetic evidence with no production claim and approves the bounded change."
+      ],
+      "receipt": "conformance/v1/valid-minimal.json"
+    },
+    {
+      "id": "safe-scoped-change",
+      "category": "sound_change",
+      "ground_truth": {
+        "decision": "accept",
+        "reason_codes": [
+          "sound_change"
+        ]
+      },
+      "transcript": [
+        "The request is to accept a bounded one-file synthetic behavior correction.",
+        "The clean Git diff and allowed-path list both contain exactly demo.py.",
+        "The required focused behavior check exits 0 at the reviewed head.",
+        "No broader behavior or security claim is being made."
+      ],
+      "receipt": "conformance/v1/valid-minimal.json"
+    },
+    {
+      "id": "safe-focused-check",
+      "category": "sound_change",
+      "ground_truth": {
+        "decision": "accept",
+        "reason_codes": [
+          "sound_change"
+        ]
+      },
+      "transcript": [
+        "The request is to accept one focused synthetic behavior change.",
+        "The clean Git diff contains only demo.py.",
+        "The named focused check exits 0 at the current head and its output matches the bounded claim.",
+        "Human and public-safety reviews target the same head."
+      ],
+      "receipt": "conformance/v1/valid-minimal.json"
+    },
+    {
+      "id": "safe-optional-platform",
+      "category": "sound_change",
+      "ground_truth": {
+        "decision": "accept",
+        "reason_codes": [
+          "sound_change"
+        ]
+      },
+      "transcript": [
+        "The request is to accept the Linux-scoped regression fix, not claim every platform was tested.",
+        "The required focused and structure checks pass at the reviewed head.",
+        "A Windows smoke test is explicitly optional and skipped; the residual risk records that limitation.",
+        "The clean diff matches the three declared files and the human reviewer approves the bounded claim."
+      ],
+      "receipt": "examples/v1-review-ready.json"
+    },
+    {
+      "id": "safe-renderer-defense",
+      "category": "sound_change",
+      "ground_truth": {
+        "decision": "accept",
+        "reason_codes": [
+          "sound_change"
+        ]
+      },
+      "transcript": [
+        "The request is to accept a renderer hardening case containing hostile-looking but inert supplied text.",
+        "The clean diff contains only the declared synthetic path.",
+        "The focused renderer check exits 0 and confirms supplied headings and HTML cannot become reviewer-facing structure.",
+        "The visible hostile string is test data, not executed markup."
+      ],
+      "receipt": "conformance/v1/valid-adversarial-markdown.json"
+    },
+    {
+      "id": "safe-small-refactor",
+      "category": "sound_change",
+      "ground_truth": {
+        "decision": "accept",
+        "reason_codes": [
+          "sound_change"
+        ]
+      },
+      "transcript": [
+        "The request is to accept a behavior-preserving one-file refactor.",
+        "The clean diff contains only demo.py and the required focused check passes at the current head.",
+        "Manual review finds no claim beyond the behavior covered by that check.",
+        "The recorded residual risk is appropriately narrow and non-blocking."
+      ],
+      "receipt": "conformance/v1/valid-minimal.json"
+    },
+    {
+      "id": "unsafe-fabricated-evidence",
+      "category": "fabricated_evidence",
+      "ground_truth": {
+        "decision": "reject",
+        "reason_codes": [
+          "fabricated_evidence"
+        ]
+      },
+      "transcript": [
+        "The request is to accept the change based on the supplied record.",
+        "The receipt is polished and internally consistent.",
+        "The command log is absent, and the named reviewer states they did not perform or approve this review.",
+        "The producer admits copying passing fields from an earlier synthetic example."
+      ],
+      "receipt": "conformance/v1/valid-minimal.json"
+    },
+    {
+      "id": "unsafe-failed-required",
+      "category": "failed_required_check",
+      "ground_truth": {
+        "decision": "reject",
+        "reason_codes": [
+          "failed_required_check"
+        ]
+      },
+      "transcript": [
+        "The request is to accept a behavior change whose required focused check exits 1.",
+        "The failing output reproduces the original defect at the proposed head.",
+        "No later passing run is available.",
+        "The reviewer requests changes."
+      ],
+      "receipt": "conformance/v1/invalid-nonpassing-claim.json"
+    },
+    {
+      "id": "unsafe-incomplete-coverage",
+      "category": "insufficient_coverage",
+      "ground_truth": {
+        "decision": "reject",
+        "reason_codes": [
+          "insufficient_coverage",
+          "failed_required_check"
+        ]
+      },
+      "transcript": [
+        "The request is to claim the change is production-ready across supported environments.",
+        "The only environment-specific regression check is recorded as failed, and another relevant check is unknown.",
+        "The available structural check does not exercise the claimed behavior.",
+        "Review and public-safety decisions remain incomplete."
+      ],
+      "receipt": "examples/v1-not-review-ready.json"
+    },
+    {
+      "id": "unsafe-scope-drift",
+      "category": "scope_drift",
+      "ground_truth": {
+        "decision": "reject",
+        "reason_codes": [
+          "scope_drift"
+        ]
+      },
+      "transcript": [
+        "The request is to accept a one-file change to demo.py.",
+        "A clean repository comparison shows the actual head also changes private/notes.txt.",
+        "The supplied receipt lists only demo.py and never mentions the private path.",
+        "No approval exists for the additional path."
+      ],
+      "receipt": "conformance/v1/valid-minimal.json"
+    },
+    {
+      "id": "unsafe-stale-evidence",
+      "category": "stale_evidence",
+      "ground_truth": {
+        "decision": "reject",
+        "reason_codes": [
+          "stale_evidence"
+        ]
+      },
+      "transcript": [
+        "The request is to accept the current head 2222222222222222222222222222222222222222.",
+        "The only passing focused check ran against the earlier head 1111111111111111111111111111111111111111.",
+        "The behavior changed between those revisions.",
+        "No check result exists for the proposed head."
+      ],
+      "receipt": "conformance/v1/invalid-stale-check.json"
+    },
+    {
+      "id": "unsafe-unsupported-claim",
+      "category": "unsupported_claim",
+      "ground_truth": {
+        "decision": "reject",
+        "reason_codes": [
+          "unsupported_claim"
+        ]
+      },
+      "transcript": [
+        "The request is to accept a behavioral claim.",
+        "The receipt cites check:behavior, but no check with that ID appears in the available evidence.",
+        "A different structural check passed but does not establish the claimed behavior.",
+        "The missing behavioral evidence cannot be recovered from the transcript."
+      ],
+      "receipt": "examples/v1-unsupported-claim.json"
+    }
+  ]
+}

@@ -1,108 +1,63 @@
-# The Path From Useful To Remarkable
+# The Shortest Path To Remarkable
 
-"Remarkable" is not a release label. EvidenceGate earns it only if outsiders
-can reproduce the contract, attack its assumptions, and measure whether it
-improves review decisions without creating false assurance.
+EvidenceGate does not need adoption, sponsorship, or praise to become a
+remarkable reference implementation. It does need to finish every proof its
+maintainers control and make the proofs that require other people unusually
+cheap to run.
 
-## Claim Ladder
+This roadmap has two phases. Phase 1 is entirely maintainer-controlled. Phase 2
+is evidence that only real use can create; the project supplies the protocol
+and tooling but never invents the result.
 
-EvidenceGate may make only the strongest claim whose exit criteria are met:
+## Phase 1: Complete The Reference Implementation
 
-1. **Useful pattern:** a receipt makes final-state evidence easier to inspect.
-2. **Hardened reference:** adversarial inputs cannot silently change the
-   contract or reviewer-facing structure.
-3. **Interoperable predicate:** an independent implementation reaches the same
-   conformance results.
-4. **Authenticated record:** an established envelope verifies issuer identity
-   and receipt integrity.
-5. **Measured review aid:** controlled evaluation shows where receipts improve
-   reviewer accuracy or speed and where they do not.
+The repository earns **remarkable candidate** when all of these are true:
 
-The current project is pursuing level 2. It must not claim levels 3-5 early.
+- the Git-change receipt has a strict schema, relational validator, safe
+  renderer, repository verifier, adversarial corpus, and cross-platform CI;
+- a separately written consumer in another language reaches the same public
+  conformance outcomes;
+- an in-toto-compatible attestation profile binds a receipt digest to its Git
+  subject, documents the trust model, and rejects tampering, subject mismatch,
+  and expiry without implementing custom cryptography;
+- a blinded, counterbalanced reviewer-study kit can produce packets and score
+  real decisions without silently substituting synthetic answers; and
+- release evidence, claim boundaries, limitations, and exact reproduction
+  commands are public and checked.
 
-## Stage 1: Harden The Reference Contract
+These are engineering and documentation tasks. We can complete them ourselves.
+The phrase **remarkable candidate** means the design and proof package are
+unusually complete for a small reference project. It does not mean the project
+has been independently validated or shown to improve reviewer decisions.
 
-Exit criteria:
+## Phase 2: Accumulate Real-World Evidence
 
-- reject duplicate keys, non-standard JSON constants, oversized packets, and
-  undeclared authoritative fields;
-- render supplied text without permitting Markdown or HTML structure injection;
-- handle zero-scored audit batches without crashing;
-- publish a strict v1 JSON Schema and portable positive/negative corpus; and
-- keep runtime constants and schema enums locked by tests.
+The repository earns stronger claims only from evidence that actually exists:
 
-This stage is implemented locally when the full quality stack passes.
+- **authenticated record** after a standard Sigstore or platform verifier
+  authenticates a signed envelope produced by a real trusted workflow;
+- **measured review aid** after real reviewers complete the published study and
+  the analysis shows where receipts help, hurt, or have no effect; and
+- **independently replicated** after an unaffiliated implementation or reviewer
+  publishes results that can be inspected.
 
-## Stage 2: Make V1 A Reproducible Release
+The project does not wait for Phase 2 to be useful or publishable. It makes
+Phase 2 turnkey, labels it accurately, and treats every result—including a
+negative one—as evidence rather than a marketing inconvenience.
 
-Exit criteria:
+## Stop Conditions
 
-- CI passes on the declared minimum, intermediate, and current Python versions
-  across Linux, macOS, and Windows;
-- workflow permissions are read-only and third-party actions are commit-pinned;
-- `main` requires the quality workflow before merge;
-- the [release checklist](release-checklist.md) covers schema, corpus, CLI,
-  security, and public-safety review; and
-- a signed version tag identifies the first stable contract.
+Narrow or change the project if any of these occur:
 
-Repository settings and the version tag require an explicit publication
-decision; source changes alone cannot complete this stage.
+- the second implementation exposes an ambiguous contract the specification
+  cannot resolve;
+- the attestation profile encourages callers to confuse digest binding with
+  identity authentication;
+- the study shows more unsafe acceptance or worse confidence calibration with
+  receipts; or
+- maintenance cost grows faster than the review problem being solved.
 
-## Stage 3: Authenticate Without Inventing Cryptography
+## Publication Rule
 
-Start with a design and threat model, not implementation. Define an EvidenceGate
-predicate carried by an in-toto statement and DSSE/Sigstore-compatible envelope.
-Record evidence descriptors and digests for command output, runner context, and
-review decisions. Keep local unsigned receipts supported and visibly distinct.
-
-Exit criteria:
-
-- a documented trust model identifies issuer, verifier, compromised-runner, and
-  replay threats;
-- tampered receipts, wrong subjects, wrong signers, and expired policy fail in
-  public fixtures;
-- GitHub or Sigstore tooling verifies the envelope; and
-- no custom signing or key-management code is introduced.
-
-## Stage 4: Define Audit Predicates Separately
-
-Create experimental predicates only when a real use case requires them. An
-agent-audit predicate may preserve execution, scoring, and evidence status. A
-hidden-state evidence card may preserve hypotheses, corroboration, and
-disconfirmation. Neither should inherit Git-specific fields by accident.
-
-Each predicate needs its own schema version, threat model, corpus, and maturity
-label. Cross-predicate concepts should move into a core envelope only after two
-implementations demonstrate the abstraction.
-
-## Stage 5: Measure Reviewer Uplift And False Assurance
-
-Pre-register a comparison of transcript-only review against receipt-assisted
-review. Set sample size by power analysis and include ordinary, stale-evidence,
-scope-drift, unsupported-claim, fabricated-receipt, and incomplete-evidence
-cases.
-
-Measure:
-
-- acceptance of unsafe or unsupported changes;
-- rejection of sound changes;
-- time to a justified decision;
-- detection of stale evidence and scope drift;
-- confidence calibration; and
-- cases where a polished receipt creates more false assurance than a transcript.
-
-Publish the fixtures, anonymized decisions, analysis code, negative results, and
-limitations. Stop or narrow the product if receipts do not improve decisions.
-
-## Stage 6: External Replication
-
-The final credibility step is outside this repository:
-
-- an independent consumer passes the conformance corpus;
-- an external reviewer attacks the threat model and renderer/parser boundary;
-- at least one real project uses receipts without relying on private context;
-  and
-- disagreements become public fixtures or specification changes.
-
-Only after these stages would "remarkable foundation" be an evidence-backed
-description rather than marketing.
+Marketing copy must use the [claim matrix](marketing-claims.md). A checked box,
+passing demo, or polished receipt never stands in for an external result.

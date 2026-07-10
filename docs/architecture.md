@@ -36,13 +36,27 @@ This experiment is not an EvidenceGate v1 subject or predicate. Its statuses,
 scores, and aggregate bounds do not become part of a Git-change receipt merely
 because they live in this repository.
 
+## Adjacent Proof Profiles
+
+The stable v1 receipt can be carried by the experimental
+[attestation profile](../attestation/v0/README.md). That profile binds the raw
+receipt digest, base revision, head revision, repository subject, issuer claim,
+and validity window inside an in-toto Statement. Its checker validates those
+relationships and deliberately reports the statement as **UNAUTHENTICATED**.
+Identity verification remains the job of a standard signed envelope and
+verifier.
+
+The [reviewer study](../study/v0/README.md) is another separate proof surface.
+It measures decisions about synthetic Git-change scenarios; it does not add
+fields or authority to the stable receipt.
+
 ## Not Yet Implemented
 
 EvidenceGate does not currently define:
 
 - a general agent-audit receipt;
 - a hidden-state or interpretability evidence card;
-- an authenticated envelope or reviewer identity;
+- an authenticated envelope or authenticated reviewer identity;
 - a signature, transparency log, or trusted timestamp; or
 - a hosted policy or approval service.
 
@@ -61,13 +75,13 @@ versioned predicate and conformance corpus.
 4. Authentication must use an established envelope and verifier. EvidenceGate
    will not invent cryptography.
 5. An experimental predicate cannot be described as stable until it has a
-   threat model, fixtures, a conformance runner, and an independent consumer.
+   threat model, fixtures, a conformance runner, and real authenticated use.
 
 ## Interoperability Direction
 
-The intended authentication path is an EvidenceGate predicate inside an
-[in-toto Statement and authenticated envelope](https://github.com/in-toto/attestation),
-with Sigstore or a platform attestation service handling signer identity and
-verification. Git commits remain the v1 subject; the envelope would authenticate
-who or what issued the receipt. This is a roadmap direction, not a current
-capability.
+The experimental profile now defines an EvidenceGate predicate inside an
+[in-toto Statement and authenticated envelope](https://github.com/in-toto/attestation).
+Sigstore or a platform attestation service must still handle signer identity
+and verification. Git commits remain the v1 subject; the envelope would
+authenticate who or what issued the statement. The checked-in statements are
+unsigned contract fixtures, not authenticated records.

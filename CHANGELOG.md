@@ -18,6 +18,14 @@ implementation will be documented here.
   audit-failure research.
 - A staged, falsifiable roadmap for interoperability, authentication, measured
   reviewer uplift, and external replication.
+- An unsigned in-toto-compatible attestation profile with strict subject,
+  issuer-policy, receipt-digest, validity-window, and adversarial fixture checks.
+- A blinded, counterbalanced twelve-case reviewer-study kit with response
+  preparation, descriptive scoring, false-assurance cases, and a preregistration
+  template.
+- A separately written, dependency-free Node conformance consumer for
+  first-party cross-language contract evidence.
+- One aggregate remarkable-candidate gate and machine-readable evidence report.
 
 ### Changed
 
@@ -28,6 +36,8 @@ implementation will be documented here.
 - The reference run uses the active Python interpreter for cross-platform CI.
 - Read-only Git subprocesses disable filesystem monitors and pagers and fail
   closed after a bounded timeout.
+- The remarkable roadmap now separates maintainer-controlled candidate proof
+  from authenticated use, measured reviewer effects, and independent replication.
 
 ### Fixed
 

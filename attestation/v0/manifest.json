@@ -1,0 +1,50 @@
+{
+  "profile": "evidencegate_attestation_v0",
+  "receipt": "conformance/v1/valid-minimal.json",
+  "cases": [
+    {
+      "id": "valid-unsigned-contract",
+      "statement": "valid-unsigned.json",
+      "expected": "pass",
+      "expected_subject": "git+https://github.com/TheDarkniteFalls/evidencegate",
+      "expected_issuer": "https://github.com/TheDarkniteFalls/evidencegate/.github/workflows/checks.yml@refs/heads/main",
+      "at_time": "2030-01-01T12:00:00Z"
+    },
+    {
+      "id": "tampered-receipt-rejected",
+      "statement": "invalid-tampered-receipt.json",
+      "expected": "validation_error",
+      "contains": "receipt digest does not match",
+      "expected_subject": "git+https://github.com/TheDarkniteFalls/evidencegate",
+      "expected_issuer": "https://github.com/TheDarkniteFalls/evidencegate/.github/workflows/checks.yml@refs/heads/main",
+      "at_time": "2030-01-01T12:00:00Z"
+    },
+    {
+      "id": "wrong-subject-rejected",
+      "statement": "invalid-wrong-subject.json",
+      "expected": "validation_error",
+      "contains": "subject digest does not match",
+      "expected_subject": "git+https://github.com/TheDarkniteFalls/evidencegate",
+      "expected_issuer": "https://github.com/TheDarkniteFalls/evidencegate/.github/workflows/checks.yml@refs/heads/main",
+      "at_time": "2030-01-01T12:00:00Z"
+    },
+    {
+      "id": "wrong-issuer-rejected",
+      "statement": "invalid-wrong-issuer.json",
+      "expected": "validation_error",
+      "contains": "claimed_issuer does not match",
+      "expected_subject": "git+https://github.com/TheDarkniteFalls/evidencegate",
+      "expected_issuer": "https://github.com/TheDarkniteFalls/evidencegate/.github/workflows/checks.yml@refs/heads/main",
+      "at_time": "2030-01-01T12:00:00Z"
+    },
+    {
+      "id": "expired-statement-rejected",
+      "statement": "invalid-expired.json",
+      "expected": "validation_error",
+      "contains": "statement is expired",
+      "expected_subject": "git+https://github.com/TheDarkniteFalls/evidencegate",
+      "expected_issuer": "https://github.com/TheDarkniteFalls/evidencegate/.github/workflows/checks.yml@refs/heads/main",
+      "at_time": "2030-01-01T12:00:00Z"
+    }
+  ]
+}
