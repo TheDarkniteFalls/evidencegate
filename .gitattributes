@@ -1,0 +1,2 @@
+# Keep digest-bound JSON fixtures byte-for-byte stable on every platform.
+*.json text eol=lf
