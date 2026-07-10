@@ -767,7 +767,10 @@ def load_packet(path: Path) -> dict[str, Any]:
         raise ValueError(f"packet must be UTF-8: {exc}") from exc
     except RecursionError as exc:
         raise ValueError("packet JSON nesting is too deep") from exc
-    _validate_json_value(data)
+    try:
+        _validate_json_value(data)
+    except RecursionError as exc:
+        raise ValueError("packet JSON nesting is too deep") from exc
     if not isinstance(data, dict):
         raise ValueError("packet must be a JSON object")
     return data
