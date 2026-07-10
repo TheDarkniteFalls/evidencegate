@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "summary": "Demonstrates a structurally valid receipt whose required behavioral check failed.",
+  "subject": {
+    "type": "git_change",
+    "base_sha": "1111111111111111111111111111111111111111",
+    "head_sha": "2222222222222222222222222222222222222222"
+  },
+  "scope": {
+    "allowed_paths": [
+      "demo.py"
+    ],
+    "protected_prefixes": [
+      "private"
+    ]
+  },
+  "files_touched": [
+    "demo.py"
+  ],
+  "checks": [
+    {
+      "id": "check:syntax",
+      "name": "Syntax check",
+      "command": "python3 -m py_compile demo.py",
+      "status": "passed",
+      "summary": "The file compiled.",
+      "scope": "Python syntax",
+      "revision": "2222222222222222222222222222222222222222",
+      "required": true
+    },
+    {
+      "id": "check:behavior",
+      "name": "Behavioral regression check",
+      "command": "python3 demo.py --self-test",
+      "status": "failed",
+      "summary": "The synthetic regression still reproduces.",
+      "scope": "Synthetic demo behavior",
+      "revision": "2222222222222222222222222222222222222222",
+      "required": true
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim:syntax",
+      "text": "The changed Python file is syntactically valid.",
+      "evidence_refs": [
+        "check:syntax"
+      ]
+    }
+  ],
+  "risks": [
+    "The required behavioral regression check is failing."
+  ],
+  "human_review": {
+    "status": "changes_requested",
+    "reviewer": "maintainer",
+    "reviewed_head_sha": "2222222222222222222222222222222222222222",
+    "summary": "The receipt is reviewable, but the change is not approved."
+  },
+  "public_safety": {
+    "status": "pending",
+    "reviewed_head_sha": "2222222222222222222222222222222222222222",
+    "summary": "Public-safety review has not been completed."
+  }
+}

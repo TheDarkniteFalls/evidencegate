@@ -24,6 +24,12 @@ the reviewer a final, deliberately small record to verify.
 
 ## Good Versus Incomplete
 
+The original examples in this section use EvidenceGate's legacy receipt
+format. They remain useful for comparing a complete structural record with an
+incomplete one, but they are not revision-bound or eligible for repository
+verification. See [Migrating a Legacy Receipt to V1](migrating-to-v1.md) for
+the stronger format.
+
 Compare these synthetic examples:
 
 - [Complete bug-fix receipt](../examples/python-cli-bugfix.json)
@@ -46,10 +52,11 @@ python3 evidencegate.py examples/python-cli-bugfix.json
 python3 evidencegate.py examples/incomplete-agent-run.json
 ```
 
-The second command should exit `1` and report:
+The first command reports a clearly labelled legacy structural pass. The
+second command should exit `1` and report:
 
 ```text
-FAIL EvidenceGate
+FAIL EvidenceGate validation
 - tests[1] must name a passed check
 - human_review.status must be approved
 - public_safety.private_data_reviewed must be true
@@ -60,50 +67,62 @@ trust or publication.
 
 ## The Copyable Pattern
 
-Start with the [receipt template](../templates/agent-run-receipt.template.json),
-then complete it from evidence after the final edit:
+For new work, start with the [v1 receipt
+template](../templates/agent-run-receipt-v1.template.json), then complete it
+from evidence after the final edit:
 
 1. Summarize the accepted change, not the original plan.
-2. Record the commands that actually ran and their results.
+2. Record the exact base and final head commits plus the allowed and protected
+   path scope.
 3. Compare `files_touched` with the real diff.
-4. Name the checks that passed after the final edit.
-5. State residual risk honestly, including skipped environments or coverage.
-6. Have a human inspect the diff, verify the receipt, and accept the risk.
-7. Complete public-safety review before copying the receipt into a public place.
-8. Run EvidenceGate and attach the receipt to the handoff, pull request, or
-   release record where it will help a reviewer.
+4. Record checks against the final head and preserve passed, failed, skipped,
+   and unknown results.
+5. Link bounded claims to named passing checks.
+6. State residual risk honestly, including skipped environments or coverage.
+7. Have a human inspect the diff, real outputs, receipt, and remaining risk.
+8. Complete public-safety review against the same head.
+9. Run `verify --repo` and attach the receipt where it will help a reviewer.
 
 Use the [review checklist](review-checklist.md) for the human verification step.
 
-## What A Valid Receipt Proves
+## What A Valid Receipt Establishes
 
-EvidenceGate checks that the receipt contains:
+Legacy validation checks that the original receipt contains its required
+structural fields. V1 validation additionally checks revision and evidence
+relationships inside the supplied JSON. V1 repository verification establishes
+that, for the supplied receipt and local checkout:
 
-- a non-empty summary
-- recorded commands with accepted result values
-- a list of touched files
-- named checks marked as passed
-- stated residual risk
-- human approval
-- completed public-safety review
+- the named commits exist, local `HEAD` matches the recorded head, and the
+  checkout has no uncommitted or untracked changes;
+- the Git diff's paths match `files_touched`, stay inside the exact allowed
+  paths, and avoid protected prefixes;
+- checks, claims, and evidence references are internally consistent;
+- required checks are recorded as passing; and
+- human and public-safety review are recorded against the same head.
 
-That is a useful structural gate. It makes missing review evidence visible.
+That is a useful deterministic consistency gate. It makes stale evidence,
+unsupported claims, path drift, and missing review state visible.
 
 ## What It Does Not Prove
 
 A valid receipt does not prove that:
 
 - the recorded commands actually ran
-- the file list matches the diff
+- supplied command output, evidence, receipts, or reviewer identities are
+  authentic
 - the chosen tests were sufficient
-- the change is correct, secure, or valuable
+- linked evidence semantically proves a claim
+- the change is correct, secure, authorized, or valuable
 - the reviewer understood every consequence
 - no unknown risk remains
+- the repository is safe to publish
 
 A polished but dishonest receipt can still pass a structural validator. The
-human reviewer must compare it with the diff, command output, and actual result.
-EvidenceGate makes accountability easier to inspect; it does not automate
-accountability away.
+v1 verifier catches more mismatches, but a coordinated or fabricated receipt
+can still mislead it. The human reviewer must compare the receipt with the
+complete diff, actual command output, and observed result. EvidenceGate makes
+accountability easier to inspect; it does not automate accountability away or
+authorize publication.
 
 ## When To Use It
 

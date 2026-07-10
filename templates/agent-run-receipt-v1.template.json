@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "summary": "Describe the accepted change in one or two sentences.",
+  "subject": {
+    "type": "git_change",
+    "base_sha": "0000000000000000000000000000000000000000",
+    "head_sha": "ffffffffffffffffffffffffffffffffffffffff"
+  },
+  "scope": {
+    "allowed_paths": [
+      "path/to/changed-file.ext"
+    ],
+    "protected_prefixes": [
+      ".env",
+      ".git",
+      "private"
+    ]
+  },
+  "files_touched": [
+    "path/to/changed-file.ext"
+  ],
+  "checks": [
+    {
+      "id": "check:focused-test",
+      "name": "Focused test",
+      "command": "command that was run",
+      "status": "passed",
+      "summary": "Describe the recorded result.",
+      "scope": "Behavior covered by this check",
+      "revision": "ffffffffffffffffffffffffffffffffffffffff",
+      "required": true
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim:accepted-behavior",
+      "text": "State one bounded claim about the change.",
+      "evidence_refs": [
+        "check:focused-test"
+      ]
+    }
+  ],
+  "risks": [
+    "none"
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "reviewer-name",
+    "reviewed_head_sha": "ffffffffffffffffffffffffffffffffffffffff",
+    "summary": "Describe what the human reviewed and accepted."
+  },
+  "public_safety": {
+    "status": "reviewed",
+    "reviewed_head_sha": "ffffffffffffffffffffffffffffffffffffffff",
+    "summary": "Describe the public/private-data review."
+  }
+}
