@@ -2,10 +2,14 @@
 
 AI-assisted work should leave a receipt.
 
-EvidenceGate is a small public pattern for human-reviewed agent work. A receipt
-records what changed, what was checked, what remains risky, and who reviewed
-it. The v1 format binds that record to one Git revision and links bounded
-claims to named checks.
+EvidenceGate is a hardened reference implementation for revision-bound
+receipts from human-reviewed agent work. It began with a practical question:
+when an AI helps change a repository, what should a person be able to inspect
+before trusting the result?
+
+A receipt records what changed, what was checked, what remains risky, and who
+reviewed it. The v1 format binds that record to one Git revision and links
+bounded claims to named checks.
 
 The CLI uses only the Python standard library. It does not run the commands in
 a receipt or make publication decisions. The supported runtime is Python 3.10
@@ -17,7 +21,7 @@ and portable [v1 conformance corpus](conformance/v1/README.md). The
 [architecture boundary](docs/architecture.md) distinguishes that stable
 contract from adjacent audit research.
 
-## Remarkable-Candidate Proof Package
+## An Unusually Complete Proof Package
 
 One command runs every proof the maintainers can complete without inventing an
 external result. It requires Python 3.10+ and Node 24+, runs no model or network
@@ -47,10 +51,10 @@ The package adds four explicit proof surfaces:
   engineering from authenticated use, measured reviewer effects, and
   independent replication.
 
-This supports the phrase **remarkable candidate** after the aggregate gate
-passes on the cited clean revision. It does not support saying that a bare
-receipt is authenticated, that reviewer uplift has been measured, or that the
-project has independent endorsement.
+Together, these make EvidenceGate a **remarkable candidate** after the
+aggregate gate passes on the cited clean revision. They do not support saying
+that a bare receipt is authenticated, that reviewer uplift has been measured,
+or that the project has independent endorsement.
 
 ## Quick Start
 
