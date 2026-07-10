@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "summary": "Changed one synthetic file but recorded a stale check revision.",
+  "subject": {
+    "type": "git_change",
+    "base_sha": "1111111111111111111111111111111111111111",
+    "head_sha": "2222222222222222222222222222222222222222"
+  },
+  "scope": {
+    "allowed_paths": ["demo.py"],
+    "protected_prefixes": ["private"]
+  },
+  "files_touched": ["demo.py"],
+  "checks": [
+    {
+      "id": "check:focused",
+      "name": "Focused synthetic check",
+      "command": "python demo.py --self-test",
+      "status": "passed",
+      "summary": "The synthetic check passed against the wrong revision.",
+      "scope": "Synthetic behavior",
+      "revision": "1111111111111111111111111111111111111111",
+      "required": true
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim:behavior",
+      "text": "The synthetic behavior passes its focused check.",
+      "evidence_refs": ["check:focused"]
+    }
+  ],
+  "risks": ["This is a synthetic negative fixture."],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "synthetic-reviewer",
+    "reviewed_head_sha": "2222222222222222222222222222222222222222",
+    "summary": "Simulated review for the public conformance fixture."
+  },
+  "public_safety": {
+    "status": "reviewed",
+    "reviewed_head_sha": "2222222222222222222222222222222222222222",
+    "summary": "Confirmed that the fixture is synthetic."
+  }
+}

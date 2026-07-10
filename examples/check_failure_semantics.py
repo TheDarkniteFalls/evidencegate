@@ -180,7 +180,11 @@ def main() -> int:
             for failure_class, count in failure_classes.items()
         )
     )
-    print(f"PASS observed_mean {summary['observed_mean']:.2f}")
+    observed_mean = summary["observed_mean"]
+    if observed_mean is None:
+        print("PASS observed_mean unavailable")
+    else:
+        print(f"PASS observed_mean {observed_mean:.2f}")
     print(
         "PASS concern_bounds "
         f"{summary['best_case_mean']:.2f}..{summary['worst_case_mean']:.2f}"

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import copy
+import io
 import importlib.util
 import subprocess
 import sys
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -109,6 +112,25 @@ class FailureSemanticsTests(unittest.TestCase):
             summary["missing_failure_class_counts"],
             {"synthetic_missing_evidence": 6},
         )
+
+    def test_all_missing_cli_reports_unavailable_instead_of_crashing(self) -> None:
+        fixture = copy.deepcopy(checker.load_fixture())
+        for case in fixture["cases"]:
+            case.update(
+                execution_status="completed",
+                scoring_status="abstained",
+                score=None,
+                failure_class="synthetic_missing_evidence",
+                evidence_status="missing",
+            )
+        output = io.StringIO()
+
+        with mock.patch.object(checker, "load_fixture", return_value=fixture):
+            with redirect_stdout(output):
+                result = checker.main()
+
+        self.assertEqual(result, 0)
+        self.assertIn("PASS observed_mean unavailable", output.getvalue())
 
 
 if __name__ == "__main__":

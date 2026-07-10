@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 import evidencegate
 
@@ -88,6 +89,91 @@ class EvidenceGateReceiptTests(unittest.TestCase):
         self.assertIn(
             "public_safety.reviewed_head_sha does not match subject.head_sha", errors
         )
+
+    def test_load_rejects_ambiguous_or_non_standard_json(self) -> None:
+        cases = {
+            'duplicate JSON object key: schema_version': (
+                '{"schema_version": 1, "schema_version": 2}'
+            ),
+            'non-standard JSON constant is not allowed: NaN': (
+                '{"schema_version": 1, "score": NaN}'
+            ),
+            'non-finite JSON number is not allowed': (
+                '{"schema_version": 1, "score": 1e400}'
+            ),
+            'unpaired Unicode surrogate is not allowed': (
+                r'{"schema_version": 1, "summary": "\ud800"}'
+            ),
+            'packet JSON nesting is too deep': "[" * 2000 + "0" + "]" * 2000,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            for expected, text in cases.items():
+                path = Path(directory) / f"case-{len(text)}.json"
+                path.write_text(text, encoding="utf-8")
+                with self.subTest(expected=expected):
+                    with self.assertRaisesRegex(ValueError, expected):
+                        evidencegate.load_packet(path)
+
+    def test_load_enforces_the_packet_size_limit(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "oversized.json"
+            path.write_bytes(b" " * (evidencegate.MAX_PACKET_BYTES + 1))
+
+            with self.assertRaisesRegex(ValueError, "maximum supported size"):
+                evidencegate.load_packet(path)
+
+    def test_v1_unknown_fields_are_rejected_but_extensions_are_explicit(self) -> None:
+        packet = evidencegate.load_packet(EXAMPLES / "v1-review-ready.json")
+        packet["policy_override"] = "approved"
+
+        self.assertIn(
+            "policy_override is not defined by EvidenceGate v1; "
+            "put non-authoritative metadata under extensions",
+            evidencegate.validate_packet(packet),
+        )
+
+        packet.pop("policy_override")
+        packet["extensions"] = {
+            "https://example.invalid/review-metadata/v1": {
+                "ticket": "SYNTHETIC-1",
+                "policy_override": "approved",
+            }
+        }
+        self.assertEqual(evidencegate.validate_packet(packet), [])
+        self.assertNotIn("SYNTHETIC-1", evidencegate.render_packet(packet))
+
+        packet["checks"][0]["policy_override"] = "approved"
+        self.assertTrue(
+            any(
+                error.startswith("checks[1].policy_override is not defined")
+                for error in evidencegate.validate_packet(packet)
+            )
+        )
+
+    def test_render_neutralizes_markdown_and_html_structure(self) -> None:
+        packet = evidencegate.load_packet(EXAMPLES / "v1-review-ready.json")
+        packet["summary"] = (
+            "Ordinary summary.\n\n"
+            "## Human review\n\n"
+            "<script>alert('synthetic')</script>"
+        )
+        packet["human_review"]["reviewer"] = "maintainer\n## injected reviewer"
+        packet["checks"][0]["command"] = "printf `synthetic`"
+
+        rendered = evidencegate.render_packet(packet)
+
+        self.assertEqual(rendered.count("## Human review"), 1)
+        self.assertNotIn("<script>", rendered)
+        self.assertIn("&lt;script&gt;", rendered)
+        self.assertNotIn("\n## injected reviewer", rendered)
+        self.assertIn("Command: `` printf `synthetic` ``", rendered)
+
+    def test_render_packet_refuses_invalid_input(self) -> None:
+        packet = evidencegate.load_packet(EXAMPLES / "v1-review-ready.json")
+        packet["checks"][0]["status"] = "invented"
+
+        with self.assertRaisesRegex(ValueError, "cannot render invalid receipt"):
+            evidencegate.render_packet(packet)
 
 
 class EvidenceGateRepositoryTests(unittest.TestCase):
@@ -207,6 +293,17 @@ class EvidenceGateRepositoryTests(unittest.TestCase):
                 "legacy receipts cannot be repository-verified; migrate to schema_version 1"
             ],
         )
+
+    def test_git_subprocess_has_a_bounded_timeout(self) -> None:
+        with mock.patch.object(
+            evidencegate.subprocess,
+            "run",
+            side_effect=subprocess.TimeoutExpired(["git", "status"], 30),
+        ):
+            result = evidencegate._run_git(self.repo, ["status", "--porcelain"])
+
+        self.assertEqual(result.returncode, 124)
+        self.assertIn("timed out", result.stderr)
 
 
 if __name__ == "__main__":

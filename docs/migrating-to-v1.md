@@ -21,11 +21,16 @@ To migrate one:
 8. Add the reviewed head and summary to `human_review`.
 9. Replace the legacy public-safety boolean with a status, reviewed head, and
    summary.
+10. Remove undeclared fields. If non-authoritative metadata must travel with the
+    receipt, place it under the optional `extensions` object; v1 validation,
+    verification, and rendering deliberately ignore its contents.
 
 Start from
 [`templates/agent-run-receipt-v1.template.json`](../templates/agent-run-receipt-v1.template.json)
 and compare it with
 [`examples/v1-review-ready.json`](../examples/v1-review-ready.json).
+The [JSON Schema](../schemas/agent-run-receipt-v1.schema.json) and portable
+[conformance corpus](../conformance/v1/README.md) define the public v1 contract.
 
 Validate before using Git state:
 

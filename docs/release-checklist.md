@@ -1,0 +1,41 @@
+# EvidenceGate Release Checklist
+
+Use this checklist for every tagged release. A local pass does not authorize a
+push, merge, package upload, or publication.
+
+## Contract
+
+- [ ] The Git-change v1 JSON Schema, template, examples, runtime constants, and
+  conformance manifest agree.
+- [ ] Every breaking contract change uses a new schema or predicate version.
+- [ ] `extensions` remain non-authoritative and cannot change a gate result.
+- [ ] `CHANGELOG.md` names user-visible, compatibility, and security changes.
+
+## Verification
+
+- [ ] `python3 -B evidencegate.py --self-test`
+- [ ] `python3 -B -m unittest discover -s tests -v`
+- [ ] `python3 -B tools/check_conformance.py`
+- [ ] `python3 -B examples/run-v1-reference.py`
+- [ ] `python3 -B examples/check_failure_semantics.py`
+- [ ] Package installation and the `evidencegate` console entry point pass in a
+  clean virtual environment.
+- [ ] The required GitHub Actions matrix passes on the release commit.
+
+## Human And Security Review
+
+- [ ] A human reviews the complete diff and actual command output.
+- [ ] Adversarial parser and renderer fixtures still fail safely.
+- [ ] `SECURITY.md`, architecture boundaries, and trust claims remain accurate.
+- [ ] Repository history and the release diff contain no credentials, private
+  logs, personal data, or private project paths.
+- [ ] Third-party actions are pinned to verified full commit SHAs with explicit
+  minimum token permissions.
+
+## Publication
+
+- [ ] `main` requires the complete quality workflow before merge.
+- [ ] The release commit is clean, immutable, and identified by its full SHA.
+- [ ] The version and signed tag match the changelog entry.
+- [ ] Release notes repeat the authentication and publication-authority boundary.
+- [ ] Package or artifact publication, if any, has separate explicit approval.

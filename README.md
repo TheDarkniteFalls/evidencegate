@@ -8,7 +8,14 @@ it. The v1 format binds that record to one Git revision and links bounded
 claims to named checks.
 
 The CLI uses only the Python standard library. It does not run the commands in
-a receipt or make publication decisions.
+a receipt or make publication decisions. The supported runtime is Python 3.10
+or newer.
+
+The stable Git-change receipt contract is published as a
+[JSON Schema](schemas/agent-run-receipt-v1.schema.json), relational validator,
+and portable [v1 conformance corpus](conformance/v1/README.md). The
+[architecture boundary](docs/architecture.md) distinguishes that stable
+contract from adjacent audit research.
 
 ## Quick Start
 
@@ -77,15 +84,16 @@ end with actual temporary commits.
 
 ## Three Operations
 
-- `validate` checks the selected receipt format and, for v1, unique IDs,
-  revision consistency, status values, scope, and claim-to-check references.
+- `validate` rejects ambiguous JSON and undeclared v1 fields, then checks unique
+  IDs, revision consistency, status values, scope, and claim-to-check
+  references.
 - `verify --repo` accepts only v1 receipts. It adds read-only Git checks for
   the current head, a clean work tree, base/head ancestry, exact changed paths,
   allowed paths, protected prefixes, required passing checks, human approval,
   and completed public-safety review.
 - `render` turns a valid legacy or v1 receipt into deterministic Markdown. It
-  preserves `passed`, `failed`, `skipped`, and `unknown` rather than hiding
-  uncertainty.
+  neutralizes supplied Markdown and HTML structure while preserving `passed`,
+  `failed`, `skipped`, and `unknown` rather than hiding uncertainty.
 
 The original shorthand remains supported:
 
@@ -110,10 +118,15 @@ A v1 receipt records:
 - `risks`: known residual risks, including skipped environments or coverage.
 - `human_review`: reviewer decision and reviewed head.
 - `public_safety`: public/private-data review state and reviewed head.
+- `extensions`: optional non-authoritative metadata that v1 records but never
+  interprets as gate authority.
 
 See the [review-ready synthetic example](examples/v1-review-ready.json), the
 [v1 template](templates/agent-run-receipt-v1.template.json), and the concise
-[migration note](docs/migrating-to-v1.md).
+[migration note](docs/migrating-to-v1.md). The
+[machine-readable schema](schemas/agent-run-receipt-v1.schema.json) covers
+structure; the validator and [conformance corpus](conformance/v1/README.md)
+cover revision, evidence-reference, parser, and rendering relationships.
 
 Negative fixtures make important failures visible:
 
@@ -139,7 +152,23 @@ python3 -B examples/check_failure_semantics.py
 The checker reports scoring coverage, explicit status and failure-class counts,
 the observed mean over scored cases, and best/worst-case sensitivity bounds. It
 is an experimental public pattern, not a change to the EvidenceGate v1 receipt
-schema.
+schema. See the [architecture boundary](docs/architecture.md) before reusing
+the EvidenceGate name for a different audit record.
+
+## Adversarial Input Boundary
+
+Receipts may be supplied by an agent or another untrusted producer. The
+reference implementation therefore:
+
+- rejects duplicate JSON object keys, `NaN` / infinity constants, packets over
+  one megabyte, and undeclared v1 fields;
+- reserves `extensions` for metadata that cannot affect a gate result;
+- refuses to render an invalid packet through the public module API; and
+- neutralizes headings, raw HTML, links, and unsafe code-span delimiters in
+  reviewer-facing Markdown.
+
+These defenses protect the integrity of the local receipt view. They do not
+authenticate the receipt or make its factual claims true.
 
 ## Legacy Receipts
 
@@ -215,11 +244,18 @@ This is a receipt validator and local consistency checker, not an attestation
 system, policy engine, sandbox, hosted platform, or autonomous approval system.
 All checked-in examples are synthetic.
 
+The [remarkable roadmap](docs/remarkable-roadmap.md) defines the evidence needed
+to progress from a useful pattern to an interoperable, authenticated, and
+empirically tested review aid. The [release checklist](docs/release-checklist.md)
+turns the local and publication gates into an explicit operator checkpoint.
+Those later claims remain explicitly unearned.
+
 ## Quality Checks
 
 ```sh
 python3 -B evidencegate.py --self-test
 python3 -B -m unittest discover -s tests -v
+python3 -B tools/check_conformance.py
 python3 -B examples/run-v1-reference.py
 python3 -B examples/check_failure_semantics.py
 python3 -B evidencegate.py validate examples/v1-review-ready.json
