@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "summary": "Demonstrates a claim that cites an evidence identifier not present in the receipt.",
+  "subject": {
+    "type": "git_change",
+    "base_sha": "1111111111111111111111111111111111111111",
+    "head_sha": "2222222222222222222222222222222222222222"
+  },
+  "scope": {
+    "allowed_paths": [
+      "demo.py"
+    ],
+    "protected_prefixes": [
+      "private"
+    ]
+  },
+  "files_touched": [
+    "demo.py"
+  ],
+  "checks": [
+    {
+      "id": "check:syntax",
+      "name": "Syntax check",
+      "command": "python3 -m py_compile demo.py",
+      "status": "passed",
+      "summary": "The file compiled.",
+      "scope": "Python syntax",
+      "revision": "2222222222222222222222222222222222222222",
+      "required": true
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim:behavior",
+      "text": "The behavioral regression is fixed.",
+      "evidence_refs": [
+        "check:behavior"
+      ]
+    }
+  ],
+  "risks": [
+    "Behavioral verification is missing."
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "maintainer",
+    "reviewed_head_sha": "2222222222222222222222222222222222222222",
+    "summary": "Reviewed the synthetic diff."
+  },
+  "public_safety": {
+    "status": "reviewed",
+    "reviewed_head_sha": "2222222222222222222222222222222222222222",
+    "summary": "Synthetic data only."
+  }
+}

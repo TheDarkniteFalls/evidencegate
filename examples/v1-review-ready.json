@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "summary": "Fixed a synthetic CLI export-path regression and recorded review evidence for one exact revision.",
+  "subject": {
+    "type": "git_change",
+    "base_sha": "1111111111111111111111111111111111111111",
+    "head_sha": "2222222222222222222222222222222222222222"
+  },
+  "scope": {
+    "allowed_paths": [
+      "docs_export.py",
+      "tests/test_export_paths.py",
+      "examples/demo-project/config.json",
+      "CHANGELOG.md"
+    ],
+    "protected_prefixes": [
+      ".env",
+      ".git",
+      "private"
+    ]
+  },
+  "files_touched": [
+    "docs_export.py",
+    "tests/test_export_paths.py",
+    "examples/demo-project/config.json",
+    "CHANGELOG.md"
+  ],
+  "checks": [
+    {
+      "id": "check:regression",
+      "name": "Export-path regression test",
+      "command": "python3 -m unittest tests.test_export_paths",
+      "status": "passed",
+      "summary": "The synthetic relative-path regression case passed.",
+      "scope": "Export path resolution and containment",
+      "revision": "2222222222222222222222222222222222222222",
+      "required": true
+    },
+    {
+      "id": "check:smoke",
+      "name": "Synthetic export smoke test",
+      "command": "python3 docs_export.py --input examples/demo-project --out /tmp/docs-export",
+      "status": "passed",
+      "summary": "The synthetic project exported under the requested output directory.",
+      "scope": "Document export happy path",
+      "revision": "2222222222222222222222222222222222222222",
+      "required": true
+    },
+    {
+      "id": "check:windows",
+      "name": "Windows smoke test",
+      "command": "python docs_export.py --input examples/demo-project --out %TEMP%\\docs-export",
+      "status": "skipped",
+      "summary": "No Windows runner was available.",
+      "scope": "Windows path behavior",
+      "revision": "2222222222222222222222222222222222222222",
+      "required": false
+    },
+    {
+      "id": "check:history",
+      "name": "Commit-history review",
+      "command": "git log --format=fuller --all",
+      "status": "unknown",
+      "summary": "Repository history was not supplied with this synthetic fixture.",
+      "scope": "Commit metadata and earlier repository history",
+      "revision": "2222222222222222222222222222222222222222",
+      "required": false
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim:regression-fixed",
+      "text": "The recorded export-path regression is fixed for the synthetic case.",
+      "evidence_refs": [
+        "check:regression"
+      ]
+    },
+    {
+      "id": "claim:happy-path",
+      "text": "The synthetic export happy path completed successfully.",
+      "evidence_refs": [
+        "check:smoke"
+      ]
+    }
+  ],
+  "risks": [
+    "Windows path behavior was not exercised on a Windows runner.",
+    "Commit history was not supplied with this synthetic fixture."
+  ],
+  "human_review": {
+    "status": "approved",
+    "reviewer": "maintainer",
+    "reviewed_head_sha": "2222222222222222222222222222222222222222",
+    "summary": "Reviewed the synthetic diff, recorded checks, and residual risk."
+  },
+  "public_safety": {
+    "status": "reviewed",
+    "reviewed_head_sha": "2222222222222222222222222222222222222222",
+    "summary": "Confirmed that the example contains synthetic data and no private project material."
+  }
+}
