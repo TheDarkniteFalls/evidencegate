@@ -15,6 +15,7 @@ jobs:
       - run: python3 -B evidencegate.py --self-test
       - run: python3 -B -m unittest discover -s tests -v
       - run: python3 -B examples/run-v1-reference.py
+      - run: python3 -B examples/check_failure_semantics.py
       - run: python3 -B evidencegate.py validate examples/v1-review-ready.json
       - run: python3 -B evidencegate.py render examples/v1-review-ready.json
       - run: python3 -B evidencegate.py examples/good-run.json
@@ -22,4 +23,4 @@ jobs:
       - run: python3 -B evidencegate.py examples/python-cli-bugfix.json
       - run: python3 -B evidencegate.py examples/browser-qa-regression.json
       - run: python3 -B evidencegate.py examples/public-safety-publication.json
-      - run: python3 -B -m py_compile evidencegate.py examples/run-v1-reference.py tests/test_evidencegate.py tests/test_reference_run.py
+      - run: python3 -B -m py_compile evidencegate.py examples/run-v1-reference.py examples/check_failure_semantics.py tests/test_evidencegate.py tests/test_reference_run.py tests/test_failure_semantics.py
