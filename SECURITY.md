@@ -25,3 +25,10 @@ The trust boundary is documented in
 [`docs/architecture.md`](docs/architecture.md). EvidenceGate does not currently
 authenticate receipts, evidence, command output, or reviewer identities. Report
 any output or documentation that implies otherwise.
+
+The experimental attestation profile validates an unsigned in-toto Statement's
+structure, digest, subject, issuer-policy text, and validity window. It does not
+verify a signature or identity and prints `UNAUTHENTICATED` on its only passing
+contract path. Treat any bypass of that label, acceptance of an attack fixture,
+or implication that digest agreement authenticates an issuer as a
+security-relevant defect.

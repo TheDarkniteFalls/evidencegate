@@ -1,0 +1,24 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "git+https://github.com/TheDarkniteFalls/evidencegate",
+      "digest": {
+        "gitCommit": "2222222222222222222222222222222222222222"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/TheDarkniteFalls/evidencegate/attestation/v0",
+  "predicate": {
+    "profile": "evidencegate_attestation_v0",
+    "receipt": {
+      "media_type": "application/vnd.evidencegate.receipt.v1+json",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "base_sha": "1111111111111111111111111111111111111111",
+    "head_sha": "2222222222222222222222222222222222222222",
+    "issued_at": "2030-01-01T00:00:00Z",
+    "expires_at": "2030-01-02T00:00:00Z",
+    "claimed_issuer": "https://github.com/TheDarkniteFalls/evidencegate/.github/workflows/checks.yml@refs/heads/main"
+  }
+}

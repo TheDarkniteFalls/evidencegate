@@ -35,9 +35,12 @@ jobs:
       - run: python -B evidencegate.py --self-test
       - run: python -B -m unittest discover -s tests -v
       - run: python -B tools/check_conformance.py
+      - run: python -B tools/check_attestation_conformance.py
+      - run: python -B tools/check_reviewer_study.py
       - run: python -B examples/run-v1-reference.py
       - run: python -B examples/check_failure_semantics.py
       - run: python -B -m json.tool schemas/agent-run-receipt-v1.schema.json
+      - run: python -B -m json.tool schemas/evidencegate-attestation-v0.schema.json
       - run: python -B evidencegate.py validate examples/v1-review-ready.json
       - run: python -B evidencegate.py render examples/v1-review-ready.json
       - run: python -B evidencegate.py examples/good-run.json
@@ -51,7 +54,41 @@ jobs:
           examples/run-v1-reference.py
           examples/check_failure_semantics.py
           tools/check_conformance.py
+          tools/attestation_profile.py
+          tools/create_attestation_statement.py
+          tools/check_attestation_conformance.py
+          tools/prepare_reviewer_study.py
+          tools/score_reviewer_study.py
+          tools/check_reviewer_study.py
+          tools/check_remarkable_candidate.py
           tests/test_evidencegate.py
           tests/test_conformance.py
+          tests/test_attestation_profile.py
           tests/test_reference_run.py
           tests/test_failure_semantics.py
+          tests/test_reviewer_study.py
+
+  node-conformance:
+    name: Node 24 / cross-language conformance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: "24"
+      - run: node replication/node/check-conformance.mjs
+
+  remarkable-candidate:
+    name: remarkable candidate / aggregate gate
+    needs: [python, node-conformance]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: "24"
+      - run: python -m pip install ".[test]"
+      - run: python -B tools/check_remarkable_candidate.py

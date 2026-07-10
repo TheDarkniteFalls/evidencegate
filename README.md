@@ -17,6 +17,41 @@ and portable [v1 conformance corpus](conformance/v1/README.md). The
 [architecture boundary](docs/architecture.md) distinguishes that stable
 contract from adjacent audit research.
 
+## Remarkable-Candidate Proof Package
+
+One command runs every proof the maintainers can complete without inventing an
+external result. It requires Python 3.10+ and Node 24+, runs no model or network
+call, and is read-only unless `--report` is supplied:
+
+```sh
+python3 -B tools/check_remarkable_candidate.py
+```
+
+On a clean revision it checks both schemas, all Python tests, the Python and
+Node conformance consumers, the end-to-end Git lifecycle, failure semantics,
+the attestation attack corpus, and the reviewer-study machinery. Supply
+`--report path.json` to write an environment-, revision-, command-, and
+output-digest-bound evidence summary.
+
+The package adds four explicit proof surfaces:
+
+- a [separately written Node consumer](replication/node/README.md) that reaches
+  the same public corpus outcomes without importing the Python implementation;
+- an [unsigned in-toto attestation profile](attestation/v0/README.md) that
+  checks receipt-byte, revision, subject-policy, issuer-policy, and expiry
+  relationships while visibly reporting `UNAUTHENTICATED`;
+- a [blinded reviewer-study kit](study/v0/README.md) with twelve sound and
+  adverse cases, complementary arms, response preparation, and descriptive
+  scoring; and
+- an exact [claim matrix](docs/marketing-claims.md) separating candidate
+  engineering from authenticated use, measured reviewer effects, and
+  independent replication.
+
+This supports the phrase **remarkable candidate** after the aggregate gate
+passes on the cited clean revision. It does not support saying that a bare
+receipt is authenticated, that reviewer uplift has been measured, or that the
+project has independent endorsement.
+
 ## Quick Start
 
 Run the complete v1 lifecycle against a temporary synthetic Git repository:
@@ -244,11 +279,12 @@ This is a receipt validator and local consistency checker, not an attestation
 system, policy engine, sandbox, hosted platform, or autonomous approval system.
 All checked-in examples are synthetic.
 
-The [remarkable roadmap](docs/remarkable-roadmap.md) defines the evidence needed
-to progress from a useful pattern to an interoperable, authenticated, and
-empirically tested review aid. The [release checklist](docs/release-checklist.md)
+The [remarkable roadmap](docs/remarkable-roadmap.md) separates the complete
+maintainer-controlled candidate from real-use evidence that cannot be created
+honestly in a source repository. The [release checklist](docs/release-checklist.md)
 turns the local and publication gates into an explicit operator checkpoint.
-Those later claims remain explicitly unearned.
+Authenticated records, measured reviewer effects, and independent replication
+remain explicitly unearned until their named evidence exists.
 
 ## Quality Checks
 
@@ -256,6 +292,9 @@ Those later claims remain explicitly unearned.
 python3 -B evidencegate.py --self-test
 python3 -B -m unittest discover -s tests -v
 python3 -B tools/check_conformance.py
+node replication/node/check-conformance.mjs
+python3 -B tools/check_attestation_conformance.py
+python3 -B tools/check_reviewer_study.py
 python3 -B examples/run-v1-reference.py
 python3 -B examples/check_failure_semantics.py
 python3 -B evidencegate.py validate examples/v1-review-ready.json
@@ -265,4 +304,5 @@ python3 -B evidencegate.py examples/agent-run-receipt.json
 python3 -B evidencegate.py examples/python-cli-bugfix.json
 python3 -B evidencegate.py examples/browser-qa-regression.json
 python3 -B evidencegate.py examples/public-safety-publication.json
+python3 -B tools/check_remarkable_candidate.py
 ```
