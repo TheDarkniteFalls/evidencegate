@@ -4,7 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import html
 import json
+import math
 import re
 import subprocess
 import sys
@@ -23,6 +26,42 @@ BOUNDARY = (
     "that evidence or reviewer identities are authentic, or that the work is correct, "
     "secure, accepted, or authorized for publication."
 )
+MAX_PACKET_BYTES = 1_000_000
+GIT_TIMEOUT_SECONDS = 30
+V1_TOP_LEVEL_FIELDS = {
+    "schema_version",
+    "summary",
+    "subject",
+    "scope",
+    "files_touched",
+    "checks",
+    "claims",
+    "risks",
+    "human_review",
+    "public_safety",
+    "extensions",
+}
+V1_SUBJECT_FIELDS = {"type", "base_sha", "head_sha"}
+V1_SCOPE_FIELDS = {"allowed_paths", "protected_prefixes"}
+V1_CHECK_FIELDS = {
+    "id",
+    "name",
+    "command",
+    "status",
+    "summary",
+    "scope",
+    "revision",
+    "required",
+}
+V1_CLAIM_FIELDS = {"id", "text", "evidence_refs"}
+V1_HUMAN_REVIEW_FIELDS = {
+    "status",
+    "reviewer",
+    "reviewed_head_sha",
+    "summary",
+}
+V1_PUBLIC_SAFETY_FIELDS = {"status", "reviewed_head_sha", "summary"}
+MARKDOWN_ESCAPE_PATTERN = re.compile(r"([\\`*_{}\[\]()#!|>])")
 
 
 def require_text(packet: dict[str, Any], key: str, errors: list[str]) -> None:
@@ -99,6 +138,17 @@ def _require_text_list(
     return items
 
 
+def _reject_unknown_fields(
+    value: dict[str, Any], allowed: set[str], location: str, errors: list[str]
+) -> None:
+    for key in sorted(set(value) - allowed):
+        field = f"{location}.{key}" if location else key
+        errors.append(
+            f"{field} is not defined by EvidenceGate v1; "
+            "put non-authoritative metadata under extensions"
+        )
+
+
 def _is_protected(path: str, prefixes: list[str]) -> bool:
     return any(path == prefix or path.startswith(f"{prefix}/") for prefix in prefixes)
 
@@ -167,6 +217,7 @@ def validate_legacy_packet(packet: dict[str, Any]) -> list[str]:
 def validate_v1_packet(packet: dict[str, Any]) -> list[str]:
     """Validate the v1 schema and its internal evidence relationships."""
     errors: list[str] = []
+    _reject_unknown_fields(packet, V1_TOP_LEVEL_FIELDS, "", errors)
     if type(packet.get("schema_version")) is not int or packet.get("schema_version") != 1:
         errors.append("schema_version must be 1")
 
@@ -177,6 +228,7 @@ def validate_v1_packet(packet: dict[str, Any]) -> list[str]:
     if not isinstance(subject, dict):
         errors.append("subject must be an object")
     else:
+        _reject_unknown_fields(subject, V1_SUBJECT_FIELDS, "subject", errors)
         if subject.get("type") != "git_change":
             errors.append("subject.type must be git_change")
         _require_sha(subject.get("base_sha"), "subject.base_sha", errors)
@@ -202,6 +254,7 @@ def validate_v1_packet(packet: dict[str, Any]) -> list[str]:
     if not isinstance(scope, dict):
         errors.append("scope must be an object")
     else:
+        _reject_unknown_fields(scope, V1_SCOPE_FIELDS, "scope", errors)
         allowed_paths = _require_path_list(
             scope.get("allowed_paths"), "scope.allowed_paths", errors
         )
@@ -235,6 +288,7 @@ def validate_v1_packet(packet: dict[str, Any]) -> list[str]:
             if not isinstance(check, dict):
                 errors.append(f"{location} must be an object")
                 continue
+            _reject_unknown_fields(check, V1_CHECK_FIELDS, location, errors)
             check_id = check.get("id")
             _require_id(check_id, f"{location}.id", errors)
             _require_text_field(check, "name", location, errors)
@@ -271,6 +325,7 @@ def validate_v1_packet(packet: dict[str, Any]) -> list[str]:
             if not isinstance(claim, dict):
                 errors.append(f"{location} must be an object")
                 continue
+            _reject_unknown_fields(claim, V1_CLAIM_FIELDS, location, errors)
             claim_id = claim.get("id")
             _require_id(claim_id, f"{location}.id", errors)
             _require_text_field(claim, "text", location, errors)
@@ -303,6 +358,9 @@ def validate_v1_packet(packet: dict[str, Any]) -> list[str]:
     if not isinstance(review, dict):
         errors.append("human_review must be an object")
     else:
+        _reject_unknown_fields(
+            review, V1_HUMAN_REVIEW_FIELDS, "human_review", errors
+        )
         if review.get("status") not in V1_HUMAN_REVIEW_STATUSES:
             errors.append(
                 "human_review.status must be one of: "
@@ -326,6 +384,9 @@ def validate_v1_packet(packet: dict[str, Any]) -> list[str]:
     if not isinstance(safety, dict):
         errors.append("public_safety must be an object")
     else:
+        _reject_unknown_fields(
+            safety, V1_PUBLIC_SAFETY_FIELDS, "public_safety", errors
+        )
         if safety.get("status") not in V1_PUBLIC_SAFETY_STATUSES:
             errors.append(
                 "public_safety.status must be one of: "
@@ -343,6 +404,8 @@ def validate_v1_packet(packet: dict[str, Any]) -> list[str]:
                 errors.append(
                     "public_safety.reviewed_head_sha does not match subject.head_sha"
                 )
+    if "extensions" in packet and not isinstance(packet["extensions"], dict):
+        errors.append("extensions must be an object when present")
     return errors
 
 
@@ -381,13 +444,32 @@ def review_readiness_errors(packet: dict[str, Any]) -> list[str]:
 
 
 def _run_git(repo: Path, arguments: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        ["git", "-C", str(repo), *arguments],
-        check=False,
-        capture_output=True,
-        encoding="utf-8",
-        errors="replace",
-    )
+    command = [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.pager=cat",
+        "-C",
+        str(repo),
+        *arguments,
+    ]
+    try:
+        return subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=GIT_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired:
+        return subprocess.CompletedProcess(
+            command,
+            124,
+            stdout="",
+            stderr=f"Git command timed out after {GIT_TIMEOUT_SECONDS} seconds",
+        )
 
 
 def verify_repository(packet: dict[str, Any], repo: Path) -> list[str]:
@@ -480,8 +562,33 @@ def verify_repository(packet: dict[str, Any], repo: Path) -> list[str]:
     return errors
 
 
+def _markdown_text(value: Any) -> str:
+    """Render supplied text without allowing it to create Markdown structure."""
+    normalized = " ".join(str(value).split())
+    escaped = html.escape(normalized, quote=False)
+    return MARKDOWN_ESCAPE_PATTERN.sub(r"\\\1", escaped)
+
+
+def _markdown_code(value: Any) -> str:
+    """Render a safe CommonMark code span, including values containing backticks."""
+    text = " ".join(str(value).splitlines())
+    runs = [len(match.group(0)) for match in re.finditer(r"`+", text)]
+    delimiter = "`" * (max(runs, default=0) + 1)
+    padding = " " if text.startswith(("`", " ")) or text.endswith(("`", " ")) else ""
+    return f"{delimiter}{padding}{text}{padding}{delimiter}"
+
+
+def _markdown_quote(value: Any) -> list[str]:
+    lines = str(value).splitlines() or [""]
+    return [f"> {_markdown_text(line)}" if line else ">" for line in lines]
+
+
 def _markdown_list(items: list[str]) -> list[str]:
-    return [f"- {item}" for item in items] if items else ["- None recorded."]
+    return (
+        [f"- {_markdown_text(item)}" for item in items]
+        if items
+        else ["- None recorded."]
+    )
 
 
 def render_v1(packet: dict[str, Any]) -> str:
@@ -495,12 +602,12 @@ def render_v1(packet: dict[str, Any]) -> str:
         "",
         "## Summary",
         "",
-        packet["summary"],
+        *_markdown_quote(packet["summary"]),
         "",
         "## Revision",
         "",
-        f"- Base: `{subject['base_sha']}`",
-        f"- Head: `{subject['head_sha']}`",
+        f"- Base: {_markdown_code(subject['base_sha'])}",
+        f"- Head: {_markdown_code(subject['head_sha'])}",
         "",
         "## Recorded scope",
         "",
@@ -523,19 +630,20 @@ def render_v1(packet: dict[str, Any]) -> str:
         requirement = "required" if check["required"] else "optional"
         lines.extend(
             [
-                f"- `{check['id']}` [{check['status']}; {requirement}] {check['name']}",
-                f"  - Command: `{check['command']}`",
-                f"  - Scope: {check['scope']}",
-                f"  - Revision: `{check['revision']}`",
-                f"  - Recorded result: {check['summary']}",
+                f"- {_markdown_code(check['id'])} "
+                f"[{check['status']}; {requirement}] {_markdown_text(check['name'])}",
+                f"  - Command: {_markdown_code(check['command'])}",
+                f"  - Scope: {_markdown_text(check['scope'])}",
+                f"  - Revision: {_markdown_code(check['revision'])}",
+                f"  - Recorded result: {_markdown_text(check['summary'])}",
             ]
         )
     lines.extend(["", "## Claims", ""])
     for claim in packet["claims"]:
-        refs = ", ".join(f"`{ref}`" for ref in claim["evidence_refs"])
+        refs = ", ".join(_markdown_code(ref) for ref in claim["evidence_refs"])
         lines.extend(
             [
-                f"- `{claim['id']}` {claim['text']}",
+                f"- {_markdown_code(claim['id'])} {_markdown_text(claim['text'])}",
                 f"  - Recorded evidence: {refs}",
             ]
         )
@@ -548,9 +656,9 @@ def render_v1(packet: dict[str, Any]) -> str:
             "## Human review",
             "",
             f"- Status: {review['status']}",
-            f"- Reviewer: {review['reviewer']}",
-            f"- Reviewed head: `{review['reviewed_head_sha']}`",
-            f"- Summary: {review['summary']}",
+            f"- Reviewer: {_markdown_text(review['reviewer'])}",
+            f"- Reviewed head: {_markdown_code(review['reviewed_head_sha'])}",
+            f"- Summary: {_markdown_text(review['summary'])}",
         ]
     )
     safety = packet["public_safety"]
@@ -560,8 +668,8 @@ def render_v1(packet: dict[str, Any]) -> str:
             "## Public-safety review",
             "",
             f"- Status: {safety['status']}",
-            f"- Reviewed head: `{safety['reviewed_head_sha']}`",
-            f"- Summary: {safety['summary']}",
+            f"- Reviewed head: {_markdown_code(safety['reviewed_head_sha'])}",
+            f"- Summary: {_markdown_text(safety['summary'])}",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -579,7 +687,7 @@ def render_legacy(packet: dict[str, Any]) -> str:
         "",
         "## Summary",
         "",
-        str(packet.get("summary", "")),
+        *_markdown_quote(packet.get("summary", "")),
         "",
         "## Files touched",
         "",
@@ -589,23 +697,80 @@ def render_legacy(packet: dict[str, Any]) -> str:
         "",
     ]
     for command in packet.get("commands", []):
-        lines.append(f"- [{command.get('result')}] `{command.get('command')}`")
+        lines.append(
+            f"- [{command.get('result')}] {_markdown_code(command.get('command'))}"
+        )
     lines.extend(["", "## Tests", ""])
     for test in packet.get("tests", []):
-        lines.append(f"- [{test.get('status')}] {test.get('name')}")
+        lines.append(
+            f"- [{test.get('status')}] {_markdown_text(test.get('name'))}"
+        )
     lines.extend(["", "## Residual risks", "", *_markdown_list(packet.get("risks", []))])
     return "\n".join(lines) + "\n"
 
 
 def render_packet(packet: dict[str, Any]) -> str:
+    errors = validate_packet(packet)
+    if errors:
+        raise ValueError("cannot render invalid receipt: " + "; ".join(errors))
     version = receipt_version(packet)
     if version == "v1":
         return render_v1(packet)
     return render_legacy(packet)
 
 
+def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    value: dict[str, Any] = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError(f"duplicate JSON object key: {key}")
+        value[key] = item
+    return value
+
+
+def _reject_json_constant(value: str) -> None:
+    raise ValueError(f"non-standard JSON constant is not allowed: {value}")
+
+
+def _validate_json_value(value: Any, location: str = "$") -> None:
+    if isinstance(value, str):
+        if any(0xD800 <= ord(character) <= 0xDFFF for character in value):
+            raise ValueError(f"unpaired Unicode surrogate is not allowed at {location}")
+        return
+    if isinstance(value, float) and not math.isfinite(value):
+        raise ValueError(f"non-finite JSON number is not allowed at {location}")
+    if isinstance(value, list):
+        for index, item in enumerate(value):
+            _validate_json_value(item, f"{location}[{index}]")
+        return
+    if isinstance(value, dict):
+        for key, item in value.items():
+            _validate_json_value(key, f"{location} object key")
+            _validate_json_value(item, f"{location}.{key}")
+
+
 def load_packet(path: Path) -> dict[str, Any]:
-    data = json.loads(path.read_text(encoding="utf-8"))
+    raw = path.read_bytes()
+    size = len(raw)
+    if size > MAX_PACKET_BYTES:
+        raise ValueError(
+            f"packet is {size} bytes; maximum supported size is {MAX_PACKET_BYTES}"
+        )
+    try:
+        text = raw.decode("utf-8")
+        data = json.loads(
+            text,
+            object_pairs_hook=_unique_object,
+            parse_constant=_reject_json_constant,
+        )
+    except UnicodeDecodeError as exc:
+        raise ValueError(f"packet must be UTF-8: {exc}") from exc
+    except RecursionError as exc:
+        raise ValueError("packet JSON nesting is too deep") from exc
+    try:
+        _validate_json_value(data)
+    except RecursionError as exc:
+        raise ValueError("packet JSON nesting is too deep") from exc
     if not isinstance(data, dict):
         raise ValueError("packet must be a JSON object")
     return data
@@ -626,23 +791,84 @@ def self_test() -> None:
     assert validate_packet(good_legacy) == []
     assert validate_packet(bad_legacy)
 
-    examples = Path(__file__).resolve().parent / "examples"
-    incomplete_errors = set(
-        validate_packet(load_packet(examples / "incomplete-agent-run.json"))
-    )
+    incomplete_legacy = copy.deepcopy(good_legacy)
+    incomplete_legacy["tests"][0]["status"] = "pending"
+    incomplete_legacy["human_review"] = {"status": "pending"}
+    incomplete_legacy["public_safety"] = {"private_data_reviewed": False}
+    incomplete_errors = set(validate_packet(incomplete_legacy))
     assert {
         "tests[1] must name a passed check",
         "human_review.status must be approved",
         "public_safety.private_data_reviewed must be true",
     } <= incomplete_errors
 
-    v1 = load_packet(examples / "v1-review-ready.json")
+    base_sha = "1" * 40
+    head_sha = "2" * 40
+    v1 = {
+        "schema_version": 1,
+        "summary": "Changed one synthetic file and recorded one focused check.",
+        "subject": {
+            "type": "git_change",
+            "base_sha": base_sha,
+            "head_sha": head_sha,
+        },
+        "scope": {
+            "allowed_paths": ["demo.py"],
+            "protected_prefixes": ["private"],
+        },
+        "files_touched": ["demo.py"],
+        "checks": [
+            {
+                "id": "check:focused",
+                "name": "Focused synthetic check",
+                "command": "python demo.py --self-test",
+                "status": "passed",
+                "summary": "The synthetic check passed.",
+                "scope": "Synthetic behavior",
+                "revision": head_sha,
+                "required": True,
+            }
+        ],
+        "claims": [
+            {
+                "id": "claim:behavior",
+                "text": "The synthetic behavior passes its focused check.",
+                "evidence_refs": ["check:focused"],
+            }
+        ],
+        "risks": ["This is an in-memory synthetic self-test."],
+        "human_review": {
+            "status": "approved",
+            "reviewer": "synthetic-reviewer",
+            "reviewed_head_sha": head_sha,
+            "summary": "Simulated review for the self-test.",
+        },
+        "public_safety": {
+            "status": "reviewed",
+            "reviewed_head_sha": head_sha,
+            "summary": "Confirmed that the self-test is synthetic.",
+        },
+    }
     assert validate_packet(v1) == []
     assert review_readiness_errors(v1) == []
     assert "# EvidenceGate v1 receipt" in render_packet(v1)
-    assert validate_packet(load_packet(examples / "v1-stale-evidence.json"))
-    assert validate_packet(load_packet(examples / "v1-unsupported-claim.json"))
-    not_ready = load_packet(examples / "v1-not-review-ready.json")
+
+    stale = copy.deepcopy(v1)
+    stale["checks"][0]["revision"] = base_sha
+    assert validate_packet(stale)
+
+    unsupported = copy.deepcopy(v1)
+    unsupported["claims"][0]["evidence_refs"] = ["check:missing"]
+    assert validate_packet(unsupported)
+
+    not_ready = copy.deepcopy(v1)
+    failed_check = copy.deepcopy(not_ready["checks"][0])
+    failed_check["id"] = "check:required-failure"
+    failed_check["status"] = "failed"
+    failed_check["summary"] = "A required synthetic check failed."
+    not_ready["checks"].append(failed_check)
+    not_ready["human_review"]["status"] = "changes_requested"
+    not_ready["public_safety"]["status"] = "pending"
     assert validate_packet(not_ready) == []
     assert review_readiness_errors(not_ready)
 
@@ -699,7 +925,7 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         packet = load_packet(Path(args.path))
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError) as exc:
         print(f"Could not load packet: {exc}", file=sys.stderr)
         return 2
 

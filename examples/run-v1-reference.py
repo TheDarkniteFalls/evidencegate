@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT))
 import evidencegate  # noqa: E402
 
 
-FOCUSED_COMMAND = "python3 -B -m unittest discover -s tests -v"
+FOCUSED_COMMAND = "python -B -m unittest discover -s tests -v"
 EXPECTED_OUTPUT = [
     "PASS focused_check",
     "PASS receipt_structure",
@@ -59,7 +59,7 @@ def run_git(repo: Path, *arguments: str) -> str:
 
 def run_focused_check(repo: Path) -> None:
     result = run_command(
-        ["python3", "-B", "-m", "unittest", "discover", "-s", "tests", "-v"],
+        [sys.executable, "-B", "-m", "unittest", "discover", "-s", "tests", "-v"],
         repo,
     )
     if result.returncode != 0:

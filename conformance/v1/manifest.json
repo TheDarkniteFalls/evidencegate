@@ -1,0 +1,44 @@
+{
+  "schema_version": "evidencegate_conformance_v1",
+  "cases": [
+    {
+      "id": "valid-minimal",
+      "receipt": "valid-minimal.json",
+      "expected": "pass"
+    },
+    {
+      "id": "duplicate-key-rejected",
+      "receipt": "invalid-duplicate-key.json",
+      "expected": "load_error",
+      "contains": "duplicate JSON object key: schema_version"
+    },
+    {
+      "id": "unknown-field-rejected",
+      "receipt": "invalid-unknown-field.json",
+      "expected": "validation_error",
+      "contains": "policy_override is not defined by EvidenceGate v1"
+    },
+    {
+      "id": "stale-check-rejected",
+      "receipt": "invalid-stale-check.json",
+      "expected": "validation_error",
+      "contains": "checks[1].revision does not match subject.head_sha"
+    },
+    {
+      "id": "nonpassing-claim-rejected",
+      "receipt": "invalid-nonpassing-claim.json",
+      "expected": "validation_error",
+      "contains": "claims[1] references non-passing evidence"
+    },
+    {
+      "id": "markdown-neutralized",
+      "receipt": "valid-adversarial-markdown.json",
+      "expected": "pass",
+      "render": {
+        "heading": "## Human review",
+        "heading_count": 1,
+        "forbidden": ["<script>", "\n## forged review"]
+      }
+    }
+  ]
+}
