@@ -3,7 +3,9 @@
 All notable changes to the EvidenceGate receipt contract and reference
 implementation will be documented here.
 
-## Unreleased
+## 0.1.0 - Unreleased
+
+[Draft release notes](docs/v0.1.0-release-notes.md)
 
 ### Added
 
@@ -26,6 +28,8 @@ implementation will be documented here.
 - A separately written, dependency-free Node conformance consumer for
   first-party cross-language contract evidence.
 - One aggregate remarkable-candidate gate and machine-readable evidence report.
+- A versioned JSON result contract for `validate` and `verify`, stable finding
+  codes, a result JSON Schema, and a pinned consumer CI recipe.
 
 ### Changed
 

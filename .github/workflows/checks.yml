@@ -40,8 +40,10 @@ jobs:
       - run: python -B examples/run-v1-reference.py
       - run: python -B examples/check_failure_semantics.py
       - run: python -B -m json.tool schemas/agent-run-receipt-v1.schema.json
+      - run: python -B -m json.tool schemas/cli-result-v1.schema.json
       - run: python -B -m json.tool schemas/evidencegate-attestation-v0.schema.json
       - run: python -B evidencegate.py validate examples/v1-review-ready.json
+      - run: python -B evidencegate.py validate examples/v1-review-ready.json --format json
       - run: python -B evidencegate.py render examples/v1-review-ready.json
       - run: python -B evidencegate.py examples/good-run.json
       - run: python -B evidencegate.py examples/agent-run-receipt.json

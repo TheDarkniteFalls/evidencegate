@@ -48,6 +48,64 @@ class EvidenceGateReceiptTests(unittest.TestCase):
         self.assertIn("`claim:regression-fixed`", rendered)
         self.assertIn(evidencegate.BOUNDARY, rendered)
 
+    def test_validate_json_result_is_stable_and_does_not_echo_input_path(self) -> None:
+        output = io.StringIO()
+        with redirect_stdout(output):
+            result = evidencegate.main(
+                [
+                    "validate",
+                    str(EXAMPLES / "v1-review-ready.json"),
+                    "--format",
+                    "json",
+                ]
+            )
+
+        document = json.loads(output.getvalue())
+        self.assertEqual(result, 0)
+        self.assertEqual(
+            document["contract_version"], evidencegate.CLI_RESULT_CONTRACT
+        )
+        self.assertEqual(document["operation"], "validate")
+        self.assertTrue(document["ok"])
+        self.assertFalse(document["repository_checked"])
+        self.assertEqual(document["findings"], [])
+        self.assertNotIn(str(EXAMPLES), output.getvalue())
+
+    def test_validate_json_result_uses_stable_finding_codes(self) -> None:
+        output = io.StringIO()
+        with redirect_stdout(output):
+            result = evidencegate.main(
+                [
+                    "validate",
+                    str(EXAMPLES / "v1-stale-evidence.json"),
+                    "--format",
+                    "json",
+                ]
+            )
+
+        document = json.loads(output.getvalue())
+        self.assertEqual(result, 1)
+        self.assertFalse(document["ok"])
+        self.assertIn(
+            "receipt_revision_invalid",
+            {finding["code"] for finding in document["findings"]},
+        )
+
+    def test_load_error_json_result_remains_machine_readable(self) -> None:
+        output = io.StringIO()
+        with tempfile.TemporaryDirectory() as directory:
+            invalid = Path(directory) / "invalid.json"
+            invalid.write_text('{"schema_version": 1, "schema_version": 2}')
+            with redirect_stdout(output):
+                result = evidencegate.main(
+                    ["validate", str(invalid), "--format", "json"]
+                )
+
+        document = json.loads(output.getvalue())
+        self.assertEqual(result, 2)
+        self.assertEqual(document["receipt_version"], None)
+        self.assertEqual(document["findings"][0]["code"], "packet_load_error")
+
     def test_stale_evidence_and_unknown_claim_reference_fail(self) -> None:
         stale = evidencegate.validate_packet(
             evidencegate.load_packet(EXAMPLES / "v1-stale-evidence.json")
@@ -238,6 +296,52 @@ class EvidenceGateRepositoryTests(unittest.TestCase):
         self.assertEqual(
             output.getvalue().strip(),
             "PASS EvidenceGate v1 repository verification",
+        )
+
+    def test_verify_cli_can_emit_a_machine_readable_pass(self) -> None:
+        head_sha = self.commit_changes({"app.py": "print('synthetic')\n"})
+        packet = self.packet_for(head_sha, ["app.py"])
+        output = io.StringIO()
+        with tempfile.TemporaryDirectory() as receipt_directory:
+            receipt_path = Path(receipt_directory) / "receipt.json"
+            receipt_path.write_text(json.dumps(packet), encoding="utf-8")
+            with redirect_stdout(output):
+                result = evidencegate.main(
+                    [
+                        "verify",
+                        str(receipt_path),
+                        "--repo",
+                        str(self.repo),
+                        "--format",
+                        "json",
+                    ]
+                )
+
+        document = json.loads(output.getvalue())
+        self.assertEqual(result, 0)
+        self.assertTrue(document["ok"])
+        self.assertTrue(document["repository_checked"])
+        self.assertEqual(document["findings"], [])
+
+    def test_legacy_verify_json_reports_that_repository_was_not_checked(self) -> None:
+        output = io.StringIO()
+        with redirect_stdout(output):
+            result = evidencegate.main(
+                [
+                    "verify",
+                    str(EXAMPLES / "good-run.json"),
+                    "--repo",
+                    str(self.repo),
+                    "--format",
+                    "json",
+                ]
+            )
+
+        document = json.loads(output.getvalue())
+        self.assertEqual(result, 1)
+        self.assertFalse(document["repository_checked"])
+        self.assertEqual(
+            document["findings"][0]["code"], "receipt_not_verifiable"
         )
 
     def test_verify_detects_current_head_drift(self) -> None:

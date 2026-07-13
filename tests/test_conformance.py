@@ -16,6 +16,7 @@ except ModuleNotFoundError:  # The runtime remains standard-library only.
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "schemas" / "agent-run-receipt-v1.schema.json"
+CLI_RESULT_SCHEMA = ROOT / "schemas" / "cli-result-v1.schema.json"
 CHECKER = ROOT / "tools" / "check_conformance.py"
 EXPECTED_OUTPUT = [
     "PASS conformance valid-minimal",
@@ -102,6 +103,34 @@ class SchemaContractTests(unittest.TestCase):
             set(properties["claims"]["items"]["properties"]),
             evidencegate.V1_CLAIM_FIELDS,
         )
+
+    def test_cli_result_schema_matches_runtime_contract(self) -> None:
+        schema = json.loads(CLI_RESULT_SCHEMA.read_text(encoding="utf-8"))
+        finding_codes = set(
+            schema["properties"]["findings"]["items"]["properties"]["code"][
+                "enum"
+            ]
+        )
+
+        self.assertEqual(
+            schema["properties"]["contract_version"]["const"],
+            evidencegate.CLI_RESULT_CONTRACT,
+        )
+        self.assertEqual(finding_codes, evidencegate.FINDING_CODES)
+
+    @unittest.skipIf(Draft202012Validator is None, "install .[test] for meta-validation")
+    def test_cli_result_schema_accepts_a_runtime_result(self) -> None:
+        schema = json.loads(CLI_RESULT_SCHEMA.read_text(encoding="utf-8"))
+        Draft202012Validator.check_schema(schema)
+        result = evidencegate.result_document(
+            operation="validate",
+            ok=False,
+            receipt_kind="v1",
+            summary="Receipt validation failed.",
+            messages=["checks[1].revision does not match subject.head_sha"],
+        )
+
+        self.assertEqual(list(Draft202012Validator(schema).iter_errors(result)), [])
 
 
 class ConformanceRunnerTests(unittest.TestCase):

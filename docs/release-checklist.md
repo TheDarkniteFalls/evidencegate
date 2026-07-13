@@ -7,15 +7,20 @@ push, merge, package upload, or publication.
 
 - [ ] The Git-change v1 JSON Schema, template, examples, runtime constants, and
   conformance manifest agree.
+- [ ] The CLI result JSON Schema, runtime finding codes, integration guide, and
+  conformance expectations agree.
 - [ ] Every breaking contract change uses a new schema or predicate version.
 - [ ] `extensions` remain non-authoritative and cannot change a gate result.
 - [ ] `CHANGELOG.md` names user-visible, compatibility, and security changes.
+- [ ] The v0.1.0 release notes match the final clean revision and package.
 
 ## Verification
 
 - [ ] `python3 -B evidencegate.py --self-test`
 - [ ] `python3 -B -m unittest discover -s tests -v`
 - [ ] `python3 -B tools/check_conformance.py`
+- [ ] JSON `validate` and `verify` results pass their schema and finding-code
+  tests.
 - [ ] `node replication/node/check-conformance.mjs`
 - [ ] `python3 -B tools/check_attestation_conformance.py`
 - [ ] `python3 -B tools/check_reviewer_study.py`
