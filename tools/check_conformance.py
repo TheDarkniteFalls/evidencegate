@@ -32,6 +32,8 @@ def load_manifest() -> dict[str, Any]:
         raise ConformanceError("manifest must be a JSON object")
     if value.get("schema_version") != "evidencegate_conformance_v1":
         raise ConformanceError("unsupported conformance manifest version")
+    if value.get("cli_result_contract") != evidencegate.CLI_RESULT_CONTRACT:
+        raise ConformanceError("unsupported CLI result contract version")
     if not isinstance(value.get("cases"), list) or not value["cases"]:
         raise ConformanceError("manifest cases must be a non-empty list")
     return value
@@ -56,6 +58,12 @@ def check_case(case: dict[str, Any]) -> None:
         packet = evidencegate.load_packet(receipt_path)
     except (OSError, ValueError) as exc:
         require(expected == "load_error", f"{case_id}: unexpected load error: {exc}")
+        expected_code = case.get("expected_code")
+        require(
+            not expected_code
+            or evidencegate.finding_code(str(exc), phase="load") == expected_code,
+            f"{case_id}: load error code did not match {expected_code!r}",
+        )
         contains = case.get("contains")
         require(
             not contains or str(contains) in str(exc),
@@ -67,6 +75,14 @@ def check_case(case: dict[str, Any]) -> None:
     errors = evidencegate.validate_packet(packet)
     if expected == "validation_error":
         require(bool(errors), f"{case_id}: expected a validation error")
+        expected_code = case.get("expected_code")
+        codes = {
+            evidencegate.finding_code(error, phase="validation") for error in errors
+        }
+        require(
+            not expected_code or expected_code in codes,
+            f"{case_id}: validation codes did not contain {expected_code!r}: {codes}",
+        )
         contains = case.get("contains")
         require(
             not contains or any(str(contains) in error for error in errors),

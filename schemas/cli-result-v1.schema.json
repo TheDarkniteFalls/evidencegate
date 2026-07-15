@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/TheDarkniteFalls/evidencegate/main/schemas/cli-result-v1.schema.json",
+  "title": "EvidenceGate CLI result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "operation",
+    "ok",
+    "receipt_version",
+    "repository_checked",
+    "summary",
+    "findings",
+    "boundary"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "evidencegate_cli_result_v1"
+    },
+    "operation": {
+      "enum": ["validate", "verify"]
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "receipt_version": {
+      "type": ["string", "null"],
+      "enum": ["legacy", "v1", "unsupported", null]
+    },
+    "repository_checked": {
+      "type": "boolean"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "enum": [
+              "packet_load_error",
+              "receipt_evidence_invalid",
+              "receipt_not_verifiable",
+              "receipt_review_not_ready",
+              "receipt_revision_invalid",
+              "receipt_scope_invalid",
+              "receipt_structure_invalid",
+              "receipt_version_invalid",
+              "repository_diff_mismatch",
+              "repository_dirty",
+              "repository_inspection_failed",
+              "repository_revision_mismatch",
+              "repository_scope_violation",
+              "repository_unavailable"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "boundary": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

@@ -321,6 +321,22 @@ function render(packet) {
 }
 
 
+function findingCode(message, phase) {
+  if (phase === "load") return "packet_load_error";
+  if (message.startsWith("schema_version")) return "receipt_version_invalid";
+  if (message.includes("revision does not match subject.head_sha")
+      || message.includes("reviewed_head_sha does not match subject.head_sha")
+      || message.startsWith("subject.base_sha")
+      || message.startsWith("subject.head_sha")) return "receipt_revision_invalid";
+  if (message.startsWith("files_touched") || message.startsWith("scope.")
+      || message.includes("protected paths")) return "receipt_scope_invalid";
+  if (message.startsWith("checks") || message.startsWith("claims")
+      || message.startsWith("duplicate check id")
+      || message.startsWith("duplicate claim id")) return "receipt_evidence_invalid";
+  return "receipt_structure_invalid";
+}
+
+
 function checkCase(specification) {
   const filename = path.join(CORPUS, specification.receipt);
   let packet;
@@ -328,6 +344,7 @@ function checkCase(specification) {
     packet = loadObject(filename);
   } catch (error) {
     require(specification.expected === "load_error", `${specification.id}: unexpected load error: ${error.message}`);
+    require(!specification.expected_code || findingCode(error.message, "load") === specification.expected_code, `${specification.id}: wrong load error code`);
     require(!specification.contains || error.message.includes(specification.contains), `${specification.id}: load error did not contain ${specification.contains}`);
     return;
   }
@@ -335,6 +352,8 @@ function checkCase(specification) {
   const errors = validate(packet);
   if (specification.expected === "validation_error") {
     require(errors.length > 0, `${specification.id}: expected validation errors`);
+    const codes = new Set(errors.map((error) => findingCode(error, "validation")));
+    require(!specification.expected_code || codes.has(specification.expected_code), `${specification.id}: wrong validation error code`);
     require(!specification.contains || errors.some((error) => error.includes(specification.contains)), `${specification.id}: validation errors did not contain ${specification.contains}: ${errors}`);
     return;
   }
@@ -352,6 +371,7 @@ function main() {
   try {
     const manifest = loadObject(path.join(CORPUS, "manifest.json"));
     require(manifest.schema_version === "evidencegate_conformance_v1", "unsupported manifest");
+    require(manifest.cli_result_contract === "evidencegate_cli_result_v1", "unsupported CLI result contract");
     require(Array.isArray(manifest.cases) && manifest.cases.length > 0, "manifest cases required");
     const seen = new Set();
     for (const specification of manifest.cases) {

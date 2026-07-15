@@ -28,6 +28,23 @@ BOUNDARY = (
 )
 MAX_PACKET_BYTES = 1_000_000
 GIT_TIMEOUT_SECONDS = 30
+CLI_RESULT_CONTRACT = "evidencegate_cli_result_v1"
+FINDING_CODES = {
+    "packet_load_error",
+    "receipt_evidence_invalid",
+    "receipt_not_verifiable",
+    "receipt_review_not_ready",
+    "receipt_revision_invalid",
+    "receipt_scope_invalid",
+    "receipt_structure_invalid",
+    "receipt_version_invalid",
+    "repository_diff_mismatch",
+    "repository_dirty",
+    "repository_inspection_failed",
+    "repository_revision_mismatch",
+    "repository_scope_violation",
+    "repository_unavailable",
+}
 V1_TOP_LEVEL_FIELDS = {
     "schema_version",
     "summary",
@@ -879,6 +896,98 @@ def _print_errors(title: str, errors: list[str]) -> None:
         print(f"- {error}")
 
 
+def finding_code(message: str, *, phase: str) -> str:
+    """Map a human-readable finding to a stable machine-facing code."""
+    if phase == "load":
+        return "packet_load_error"
+    if message.startswith("legacy receipts cannot be repository-verified"):
+        return "receipt_not_verifiable"
+    if message.startswith(
+        (
+            "required check is not passing",
+            "human_review.status must be approved for repository verification",
+            "public_safety.status must be reviewed for repository verification",
+        )
+    ):
+        return "receipt_review_not_ready"
+    if message.startswith("repository path"):
+        return "repository_unavailable"
+    if message.startswith("repository work tree has"):
+        return "repository_dirty"
+    if message.startswith(
+        (
+            "repository HEAD does not match",
+            "subject.base_sha is not an ancestor",
+            "subject.base_sha is not a commit",
+            "subject.head_sha is not a commit",
+        )
+    ):
+        return "repository_revision_mismatch"
+    if message.startswith(
+        (
+            "could not resolve repository HEAD",
+            "could not inspect repository work-tree status",
+            "could not compare subject base and head revisions",
+            "could not list paths changed between subject revisions",
+        )
+    ):
+        return "repository_inspection_failed"
+    if message.startswith(
+        ("changed paths missing from files_touched", "files_touched not present in Git diff")
+    ):
+        return "repository_diff_mismatch"
+    if message.startswith(
+        ("Git diff includes paths outside", "Git diff includes protected paths")
+    ):
+        return "repository_scope_violation"
+    if message.startswith("schema_version"):
+        return "receipt_version_invalid"
+    if (
+        "revision does not match subject.head_sha" in message
+        or "reviewed_head_sha does not match subject.head_sha" in message
+        or message.startswith("subject.base_sha")
+        or message.startswith("subject.head_sha")
+    ):
+        return "receipt_revision_invalid"
+    if message.startswith(("files_touched", "scope.")) or "protected paths" in message:
+        return "receipt_scope_invalid"
+    if message.startswith(
+        ("checks", "claims", "duplicate check id", "duplicate claim id")
+    ):
+        return "receipt_evidence_invalid"
+    return "receipt_structure_invalid"
+
+
+def result_document(
+    *,
+    operation: str,
+    ok: bool,
+    receipt_kind: str | None,
+    summary: str,
+    messages: list[str] | None = None,
+    phase: str = "validation",
+    repository_checked: bool = False,
+) -> dict[str, Any]:
+    """Build the stable JSON result without echoing receipt packet content."""
+    return {
+        "contract_version": CLI_RESULT_CONTRACT,
+        "operation": operation,
+        "ok": ok,
+        "receipt_version": receipt_kind,
+        "repository_checked": repository_checked,
+        "summary": summary,
+        "findings": [
+            {"code": finding_code(message, phase=phase), "message": message}
+            for message in (messages or [])
+        ],
+        "boundary": BOUNDARY,
+    }
+
+
+def _print_result_json(result: dict[str, Any]) -> None:
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+
+
 def _normalize_argv(argv: list[str]) -> list[str]:
     commands = {"validate", "verify", "render"}
     if argv and not argv[0].startswith("-") and argv[0] not in commands:
@@ -895,12 +1004,18 @@ def build_parser() -> argparse.ArgumentParser:
         "validate", help="validate receipt structure and internal references"
     )
     validate_parser.add_argument("path")
+    validate_parser.add_argument(
+        "--format", dest="output_format", choices=("text", "json"), default="text"
+    )
 
     verify_parser = subparsers.add_parser(
         "verify", help="verify a v1 receipt against a local Git repository"
     )
     verify_parser.add_argument("path")
     verify_parser.add_argument("--repo", required=True)
+    verify_parser.add_argument(
+        "--format", dest="output_format", choices=("text", "json"), default="text"
+    )
 
     render_parser = subparsers.add_parser(
         "render", help="render a valid receipt as deterministic Markdown"
@@ -926,16 +1041,57 @@ def main(argv: list[str] | None = None) -> int:
     try:
         packet = load_packet(Path(args.path))
     except (OSError, ValueError) as exc:
-        print(f"Could not load packet: {exc}", file=sys.stderr)
+        message = f"Could not load packet: {exc}"
+        if getattr(args, "output_format", "text") == "json":
+            _print_result_json(
+                result_document(
+                    operation=args.command,
+                    ok=False,
+                    receipt_kind=None,
+                    summary="Receipt could not be loaded.",
+                    messages=[message],
+                    phase="load",
+                )
+            )
+        else:
+            print(message, file=sys.stderr)
         return 2
 
     errors = validate_packet(packet)
     if errors:
-        _print_errors("FAIL EvidenceGate validation", errors)
+        if getattr(args, "output_format", "text") == "json":
+            _print_result_json(
+                result_document(
+                    operation=args.command,
+                    ok=False,
+                    receipt_kind=receipt_version(packet),
+                    summary="Receipt validation failed.",
+                    messages=errors,
+                )
+            )
+        else:
+            _print_errors("FAIL EvidenceGate validation", errors)
         return 1
 
     version = receipt_version(packet)
     if args.command == "validate":
+        if args.output_format == "json":
+            summary = (
+                "Legacy receipt structure is valid; it is not revision-bound or "
+                "repository-verified."
+                if version == "legacy"
+                else "Receipt structure and internal references are valid; "
+                "repository state was not checked."
+            )
+            _print_result_json(
+                result_document(
+                    operation="validate",
+                    ok=True,
+                    receipt_kind=version,
+                    summary=summary,
+                )
+            )
+            return 0
         if version == "legacy":
             print(
                 "PASS EvidenceGate legacy receipt "
@@ -951,8 +1107,37 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "verify":
         verify_errors = verify_repository(packet, Path(args.repo))
         if verify_errors:
-            _print_errors("FAIL EvidenceGate repository verification", verify_errors)
+            if args.output_format == "json":
+                _print_result_json(
+                    result_document(
+                        operation="verify",
+                        ok=False,
+                        receipt_kind=version,
+                        summary="Repository verification failed.",
+                        messages=verify_errors,
+                        phase="verification",
+                        repository_checked=version == "v1",
+                    )
+                )
+            else:
+                _print_errors(
+                    "FAIL EvidenceGate repository verification", verify_errors
+                )
             return 1
+        if args.output_format == "json":
+            _print_result_json(
+                result_document(
+                    operation="verify",
+                    ok=True,
+                    receipt_kind=version,
+                    summary=(
+                        "Receipt matches the supplied local Git repository and is "
+                        "review-ready."
+                    ),
+                    repository_checked=True,
+                )
+            )
+            return 0
         print("PASS EvidenceGate v1 repository verification")
         return 0
 

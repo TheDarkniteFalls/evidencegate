@@ -1,5 +1,6 @@
 {
   "schema_version": "evidencegate_conformance_v1",
+  "cli_result_contract": "evidencegate_cli_result_v1",
   "cases": [
     {
       "id": "valid-minimal",
@@ -10,24 +11,28 @@
       "id": "duplicate-key-rejected",
       "receipt": "invalid-duplicate-field.json",
       "expected": "load_error",
+      "expected_code": "packet_load_error",
       "contains": "duplicate JSON object key: schema_version"
     },
     {
       "id": "unknown-field-rejected",
       "receipt": "invalid-unknown-field.json",
       "expected": "validation_error",
+      "expected_code": "receipt_structure_invalid",
       "contains": "policy_override is not defined by EvidenceGate v1"
     },
     {
       "id": "stale-check-rejected",
       "receipt": "invalid-stale-check.json",
       "expected": "validation_error",
+      "expected_code": "receipt_revision_invalid",
       "contains": "checks[1].revision does not match subject.head_sha"
     },
     {
       "id": "nonpassing-claim-rejected",
       "receipt": "invalid-nonpassing-claim.json",
       "expected": "validation_error",
+      "expected_code": "receipt_evidence_invalid",
       "contains": "claims[1] references non-passing evidence"
     },
     {

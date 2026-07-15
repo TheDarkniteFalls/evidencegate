@@ -21,6 +21,12 @@ and portable [v1 conformance corpus](conformance/v1/README.md). The
 [architecture boundary](docs/architecture.md) distinguishes that stable
 contract from adjacent audit research.
 
+If you are connecting EvidenceGate to another tool, you can ask `validate` and
+`verify` for the stable
+[`evidencegate_cli_result_v1`](docs/integration-contract.md) JSON result. Your
+integration can then use dependable finding codes instead of trying to parse
+English error text.
+
 ## An Unusually Complete Proof Package
 
 One command runs every proof the maintainers can complete without inventing an
@@ -142,6 +148,20 @@ python3 evidencegate.py examples/good-run.json
 
 It now says explicitly that the original format is legacy, structural-only,
 and not eligible for repository verification.
+
+## Use EvidenceGate From Other Tools
+
+```sh
+evidencegate validate receipt.json --format json
+evidencegate verify receipt.json --repo . --format json
+```
+
+Both commands return the same versioned result shape, including `ok`,
+`repository_checked`, stable finding codes, human-readable messages, and the
+trust boundary. The [integration contract](docs/integration-contract.md) brings
+the JSON Schema, exit statuses, code table, and a copyable pinned CI recipe
+together in one place. If you are using EvidenceGate directly in a terminal,
+the familiar plain-text output remains the default.
 
 ## V1 Receipt Shape
 

@@ -95,6 +95,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         for relative in (
             "schemas/agent-run-receipt-v1.schema.json",
+            "schemas/cli-result-v1.schema.json",
             "schemas/evidencegate-attestation-v0.schema.json",
         ):
             value = json.loads((ROOT / relative).read_text(encoding="utf-8"))
