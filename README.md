@@ -1,5 +1,17 @@
 # EvidenceGate
 
+<!-- toolkit-trust-card:start -->
+> **Public contract:** Flagship tool · about 5 min · Python 3 · no model · no network
+>
+> **Operation:** Read-only check; examples may use temporary files
+>
+> **A pass establishes:** Declared claims, checks, changed paths, review, and public-safety fields are tied to the exact Git revision supplied to the verifier.
+>
+> **It does not establish:** It does not authenticate a reviewer, prove semantic correctness, or approve publication.
+>
+> **First check:** `python3 -B examples/run-v1-reference.py`
+<!-- toolkit-trust-card:end -->
+
 AI-assisted work should leave a receipt.
 
 EvidenceGate is a hardened reference implementation for revision-bound
