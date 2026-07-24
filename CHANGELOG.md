@@ -3,9 +3,9 @@
 All notable changes to the EvidenceGate receipt contract and reference
 implementation will be documented here.
 
-## 0.1.0 - Unreleased
+## 0.1.0 - 2026-07-24
 
-[Draft release notes](docs/v0.1.0-release-notes.md)
+[Release notes](docs/v0.1.0-release-notes.md)
 
 ### Added
 

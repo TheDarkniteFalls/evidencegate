@@ -76,6 +76,15 @@ or that the project has independent endorsement.
 
 ## Quick Start
 
+Version 0.1.0 is distributed as a signed source tag and GitHub release, not as
+a PyPI upload. Install that exact source revision and run its console self-test:
+
+```sh
+python -m pip install \
+  "evidencegate @ git+https://github.com/TheDarkniteFalls/evidencegate.git@v0.1.0"
+evidencegate --self-test
+```
+
 Run the complete v1 lifecycle against a temporary synthetic Git repository:
 
 ```sh
