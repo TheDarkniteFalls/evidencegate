@@ -76,8 +76,8 @@ or that the project has independent endorsement.
 
 ## Quick Start
 
-Version 0.1.0 is distributed as a signed source tag and GitHub release, not as
-a PyPI upload. Install that exact source revision and run its console self-test:
+Version 0.1.0 is distributed as an unsigned source tag and GitHub release, not
+as a PyPI upload. Install that exact source revision and run its console self-test:
 
 ```sh
 python -m pip install \
