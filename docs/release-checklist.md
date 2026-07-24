@@ -49,7 +49,8 @@ push, merge, package upload, or publication.
 
 - [ ] `main` requires the complete quality workflow before merge.
 - [ ] The release commit is clean, immutable, and identified by its full SHA.
-- [ ] The version and signed tag match the changelog entry.
+- [ ] The version and tag match the changelog entry, and the release notes state
+  whether the tag is signed.
 - [ ] Release notes repeat the authentication and publication-authority boundary.
 - [ ] Any "remarkable candidate" claim cites the exact clean revision whose
   aggregate gate passed.
