@@ -4,7 +4,7 @@
   "status": "experimental_author_tested_macos_linux_untested_review_requested",
   "scope": "isolated experimental EvalBraid profile; stable EvidenceGate v1 unchanged",
   "file_count": 56,
-  "file_set_sha256": "2b04cbe1a1d572f3267a511dbb4353065dd550a9bcf641824ce58c01abbfc341",
+  "file_set_sha256": "e81e920831a48a3a96f0351b5c979ded7ee753b38373ab3312830dde2f3fd2a5",
   "files": [
     {
       "path": "evalbraid/v0/AI_ASSISTANCE.md",
@@ -22,15 +22,15 @@
     },
     {
       "path": "evalbraid/v0/README.md",
-      "sha256": "f12031ed2dc18dbf5117a854899c2cd1814ba4223b42f7b329f6e39da8254d92",
-      "size_bytes": 2356,
+      "sha256": "b9c8533737805db61a365137ab3bdbae46222f1ee8843658aa5e4867cf17e247",
+      "size_bytes": 3238,
       "role": "profile_documentation",
       "license_treatment": "MIT via repository LICENSE and profile attribution map"
     },
     {
       "path": "evalbraid/v0/REVIEWING.md",
-      "sha256": "0d6a388efedc889bbb50f28c09a19873a26015e04b7761db773ae48d1f5eb101",
-      "size_bytes": 3094,
+      "sha256": "e1e03450f22b2c354eea202e18faff5806bd605267832d8f71cbc0ae0b9c0e70",
+      "size_bytes": 3389,
       "role": "profile_documentation",
       "license_treatment": "MIT via repository LICENSE and profile attribution map"
     },
@@ -288,8 +288,8 @@
     },
     {
       "path": "replication/node/evalbraid-v0/README.md",
-      "sha256": "5bdd7c13e60ff9a7633c2f00af0bc94e931bc5cfe4325571977e6db44a6fc881",
-      "size_bytes": 1246,
+      "sha256": "2fccf3c2820190b9a1b3b436c45cfe0a4ef30996f17138084c91eadd06dde834",
+      "size_bytes": 1345,
       "role": "node_consumer",
       "license_treatment": "MIT via repository LICENSE and profile attribution map"
     },

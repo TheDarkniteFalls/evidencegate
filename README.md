@@ -217,7 +217,17 @@ Negative fixtures make important failures visible:
 
 ## Experimental EvalBraid Profile
 
-[EvalBraid Evaluation Provenance Profile v0](evalbraid/v0/README.md) is an isolated experimental contract for attempt-bounded evaluation evidence. It is author-tested on macOS, Linux portability is untested, independent review is requested but incomplete, authentication is not provided, and stable EvidenceGate v1 is unchanged.
+[EvalBraid Evaluation Provenance Profile v0](evalbraid/v0/README.md) is a
+usable experimental public asset for teams that want to pilot an
+attempt-bounded evaluation-provenance contract, test producer and consumer
+integrations, or reproduce its conformance behavior. It is available for
+experimental use now; independent review is a prerequisite for stronger
+claims, not for trying it.
+
+The profile is author-tested on macOS. Linux portability is untested,
+authentication is not provided, independent review is requested but
+incomplete, production reliance is not recommended, and stable EvidenceGate v1
+is unchanged.
 
 ## Failure Semantics Research Slice
 

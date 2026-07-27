@@ -4,15 +4,19 @@
 Maturity: Experimental v0
 Validation: Author-tested on macOS against the published conformance corpus
 Implementation diversity: Python and Node results agree
+Intended use: Experimental pilots, integration tests, conformance work, and review
 Linux portability: Not tested
 Independent review: Requested — not yet completed
-Production use: Not recommended
+Production reliance: Not recommended
 Authentication: Not provided
 Stable EvidenceGate v1: Unchanged
 ```
 
-Partial findings are useful. Reproduction does not require endorsement of the
-profile or its terminology.
+EvalBraid can be used now for experimental pilots, integration checks, and
+conformance work. Independent review strengthens the claims that can be made
+about it; it is not permission to try the profile. Partial findings are useful,
+and reproduction does not require endorsement of the profile or its
+terminology.
 
 ## Review questions
 

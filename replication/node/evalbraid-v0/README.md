@@ -1,7 +1,10 @@
-# Private Node consumer — EvalBraid Evaluation Provenance Profile v0
+# Node consumer — EvalBraid Evaluation Provenance Profile v0
 
-Status: experimental first-party implementation; independent review requested\
-License: MIT; package publication disabled\
+Status: usable experimental first-party implementation\
+Independent review: requested — not yet completed\
+Production reliance: not recommended\
+Distribution: repository consumer; npm package publication disabled\
+License: MIT\
 Stable EvidenceGate v1: unchanged\
 
 This Node 24.14.0 consumer independently implements the candidate profile's

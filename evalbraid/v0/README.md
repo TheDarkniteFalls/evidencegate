@@ -4,9 +4,10 @@
 Maturity: Experimental v0
 Validation: Author-tested on macOS against the published conformance corpus
 Implementation diversity: Python and Node results agree
+Intended use: Experimental pilots, integration tests, conformance work, and review
 Linux portability: Not tested
 Independent review: Requested — not yet completed
-Production use: Not recommended
+Production reliance: Not recommended
 Authentication: Not provided
 Stable EvidenceGate v1: Unchanged
 ```
@@ -17,6 +18,11 @@ Status token:
 This profile records evidence and judgment boundaries for one evaluation
 attempt across trajectory and self-check, handoff and lifecycle, verifier
 definition, executed verifier, policy, and adjudication layers.
+
+It is usable now as an experimental public asset. Evaluation teams can use it
+to draft attempt-bounded provenance records, test producers and consumers
+against one versioned contract, reproduce the conformance corpus, and report
+gaps before adopting a stable or production dependency.
 
 It is an adjacent experimental contract. It does not add fields to, alter, or
 interpret the stable EvidenceGate v1 Git-change receipt.
@@ -33,6 +39,21 @@ interpret the stable EvidenceGate v1 Git-change receipt.
 - a Python structural and semantic validator;
 - a separately written first-party Node consumer; and
 - deterministic tests and a profile-specific reviewer gate.
+
+## Try it
+
+After installing the locked dependencies described in `REVIEWING.md`, validate
+one synthetic example from the repository root:
+
+```sh
+.venv-profile/bin/python -B tools/evalbraid_contract.py \
+  evalbraid/v0/examples/valid-static-explained.json --json
+```
+
+The result should report `"valid":true`. This proves only that the supplied
+record passed the profile's structural and semantic checks. Use the
+one-command gate in `REVIEWING.md` to reproduce the complete author-tested
+conformance package.
 
 The semantic validator emits the unchanged
 `evalbraid_evaluation_provenance_result_v0` contract:
