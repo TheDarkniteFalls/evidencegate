@@ -1,0 +1,266 @@
+{
+  "manifest_version": "evalbraid_evaluation_provenance_conformance_v0",
+  "profile": "evalbraid_evaluation_provenance_v0",
+  "result_contract": "evalbraid_evaluation_provenance_result_v0",
+  "redistribution": "public_candidate_pending_owner_authorization",
+  "schema": {
+    "path": "../../../schemas/evalbraid-evaluation-provenance-v0.schema.json",
+    "sha256": "a84b01f2e9e4bc375bfc84e4a644e00dc26d7629fe0de66170df43aa928fe519"
+  },
+  "source_examples": [
+    {
+      "source": "../examples/valid-static-explained.json",
+      "source_sha256": "2e6a201cf362f1db6d766b9dbda9ec30dc8cbbe4c7a6ebde0297f29dc3f415e3",
+      "fixture": "positive/valid-static-explained.json",
+      "fixture_sha256": "2e6a201cf362f1db6d766b9dbda9ec30dc8cbbe4c7a6ebde0297f29dc3f415e3",
+      "transformation": "sanitized public-candidate derivation; byte-identical to matching positive fixture"
+    },
+    {
+      "source": "../examples/valid-runtime-unresolved.json",
+      "source_sha256": "18c8249d976ae6227427887a5a3ad971c53ca3571bb275561d97519d5dc77de2",
+      "fixture": "positive/valid-runtime-unresolved.json",
+      "fixture_sha256": "18c8249d976ae6227427887a5a3ad971c53ca3571bb275561d97519d5dc77de2",
+      "transformation": "sanitized public-candidate derivation; byte-identical to matching positive fixture"
+    },
+    {
+      "source": "../examples/valid-integrity-adjudicated.json",
+      "source_sha256": "746c8c89dbc13cce00cb5bdaf321a74efddca2fe4feca639d1dca6c3779f7d68",
+      "fixture": "positive/valid-integrity-adjudicated.json",
+      "fixture_sha256": "746c8c89dbc13cce00cb5bdaf321a74efddca2fe4feca639d1dca6c3779f7d68",
+      "transformation": "sanitized public-candidate derivation; byte-identical to matching positive fixture"
+    }
+  ],
+  "known_stage_overlaps": [],
+  "cases": [
+    {
+      "id": "static-explained",
+      "record": "positive/valid-static-explained.json",
+      "record_sha256": "2e6a201cf362f1db6d766b9dbda9ec30dc8cbbe4c7a6ebde0297f29dc3f415e3",
+      "expected": "pass",
+      "mutation": "sanitized synthetic example with public-candidate redistribution metadata"
+    },
+    {
+      "id": "runtime-unresolved",
+      "record": "positive/valid-runtime-unresolved.json",
+      "record_sha256": "18c8249d976ae6227427887a5a3ad971c53ca3571bb275561d97519d5dc77de2",
+      "expected": "pass",
+      "mutation": "sanitized synthetic example with public-candidate redistribution metadata"
+    },
+    {
+      "id": "integrity-adjudicated",
+      "record": "positive/valid-integrity-adjudicated.json",
+      "record_sha256": "746c8c89dbc13cce00cb5bdaf321a74efddca2fe4feca639d1dca6c3779f7d68",
+      "expected": "pass",
+      "mutation": "sanitized synthetic example with public-candidate redistribution metadata"
+    },
+    {
+      "id": "duplicate-field",
+      "record": "negative/invalid-duplicate-field.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "1c8eacbed18ee7c1255bd38ea05ee2afc8d808f6107ba934acc50da8545ea079",
+      "expected": "load_error",
+      "mutation": "duplicate the top-level profile member",
+      "expected_code": "profile_load_duplicate_key"
+    },
+    {
+      "id": "unknown-field",
+      "record": "negative/invalid-unknown-field.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "dc435ea040603e3d52bba217024db6dcb4202ba9a43bac8b65bc539d8b2e5785",
+      "expected": "schema_error",
+      "mutation": "add one unknown top-level member",
+      "expected_code": "profile_schema_invalid",
+      "expected_path": ""
+    },
+    {
+      "id": "invalid-format",
+      "record": "negative/invalid-format.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "69ec4503bdb8c61a32e0fe5310e94462630825bc59c37354e8e0a8363e900732",
+      "expected": "schema_error",
+      "mutation": "replace one UUID with a non-UUID string",
+      "expected_code": "profile_schema_invalid",
+      "expected_path": "/identity/attempt_uuid"
+    },
+    {
+      "id": "missing-layer",
+      "record": "negative/invalid-missing-layer.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "75808b8c2a4ffbdadecd297c242c239cd964d6247cbf974f63fbdc05f9189ab9",
+      "expected": "semantic_error",
+      "mutation": "change the only handoff layer declaration to adjudication",
+      "expected_code": "profile_layer_missing",
+      "expected_path": "/source_references"
+    },
+    {
+      "id": "duplicate-reference-id",
+      "record": "negative/invalid-duplicate-reference-id.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "5d770432b182ef3f57e22e260282a2cdeaeb5029b1fb6f902432290330a38851",
+      "expected": "semantic_error",
+      "mutation": "append one distinct source object that repeats a reference ID",
+      "expected_code": "profile_reference_duplicate",
+      "expected_path": "/source_references/5/reference_id"
+    },
+    {
+      "id": "unresolved-reference",
+      "record": "negative/invalid-unresolved-reference.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "79f46010efdda44ab5bcc492ade336294e166d3745c4c6a98e561093aebef74c",
+      "expected": "semantic_error",
+      "mutation": "replace one reference use with an undeclared ID",
+      "expected_code": "profile_reference_unresolved",
+      "expected_path": "/trajectory/evidence_references/0"
+    },
+    {
+      "id": "orphaned-reference",
+      "record": "negative/invalid-orphaned-reference.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "0a95a7f76e5d3ae67a314b4f9309a319a4f65975bb23e2884977c8807bb165d3",
+      "expected": "semantic_error",
+      "mutation": "append one valid but unused source reference",
+      "expected_code": "profile_reference_orphaned",
+      "expected_path": "/source_references/5/reference_id"
+    },
+    {
+      "id": "reference-layer",
+      "record": "negative/invalid-reference-layer.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "fe5ffec3b7b61a51430e1228dd8b38b6ffcfdbc71039680443929f993a5ca28a",
+      "expected": "semantic_error",
+      "mutation": "point one trajectory reference at a policy-layer source",
+      "expected_code": "profile_reference_layer_invalid",
+      "expected_path": "/trajectory/evidence_references/0"
+    },
+    {
+      "id": "source-availability",
+      "record": "negative/invalid-source-availability.json",
+      "base": "positive/valid-runtime-unresolved.json",
+      "record_sha256": "c080f361036aba31246337ad9f7d4b7e1dacb4cffa23c3a8242b93fa55a10cbe",
+      "expected": "semantic_error",
+      "mutation": "claim available while retaining a not-observed digest",
+      "expected_code": "profile_source_availability_invalid",
+      "expected_path": "/source_references/2/availability"
+    },
+    {
+      "id": "verifier-digest-mismatch",
+      "record": "negative/invalid-verifier-digest-mismatch.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "d594d3b88ff149c0e4e9c6a1e300fe450835a9dd6ab6e09af42fc3c5f3868c6c",
+      "expected": "semantic_error",
+      "mutation": "replace the exact verifier-definition digest",
+      "expected_code": "profile_verifier_digest_mismatch",
+      "expected_path": "/verifier_definition/verifier_digest/value"
+    },
+    {
+      "id": "handoff-link-mismatch",
+      "record": "negative/invalid-handoff-link-mismatch.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "ec1273447897e248ce9c3802ed802ddf0710c6b3e517a3902de9d5608abef5f7",
+      "expected": "semantic_error",
+      "mutation": "replace one verifier-start subject ID",
+      "expected_code": "profile_handoff_link_mismatch",
+      "expected_path": "/verifier_start/liveness_observations/0/subject_id"
+    },
+    {
+      "id": "time-order",
+      "record": "negative/invalid-time-order.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "5558f6ef8ef5f0ae86adbc2ed97052a4e2c522a417a2fc9a04267b4892866f98",
+      "expected": "semantic_error",
+      "mutation": "move verifier start before agent exit",
+      "expected_code": "profile_time_order_invalid",
+      "expected_path": "/verifier_start/timestamp/value"
+    },
+    {
+      "id": "adjudication-missing",
+      "record": "negative/invalid-adjudication-missing.json",
+      "base": "positive/valid-runtime-unresolved.json",
+      "record_sha256": "9d89232de03db024c317800b0c663ad474c5a7fde62d325ec315adea34026064",
+      "expected": "schema_error",
+      "mutation": "remove the required adjudication object",
+      "expected_code": "profile_schema_invalid",
+      "expected_path": ""
+    },
+    {
+      "id": "adjudication-trigger-set",
+      "record": "negative/invalid-adjudication-trigger-set.json",
+      "base": "positive/valid-runtime-unresolved.json",
+      "record_sha256": "b2e782f1e273c0a85f4e4ecffec5597686a7a6f1b691fed9827fb51083a1f96a",
+      "expected": "semantic_error",
+      "mutation": "append one spurious adjudication trigger",
+      "expected_code": "profile_trigger_set_invalid",
+      "expected_path": "/adjudication/triggers"
+    },
+    {
+      "id": "shortcut-basis",
+      "record": "negative/invalid-shortcut-basis.json",
+      "base": "positive/valid-integrity-adjudicated.json",
+      "record_sha256": "1af7bac303911025d0afe386f8bd78c5e8051f070995e3166ad9ff5877cbe31b",
+      "expected": "schema_error",
+      "mutation": "replace ambiguous with possible-shortcut without its required basis",
+      "expected_code": "profile_schema_invalid",
+      "expected_path": "/evaluation_judgment/integrity_basis/policy_visibility"
+    },
+    {
+      "id": "adjudication-pointer",
+      "record": "negative/invalid-adjudication-pointer.json",
+      "base": "positive/valid-integrity-adjudicated.json",
+      "record_sha256": "b9e684258733a0089839b534517b20db5652fc99d2f41d36842b7ce390baacc3",
+      "expected": "semantic_error",
+      "mutation": "replace one retained-field pointer with an unresolved path",
+      "expected_code": "profile_adjudication_pointer_invalid",
+      "expected_path": "/adjudication/retained_fields/0"
+    },
+    {
+      "id": "revision-value",
+      "record": "negative/invalid-revision-value.json",
+      "base": "positive/valid-runtime-unresolved.json",
+      "record_sha256": "9dd4dfad30eec4334f5db1923f454a07518790aea8c1dfbaa4b2e6c83343db36",
+      "expected": "semantic_error",
+      "mutation": "append one no-op revision declaration",
+      "expected_code": "profile_revision_value_invalid",
+      "expected_path": "/adjudication/revised_fields/0"
+    },
+    {
+      "id": "proven-fact-evidence",
+      "record": "negative/invalid-proven-fact-evidence.json",
+      "base": "positive/valid-runtime-unresolved.json",
+      "record_sha256": "085e333eb740449f7a4a090123d4aa2dca72e97f89eb1b4aa7151915a3d1ba0e",
+      "expected": "semantic_error",
+      "mutation": "replace one fact reference list with absent evidence only",
+      "expected_code": "profile_proven_fact_evidence_invalid",
+      "expected_path": "/evaluation_judgment/proven_facts/0/evidence_references"
+    },
+    {
+      "id": "redistribution-downgrade",
+      "record": "negative/invalid-redistribution-downgrade.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "8bb72918d8895b9849487430166c5cc687eed4e7f29577ea601ec6bcf3b6ed22",
+      "expected": "semantic_error",
+      "mutation": "raise record redistribution above internal-only sources",
+      "expected_code": "profile_redistribution_invalid",
+      "expected_path": "/data_handling/redistribution_status"
+    },
+    {
+      "id": "self-check-independence",
+      "record": "negative/invalid-self-check-independence.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "7fb5309a581173020cda45f079be70aa5b6927d5bc4dc96027391c816d8e3afe",
+      "expected": "schema_error",
+      "mutation": "replace self-authored with independent",
+      "expected_code": "profile_schema_invalid",
+      "expected_path": "/trajectory/self_checks/0/independence"
+    },
+    {
+      "id": "judgment-self-check-independence",
+      "record": "negative/invalid-judgment-self-check-independence.json",
+      "base": "positive/valid-static-explained.json",
+      "record_sha256": "d2b7eb1eb90fae91c23802667016854b3c136a905bcd81dd58a208375692220a",
+      "expected": "semantic_error",
+      "mutation": "declare the overall judgment independent while retaining a trajectory_agent_self_check basis",
+      "expected_code": "profile_judgment_independence_invalid",
+      "expected_path": "/evaluation_judgment/evidence_independence"
+    }
+  ]
+}

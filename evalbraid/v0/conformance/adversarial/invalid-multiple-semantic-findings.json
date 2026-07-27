@@ -1,0 +1,343 @@
+{
+  "profile": "evalbraid_evaluation_provenance_v0",
+  "identity": {
+    "attempt_uuid": "00000000-0000-4000-8000-000000000001",
+    "task": {
+      "id": "synthetic-static-artifact",
+      "version": {
+        "status": "observed",
+        "value": "synthetic-1.0"
+      }
+    },
+    "task_image_digest": {
+      "status": "observed",
+      "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "agent_version": {
+      "status": "observed",
+      "value": "example-agent-1.0"
+    },
+    "harness_version": {
+      "status": "observed",
+      "value": "example-harness-1.0"
+    },
+    "verifier_digest": {
+      "status": "observed",
+      "value": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  },
+  "trajectory": {
+    "trajectory_status": "complete",
+    "archive_status": "available",
+    "actual_exit_reason": {
+      "status": "observed",
+      "value": "finished"
+    },
+    "summary": "The synthetic agent wrote one static output file and ran the same self-authored format check twice.",
+    "self_checks": [
+      {
+        "check_id": "format-check-1",
+        "result": "passed",
+        "independence": "self_authored",
+        "repetition_group": "output-format-v1",
+        "summary": "The first self-authored format check passed.",
+        "evidence_references": [
+          "ref-static-trajectory"
+        ]
+      },
+      {
+        "check_id": "format-check-2",
+        "result": "passed",
+        "independence": "self_authored",
+        "repetition_group": "output-format-v1",
+        "summary": "The repeated self-authored format check passed and remains the same evidence source.",
+        "evidence_references": [
+          "ref-static-trajectory"
+        ]
+      }
+    ],
+    "evidence_references": [
+      "ref-static-trajectory",
+      "ref-missing-trajectory"
+    ]
+  },
+  "agent_handoff": {
+    "agent_exit_time": {
+      "status": "observed",
+      "value": "2026-01-01T00:00:00Z"
+    },
+    "relevant_artifacts": [
+      {
+        "artifact_id": "output-file",
+        "kind": "file",
+        "observation_status": "observed",
+        "digest": {
+          "status": "observed",
+          "value": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "liveness_at_exit": "present",
+        "evidence_references": [
+          "ref-static-handoff"
+        ]
+      }
+    ],
+    "relevant_processes": [],
+    "expected_lifecycle_transformation": {
+      "status": "none_expected",
+      "description": "The static artifact should pass unchanged into verifier execution."
+    },
+    "evidence_references": [
+      "ref-static-handoff"
+    ]
+  },
+  "verifier_definition": {
+    "definition_status": "exact",
+    "verifier_digest": {
+      "status": "observed",
+      "value": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "policy_visibility": "visible",
+    "policy_references": [
+      "ref-static-policy"
+    ],
+    "summary": "The exact synthetic verifier definition requires output length at most ten characters.",
+    "evidence_references": [
+      "ref-static-definition"
+    ]
+  },
+  "verifier_start": {
+    "timestamp": {
+      "status": "observed",
+      "value": "2025-12-31T23:59:59Z"
+    },
+    "namespace_or_container": {
+      "status": "observed",
+      "value": "example-container-static-001"
+    },
+    "liveness_observations": [
+      {
+        "subject_kind": "artifact",
+        "subject_id": "output-file",
+        "status": "present",
+        "evidence_references": [
+          "ref-static-execution"
+        ]
+      }
+    ],
+    "dependency_setup_result": {
+      "status": "succeeded",
+      "detail": "The synthetic evaluator dependencies were already available.",
+      "evidence_references": [
+        "ref-static-execution"
+      ]
+    },
+    "evaluator_entry_point": {
+      "status": "observed",
+      "value": "python -m evaluator.static_check"
+    },
+    "evidence_references": [
+      "ref-static-execution"
+    ]
+  },
+  "verifier_result": {
+    "execution_status": "failed",
+    "exit_status": {
+      "status": "observed",
+      "code": 1
+    },
+    "reward": {
+      "status": "observed",
+      "value": 0
+    },
+    "first_failure_or_threshold": {
+      "status": "observed",
+      "kind": "threshold",
+      "summary": "The measured output length was 12; the permitted maximum was 10.",
+      "measurement_name": "output-length"
+    },
+    "output_digests": {
+      "stdout": {
+        "status": "observed",
+        "value": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "stderr": {
+        "status": "observed",
+        "value": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    },
+    "safe_excerpt": {
+      "status": "omitted",
+      "reason": "not_needed",
+      "detail": "The bounded failure summary and output digests are sufficient; no raw output is retained."
+    },
+    "evidence_references": [
+      "ref-static-execution"
+    ]
+  },
+  "evaluation_judgment": {
+    "assessment_status": "explained",
+    "reward_alignment": "aligned",
+    "confidence": "high",
+    "claim_severity": "low",
+    "integrity_signal": "none_observed",
+    "integrity_basis": {
+      "policy_visibility": "visible",
+      "policy_references": [
+        "ref-static-policy"
+      ],
+      "reward_connection": "not_demonstrated",
+      "behavior_summary": "No behavior suggesting an integrity concern was observed in the synthetic trajectory."
+    },
+    "evidence_independence": "mixed",
+    "proven_facts": [
+      {
+        "statement": "The handoff artifact digest matched the verifier-start artifact digest record.",
+        "evidence_references": [
+          "ref-static-handoff",
+          "ref-static-execution"
+        ]
+      },
+      {
+        "statement": "The executed synthetic verifier measured length 12 against a maximum of 10 and returned exit status 1 with reward 0.",
+        "evidence_references": [
+          "ref-static-definition",
+          "ref-static-execution"
+        ]
+      }
+    ],
+    "interpretations": [
+      {
+        "statement": "The independently defined threshold explains the static-artifact failure; the two repeated agent checks remain one self-authored evidence source.",
+        "basis_references": [
+          "ref-static-trajectory",
+          "ref-static-definition",
+          "ref-static-execution"
+        ]
+      }
+    ],
+    "unknowns": [],
+    "minimum_missing_evidence": "No additional evidence is required for this attempt-bounded assessment.",
+    "evidence_references": [
+      "ref-static-trajectory",
+      "ref-static-definition",
+      "ref-static-handoff",
+      "ref-static-execution",
+      "ref-static-policy"
+    ],
+    "causal_attribution": "agent"
+  },
+  "adjudication": {
+    "triggered": false,
+    "triggers": [],
+    "status": "not_required",
+    "adjudicator_role": {
+      "status": "not_applicable",
+      "reason": "No frozen adjudication trigger fired."
+    },
+    "timestamp": {
+      "status": "not_applicable",
+      "reason": "No adjudication occurred."
+    },
+    "retained_fields": [],
+    "revised_fields": [],
+    "evidence_references": []
+  },
+  "data_handling": {
+    "classification": "synthetic",
+    "contains_personal_data": false,
+    "contains_secrets": false,
+    "contains_raw_trajectory": false,
+    "contains_task_assets": false,
+    "redactions": [],
+    "safe_excerpt_policy": "digest_only",
+    "redistribution_status": "cleared",
+    "redistribution_notes": "This record is synthetic and cleared within the example for public conformance use."
+  },
+  "source_references": [
+    {
+      "reference_id": "ref-static-trajectory",
+      "layer": "trajectory_agent_self_check",
+      "availability": "available",
+      "uri": "https://records.example.invalid/static/trajectory-summary",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "description": "Synthetic bounded trajectory and self-check summary.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-static-definition",
+      "layer": "verifier_definition",
+      "availability": "available",
+      "uri": "https://records.example.invalid/static/verifier-definition",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "description": "Synthetic exact verifier definition.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-static-execution",
+      "layer": "executed_verifier",
+      "availability": "available",
+      "uri": "https://records.example.invalid/static/verifier-receipt",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "description": "Synthetic verifier-start and result record without raw output.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-static-handoff",
+      "layer": "handoff_lifecycle",
+      "availability": "available",
+      "uri": "https://records.example.invalid/static/handoff-receipt",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      "description": "Synthetic artifact handoff record.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-static-policy",
+      "layer": "policy",
+      "availability": "available",
+      "uri": "https://records.example.invalid/static/policy",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+      },
+      "description": "Synthetic visible evaluation policy.",
+      "redistribution": "cleared"
+    }
+  ],
+  "measurements": [
+    {
+      "name": "output-length",
+      "observed_value": 12,
+      "unit": "characters",
+      "comparison": "lte",
+      "threshold": 10,
+      "result": "failed",
+      "evidence_references": [
+        "ref-static-execution"
+      ]
+    }
+  ],
+  "operational_metadata": {
+    "created_at": "2026-01-01T00:10:00Z",
+    "producer": "EvalBraid Evaluation Provenance Profile v0 synthetic example generator",
+    "workflow_id": "synthetic-static-example",
+    "review_duration_seconds": 60,
+    "synthetic_record": true,
+    "labels": [
+      "static-artifact",
+      "explained-failure"
+    ],
+    "notes": "All identifiers, events, values, and references are synthetic."
+  }
+}

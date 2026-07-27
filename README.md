@@ -215,6 +215,10 @@ Negative fixtures make important failures visible:
 - [not review-ready](examples/v1-not-review-ready.json) preserves a failed
   required check, requested changes, and pending public-safety review.
 
+## Experimental EvalBraid Profile
+
+[EvalBraid Evaluation Provenance Profile v0](evalbraid/v0/README.md) is an isolated experimental contract for attempt-bounded evaluation evidence. It is author-tested on macOS, Linux portability is untested, independent review is requested but incomplete, authentication is not provided, and stable EvidenceGate v1 is unchanged.
+
 ## Failure Semantics Research Slice
 
 [Missing Evidence Is Not Safety](docs/missing-evidence-is-not-safety.md) is a
