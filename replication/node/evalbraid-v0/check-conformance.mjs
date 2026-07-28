@@ -92,8 +92,8 @@ export function runConformance({
   const allCases = [...core.results, ...overlay.results];
   const corePositive = core.results.filter((item) => item.expected_stage === "pass").length;
   const coreNegative = core.results.length - corePositive;
-  if (core.results.length !== 24 || corePositive !== 3 || coreNegative !== 21) {
-    findings.push({ code: "node_core_counts_invalid", path: "/counts/core", message: "core corpus must contain 3 positive and 21 negative cases" });
+  if (core.results.length !== 28 || corePositive !== 3 || coreNegative !== 25) {
+    findings.push({ code: "node_core_counts_invalid", path: "/counts/core", message: "core corpus must contain 3 positive and 25 negative cases" });
   }
   if (overlay.results.length !== 4) {
     findings.push({ code: "node_overlay_counts_invalid", path: "/counts/overlay", message: "adversarial overlay must contain exactly four cases" });

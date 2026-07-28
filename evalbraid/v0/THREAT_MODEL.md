@@ -24,6 +24,8 @@ identity is not authenticated by this profile.
   references;
 - inconsistent verifier digests, lifecycle links, time order, adjudication
   triggers, retained or revised pointers, or proven-fact evidence;
+- omitted or malformed attempt-level failure classes, including non-null
+  classes on passing outcomes and null classes on non-passing outcomes;
 - self-checks mislabelled as independent;
 - redistribution claims stronger than the referenced sources permit;
 - non-deterministic or cross-consumer result drift; and
@@ -34,7 +36,8 @@ identity is not authenticated by this profile.
 The profile does not authenticate an issuer or reviewer; fetch evidence;
 verify that referenced URIs or digests correspond to truthful evidence;
 execute a verifier; establish benchmark fairness; prevent a producer from
-lying; protect a host from arbitrary third-party tooling; or prove that an
+lying or choosing a misleading but syntactically valid open failure class;
+protect a host from arbitrary third-party tooling; or prove that an
 evaluation conclusion is correct. Linux portability has not been tested.
 
 ## Trust-preserving response

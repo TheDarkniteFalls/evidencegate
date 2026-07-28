@@ -36,7 +36,7 @@ function testConformanceAndDeterminism() {
   assert.deepEqual(probes, { uuid: true, date_time: true, uri: true });
   const result = runConformance();
   assert.equal(result.valid, true);
-  assert.deepEqual(result.counts.core, { total: 24, positive: 3, negative: 21, passed: 24 });
+  assert.deepEqual(result.counts.core, { total: 28, positive: 3, negative: 25, passed: 28 });
   assert.deepEqual(result.counts.overlay, { total: 4, passed: 4 });
   assert.equal(result.network_attempts, 0);
   for (const fixture of [POSITIVE, MULTI]) {
@@ -83,6 +83,34 @@ function testLegacyProfileAliasRejected() {
   }
 }
 
+function testFailureClassBoundary() {
+  const original = JSON.parse(fs.readFileSync(POSITIVE, "utf8"));
+  assert.equal(original.verifier_result.failure_class, "output_length_exceeded");
+  assert.equal(original.evaluation_judgment.causal_attribution, "agent");
+  const passed = structuredClone(original);
+  Object.assign(passed.verifier_result, {
+    execution_status: "passed",
+    failure_class: null,
+    exit_status: { status: "observed", code: 0 },
+    reward: { status: "observed", value: 1 },
+    first_failure_or_threshold: {
+      status: "not_applicable",
+      reason: "Verifier passed; no failure or threshold breach occurred.",
+    },
+  });
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "evalbraid-passed-"));
+  const candidate = path.join(directory, "passed.json");
+  try {
+    fs.writeFileSync(candidate, `${JSON.stringify(passed, null, 2)}\n`, { encoding: "utf8", mode: 0o600 });
+    const outcome = validateRecord(candidate);
+    assert.equal(outcome.stage, "pass");
+    assert.equal(outcome.exitCode, 0);
+    assert.equal(outcome.result.valid, true);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+}
+
 function testCapabilitySurface() {
   const forbidden = /(?:from\s+|import\s*)["'](?:node:)?(?:child_process|http|https|net|tls|dgram)["']|\bimport\s*\(/;
   const sources = fs.readdirSync(MODULE_DIR)
@@ -100,8 +128,9 @@ function main() {
   testConformanceAndDeterminism();
   testObjectOrderMetamorphism();
   testLegacyProfileAliasRejected();
+  testFailureClassBoundary();
   testCapabilitySurface();
-  process.stdout.write("PASS node consumer tests: strict loading, 28 cases, determinism, metamorphism, capability surface\n");
+  process.stdout.write("PASS node consumer tests: strict loading, 32 cases, determinism, metamorphism, capability surface\n");
 }
 
 try {

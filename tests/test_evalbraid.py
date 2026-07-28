@@ -23,11 +23,11 @@ from evalbraid_contract import (  # noqa: E402
 )
 
 
-EXPECTED_SCHEMA_SHA256 = "a84b01f2e9e4bc375bfc84e4a644e00dc26d7629fe0de66170df43aa928fe519"
+EXPECTED_SCHEMA_SHA256 = "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806"
 EXPECTED_SOURCE_HASHES = {
-    "valid-static-explained.json": "2e6a201cf362f1db6d766b9dbda9ec30dc8cbbe4c7a6ebde0297f29dc3f415e3",
-    "valid-runtime-unresolved.json": "18c8249d976ae6227427887a5a3ad971c53ca3571bb275561d97519d5dc77de2",
-    "valid-integrity-adjudicated.json": "746c8c89dbc13cce00cb5bdaf321a74efddca2fe4feca639d1dca6c3779f7d68",
+    "valid-static-explained.json": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
+    "valid-runtime-unresolved.json": "ff7f95e8fee726b15746474a665e14a6e5e3770955a425dbf19bd3c937bb3f11",
+    "valid-integrity-adjudicated.json": "68d8b514607660068932928f32b430bf6300253c99bde3333f5908357603f30f",
 }
 
 
@@ -46,7 +46,7 @@ class EvaluationProvenanceSlice21Tests(unittest.TestCase):
     def test_conformance_manifest_passes_offline(self) -> None:
         result = run_manifest()
         self.assertTrue(result["valid"])
-        self.assertEqual(result["counts"], {"total": 24, "positive": 3, "negative": 21, "passed": 24, "failed": 0})
+        self.assertEqual(result["counts"], {"total": 28, "positive": 3, "negative": 25, "passed": 28, "failed": 0})
         self.assertEqual(result["network_attempts"], 0)
         self.assertTrue(all(result["invariants"].values()))
 
@@ -129,6 +129,42 @@ class EvaluationProvenanceSlice21Tests(unittest.TestCase):
         self.assertEqual(fixture_stage, "pass")
         self.assertTrue(fixture_result["valid"])
         self.assertEqual(source.read_bytes(), fixture.read_bytes())
+
+    def test_failure_class_is_attempt_level_and_separate_from_attribution(self) -> None:
+        examples = ROOT / "evalbraid" / "v0" / "examples"
+        expected = {
+            "valid-static-explained.json": ("output_length_exceeded", "agent"),
+            "valid-runtime-unresolved.json": ("verifier_result_not_observed", "unknown"),
+            "valid-integrity-adjudicated.json": ("answer_mismatch", "agent"),
+        }
+        for name, (failure_class, attribution) in expected.items():
+            with self.subTest(name=name):
+                record = json.loads((examples / name).read_text(encoding="utf-8"))
+                self.assertEqual(record["verifier_result"]["failure_class"], failure_class)
+                self.assertEqual(record["evaluation_judgment"]["causal_attribution"], attribution)
+
+    def test_passed_verifier_requires_and_accepts_null_failure_class(self) -> None:
+        source = ROOT / "evalbraid" / "v0" / "conformance" / "positive" / "valid-static-explained.json"
+        record = json.loads(source.read_text(encoding="utf-8"))
+        record["verifier_result"].update(
+            {
+                "execution_status": "passed",
+                "failure_class": None,
+                "exit_status": {"status": "observed", "code": 0},
+                "reward": {"status": "observed", "value": 1},
+                "first_failure_or_threshold": {
+                    "status": "not_applicable",
+                    "reason": "Verifier passed; no failure or threshold breach occurred.",
+                },
+            }
+        )
+        with tempfile.TemporaryDirectory(prefix="evalbraid-passed-") as directory:
+            candidate = Path(directory) / "passed.json"
+            candidate.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+            stage, exit_code, result = validate_path(candidate)
+        self.assertEqual(stage, "pass")
+        self.assertEqual(exit_code, 0)
+        self.assertTrue(result["valid"])
 
 
 if __name__ == "__main__":

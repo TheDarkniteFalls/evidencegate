@@ -128,6 +128,7 @@
   },
   "verifier_result": {
     "execution_status": "not_observed",
+    "failure_class": "verifier_result_not_observed",
     "exit_status": {
       "status": "not_observed",
       "reason": "No executed-verifier exit status was retained."

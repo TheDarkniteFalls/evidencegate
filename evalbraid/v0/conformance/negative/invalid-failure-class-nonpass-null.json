@@ -140,7 +140,7 @@
   },
   "verifier_result": {
     "execution_status": "failed",
-    "failure_class": "output_length_exceeded",
+    "failure_class": null,
     "exit_status": {
       "status": "observed",
       "code": 1
@@ -188,7 +188,7 @@
       "reward_connection": "not_demonstrated",
       "behavior_summary": "No behavior suggesting an integrity concern was observed in the synthetic trajectory."
     },
-    "evidence_independence": "independent",
+    "evidence_independence": "mixed",
     "proven_facts": [
       {
         "statement": "The handoff artifact digest matched the verifier-start artifact digest record.",

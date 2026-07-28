@@ -316,6 +316,12 @@
       "minLength": 1,
       "maxLength": 2000
     },
+    "failureClass": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
     "referenceId": {
       "type": "string",
       "pattern": "^ref-[a-z0-9][a-z0-9._-]{0,63}$"
@@ -1109,6 +1115,7 @@
       "additionalProperties": false,
       "required": [
         "execution_status",
+        "failure_class",
         "exit_status",
         "reward",
         "first_failure_or_threshold",
@@ -1125,6 +1132,13 @@
             "timeout",
             "cancelled",
             "not_observed"
+          ]
+        },
+        "failure_class": {
+          "description": "Attempt-level open-vocabulary machine code for a non-passing verifier outcome. It is separate from the human failure summary and from causal attribution.",
+          "type": [
+            "string",
+            "null"
           ]
         },
         "exit_status": {
@@ -1158,7 +1172,35 @@
         "evidence_references": {
           "$ref": "#/$defs/referenceList"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "execution_status": {
+                "const": "passed"
+              }
+            },
+            "required": [
+              "execution_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "failure_class": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "failure_class": {
+                "$ref": "#/$defs/failureClass"
+              }
+            }
+          }
+        }
+      ]
     },
     "evidencedStatement": {
       "type": "object",

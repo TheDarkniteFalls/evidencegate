@@ -229,6 +229,10 @@ authentication is not provided, independent review is requested but
 incomplete, production reliance is not recommended, and stable EvidenceGate v1
 is unchanged.
 
+Its verifier result keeps the closed execution outcome, an attempt-level open
+failure class, the human explanation, and causal attribution as separate
+fields rather than collapsing them into one reason string.
+
 ## Failure Semantics Research Slice
 
 [Missing Evidence Is Not Safety](docs/missing-evidence-is-not-safety.md) is a

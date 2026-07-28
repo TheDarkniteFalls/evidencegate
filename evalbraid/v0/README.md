@@ -32,13 +32,28 @@ interpret the stable EvidenceGate v1 Git-change receipt.
 - Draft 2020-12 JSON Schema:
   `schemas/evalbraid-evaluation-provenance-v0.schema.json`
 - three synthetic examples in `evalbraid/v0/examples/`;
-- three positive and twenty-one single-mutation negative core fixtures in
+- three positive and twenty-five single-mutation negative core fixtures in
   `evalbraid/v0/conformance/`;
 - four targeted adversarial fixtures under
   `evalbraid/v0/conformance/adversarial/`;
 - a Python structural and semantic validator;
 - a separately written first-party Node consumer; and
 - deterministic tests and a profile-specific reviewer gate.
+
+## Verifier outcome and reason boundary
+
+`verifier_result.execution_status` is the closed outcome vocabulary. The
+required `verifier_result.failure_class` is `null` when that status is
+`passed`; every other status requires a lowercase open-vocabulary machine code
+such as `output_length_exceeded` or `verifier_result_not_observed`.
+
+The machine code belongs to this one attempt. It is separate from the bounded
+human explanation in `first_failure_or_threshold` and from
+`evaluation_judgment.causal_attribution`, which records the assessed cause.
+Producers must not replace attempt records with batch counts, infer a missing
+class from prose or attribution, or resurrect a removed value during import or
+editing. A deliberate later change belongs in the explicit adjudication
+record.
 
 ## Try it
 

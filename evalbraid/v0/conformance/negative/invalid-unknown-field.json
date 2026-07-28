@@ -140,6 +140,7 @@
   },
   "verifier_result": {
     "execution_status": "failed",
+    "failure_class": "output_length_exceeded",
     "exit_status": {
       "status": "observed",
       "code": 1

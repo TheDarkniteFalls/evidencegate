@@ -8,17 +8,17 @@
     {
       "id": "invalid-multiple-semantic-findings",
       "record": "invalid-multiple-semantic-findings.json",
-      "record_sha256": "6387204e1bad15e7545108f8f7f4d6d26b0f7af87848822162ae9ec38f31da15",
+      "record_sha256": "9e09975e425ac2f1c1a085558dc4c27e3e7129daff120a2eec89a49395b37cff",
       "base": "../positive/valid-static-explained.json",
-      "base_sha256": "2e6a201cf362f1db6d766b9dbda9ec30dc8cbbe4c7a6ebde0297f29dc3f415e3",
+      "base_sha256": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
       "mutation": "append ref-missing-trajectory at trajectory evidence index 1 and move observed verifier start before observed agent exit",
       "expected": "semantic_error",
       "expected_code": "profile_reference_unresolved",
       "expected_path": "/trajectory/evidence_references/1",
       "expected_projection": {
         "valid": false,
-        "record_sha256": "6387204e1bad15e7545108f8f7f4d6d26b0f7af87848822162ae9ec38f31da15",
-        "schema_sha256": "a84b01f2e9e4bc375bfc84e4a644e00dc26d7629fe0de66170df43aa928fe519",
+        "record_sha256": "9e09975e425ac2f1c1a085558dc4c27e3e7129daff120a2eec89a49395b37cff",
+        "schema_sha256": "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806",
         "findings": [
           {
             "code": "profile_reference_unresolved",
@@ -35,17 +35,17 @@
     {
       "id": "invalid-adjudication-noncanonical-index",
       "record": "invalid-adjudication-noncanonical-index.json",
-      "record_sha256": "a027dbe0512d23b7c140f79bbcb0cb90e39e1b434bf65b63a742c17b5e08e3c1",
+      "record_sha256": "ef9eb89732348930b6ce4463d220f1fba3967e029893eac8b48202ca4c11f469",
       "base": "../positive/valid-integrity-adjudicated.json",
-      "base_sha256": "746c8c89dbc13cce00cb5bdaf321a74efddca2fe4feca639d1dca6c3779f7d68",
+      "base_sha256": "68d8b514607660068932928f32b430bf6300253c99bde3333f5908357603f30f",
       "mutation": "replace retained field 0 with the otherwise resolving noncanonical array index 00",
       "expected": "semantic_error",
       "expected_code": "profile_adjudication_pointer_invalid",
       "expected_path": "/adjudication/retained_fields/0",
       "expected_projection": {
         "valid": false,
-        "record_sha256": "a027dbe0512d23b7c140f79bbcb0cb90e39e1b434bf65b63a742c17b5e08e3c1",
-        "schema_sha256": "a84b01f2e9e4bc375bfc84e4a644e00dc26d7629fe0de66170df43aa928fe519",
+        "record_sha256": "ef9eb89732348930b6ce4463d220f1fba3967e029893eac8b48202ca4c11f469",
+        "schema_sha256": "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806",
         "findings": [
           {
             "code": "profile_adjudication_pointer_invalid",
@@ -58,17 +58,17 @@
     {
       "id": "invalid-unpaired-surrogate",
       "record": "invalid-unpaired-surrogate.json",
-      "record_sha256": "42a89184204b2500a56d512163cc562f82e17c5f6157ceb9cfc4e90e253b6a22",
+      "record_sha256": "c791470abb8806edeb610501eefdc44c2a2beb431266906f4e2a0f740b9511e9",
       "base": "../positive/valid-static-explained.json",
-      "base_sha256": "2e6a201cf362f1db6d766b9dbda9ec30dc8cbbe4c7a6ebde0297f29dc3f415e3",
+      "base_sha256": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
       "mutation": "append one lone escaped high surrogate to a non-authoritative source description",
       "expected": "load_error",
       "expected_code": "profile_load_invalid_unicode",
       "expected_path": "",
       "expected_projection": {
         "valid": false,
-        "record_sha256": "42a89184204b2500a56d512163cc562f82e17c5f6157ceb9cfc4e90e253b6a22",
-        "schema_sha256": "a84b01f2e9e4bc375bfc84e4a644e00dc26d7629fe0de66170df43aa928fe519",
+        "record_sha256": "c791470abb8806edeb610501eefdc44c2a2beb431266906f4e2a0f740b9511e9",
+        "schema_sha256": "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806",
         "findings": [
           {
             "code": "profile_load_invalid_unicode",
@@ -81,15 +81,15 @@
     {
       "id": "valid-offset-equivalent-timestamps",
       "record": "valid-offset-equivalent-timestamps.json",
-      "record_sha256": "9f5bd7b284625a9a84b3d351eba914edfbd1e07d91b4527bbacafee7e2b138db",
+      "record_sha256": "5e15d36a705d02fbf87bb943ef8005b013aa94c2a2d0f996220ad8f5244ad3cf",
       "base": "../positive/valid-static-explained.json",
-      "base_sha256": "2e6a201cf362f1db6d766b9dbda9ec30dc8cbbe4c7a6ebde0297f29dc3f415e3",
+      "base_sha256": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
       "mutation": "represent ordered verifier timestamps with +12:00 and -05:00 offsets whose lexical order differs from chronological order",
       "expected": "pass",
       "expected_projection": {
         "valid": true,
-        "record_sha256": "9f5bd7b284625a9a84b3d351eba914edfbd1e07d91b4527bbacafee7e2b138db",
-        "schema_sha256": "a84b01f2e9e4bc375bfc84e4a644e00dc26d7629fe0de66170df43aa928fe519",
+        "record_sha256": "5e15d36a705d02fbf87bb943ef8005b013aa94c2a2d0f996220ad8f5244ad3cf",
+        "schema_sha256": "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806",
         "findings": [],
         "exit_class": 0
       }

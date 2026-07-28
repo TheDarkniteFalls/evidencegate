@@ -52,7 +52,7 @@ fields or authority to the stable receipt.
 
 ## Adjacent Experimental EvalBraid Profile
 
-The [EvalBraid Evaluation Provenance Profile v0](../evalbraid/v0/README.md) is a separate attempt-bounded schema and predicate. It does not add fields or authority to the stable Git-change receipt. Its current evidence is macOS author testing with first-party Python and Node agreement; Linux portability and independent review remain unestablished.
+The [EvalBraid Evaluation Provenance Profile v0](../evalbraid/v0/README.md) is a separate attempt-bounded schema and predicate. Its verifier result keeps execution status, open failure class, human explanation, and causal attribution distinct. It does not add fields or authority to the stable Git-change receipt. Its current evidence is macOS author testing with first-party Python and Node agreement; Linux portability and independent review remain unestablished.
 
 ## Not Yet Implemented
 
