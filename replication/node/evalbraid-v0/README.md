@@ -14,9 +14,10 @@ the Python validator, execute record content, fetch evidence, or authenticate a
 record.
 
 Structural validation includes the attempt-level `failure_class` invariant:
-`passed` requires `null`, while every non-passing execution status requires a
-lowercase open-vocabulary machine code. The field is not causal attribution
-and is not inferred from the human failure summary.
+`passed` requires `null` and a `not_applicable` first-failure status, while
+every non-passing execution status requires a lowercase open-vocabulary
+machine code. The field is not causal attribution and is not inferred from the
+human failure summary.
 
 Dependencies are locked to Ajv 8.20.0 and ajv-formats 3.0.1. Environment
 preparation is separate from validation:

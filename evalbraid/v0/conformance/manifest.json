@@ -5,7 +5,7 @@
   "redistribution": "public_candidate_pending_owner_authorization",
   "schema": {
     "path": "../../../schemas/evalbraid-evaluation-provenance-v0.schema.json",
-    "sha256": "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806"
+    "sha256": "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78"
   },
   "source_examples": [
     {
@@ -121,6 +121,16 @@
       "expected": "schema_error",
       "expected_code": "profile_schema_invalid",
       "expected_path": "/verifier_result/failure_class"
+    },
+    {
+      "id": "passed-observed-failure",
+      "record": "negative/invalid-passed-observed-failure.json",
+      "record_sha256": "0fb7751a63d121ca0b69a4104d7be7a79da119547fbc47d1bc5d93e08738212c",
+      "base": "positive/valid-static-explained.json",
+      "mutation": "declare the attempt passed with its required null failure class while retaining an observed failure",
+      "expected": "schema_error",
+      "expected_code": "profile_schema_invalid",
+      "expected_path": "/verifier_result/first_failure_or_threshold/status"
     },
     {
       "id": "missing-layer",

@@ -24,11 +24,12 @@ terminology.
    stable EvidenceGate v1?
 2. Do the semantic finding codes and JSON Pointer paths match the documented
    rules?
-3. Is `failure_class` null only for a passed verifier and a valid open machine
-   code for every non-passing status?
+3. Does a passed verifier require both a null `failure_class` and a
+   `not_applicable` first-failure status, with a valid open machine code for
+   every non-passing status?
 4. Does every failure class remain attempt-level and distinct from the human
    summary and causal attribution?
-5. Do Python and Node produce the same canonical result for all 32 fixtures?
+5. Do Python and Node produce the same canonical result for all 33 fixtures?
 6. Can any malformed, ambiguous, or incomplete record pass unexpectedly?
 7. Do the examples or terminology create privacy, integrity, fairness,
    attribution, or branding concerns?
@@ -66,7 +67,7 @@ After installing the locked dependencies:
 ```
 
 The gate checks the profile manifest, Python core corpus, Python regression
-and adversarial tests, Node core and adversarial corpus, Node tests, all 32
+and adversarial tests, Node core and adversarial corpus, Node tests, all 33
 cross-consumer projections, selected byte-identical outputs, zero validation
 network attempts, and input immutability.
 

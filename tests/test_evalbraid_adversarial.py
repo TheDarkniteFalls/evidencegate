@@ -19,7 +19,7 @@ from evalbraid_contract import validate_path  # noqa: E402
 
 
 OVERLAY = ROOT / "evalbraid" / "v0" / "conformance" / "adversarial" / "manifest.json"
-SCHEMA_SHA256 = "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806"
+SCHEMA_SHA256 = "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78"
 
 
 def sha256(path: Path) -> str:

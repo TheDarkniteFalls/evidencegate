@@ -14,6 +14,7 @@ import { validateRecord } from "./validate-record.mjs";
 const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(MODULE_DIR, "../../..");
 const POSITIVE = path.join(ROOT, "evalbraid", "v0", "conformance", "positive", "valid-static-explained.json");
+const PASSED_WITH_OBSERVED_FAILURE = path.join(ROOT, "evalbraid", "v0", "conformance", "negative", "invalid-passed-observed-failure.json");
 const MULTI = path.join(ROOT, "evalbraid", "v0", "conformance", "adversarial", "invalid-multiple-semantic-findings.json");
 
 function expectStrictCode(text, code) {
@@ -36,7 +37,7 @@ function testConformanceAndDeterminism() {
   assert.deepEqual(probes, { uuid: true, date_time: true, uri: true });
   const result = runConformance();
   assert.equal(result.valid, true);
-  assert.deepEqual(result.counts.core, { total: 28, positive: 3, negative: 25, passed: 28 });
+  assert.deepEqual(result.counts.core, { total: 29, positive: 3, negative: 26, passed: 29 });
   assert.deepEqual(result.counts.overlay, { total: 4, passed: 4 });
   assert.equal(result.network_attempts, 0);
   for (const fixture of [POSITIVE, MULTI]) {
@@ -109,6 +110,12 @@ function testFailureClassBoundary() {
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
+  const invalid = validateRecord(PASSED_WITH_OBSERVED_FAILURE);
+  assert.equal(invalid.stage, "schema_error");
+  assert.equal(invalid.exitCode, 1);
+  assert.equal(invalid.result.findings.some((item) =>
+    item.code === "profile_schema_invalid"
+      && item.path === "/verifier_result/first_failure_or_threshold/status"), true);
 }
 
 function testCapabilitySurface() {
@@ -130,7 +137,7 @@ function main() {
   testLegacyProfileAliasRejected();
   testFailureClassBoundary();
   testCapabilitySurface();
-  process.stdout.write("PASS node consumer tests: strict loading, 32 cases, determinism, metamorphism, capability surface\n");
+  process.stdout.write("PASS node consumer tests: strict loading, 33 cases, determinism, metamorphism, capability surface\n");
 }
 
 try {

@@ -9,7 +9,7 @@ import { sha256Bytes, strictParse } from "./strict-json.mjs";
 export const EXPECTED_NODE_VERSION = "24.14.0";
 export const EXPECTED_AJV_VERSION = "8.20.0";
 export const EXPECTED_AJV_FORMATS_VERSION = "3.0.1";
-export const EXPECTED_SCHEMA_SHA256 = "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806";
+export const EXPECTED_SCHEMA_SHA256 = "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78";
 
 const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const CANDIDATE_ROOT = path.resolve(MODULE_DIR, "../../..");

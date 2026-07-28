@@ -25,7 +25,8 @@ identity is not authenticated by this profile.
 - inconsistent verifier digests, lifecycle links, time order, adjudication
   triggers, retained or revised pointers, or proven-fact evidence;
 - omitted or malformed attempt-level failure classes, including non-null
-  classes on passing outcomes and null classes on non-passing outcomes;
+  classes on passing outcomes and null classes on non-passing outcomes, and
+  passing outcomes that retain an observed failure or threshold breach;
 - self-checks mislabelled as independent;
 - redistribution claims stronger than the referenced sources permit;
 - non-deterministic or cross-consumer result drift; and

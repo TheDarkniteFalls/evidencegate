@@ -23,7 +23,7 @@ from evalbraid_contract import (  # noqa: E402
 )
 
 
-EXPECTED_SCHEMA_SHA256 = "5cb28a06a3c012c5c7faa762b1d5e0a7512c13fef2528ff4d66df94329814806"
+EXPECTED_SCHEMA_SHA256 = "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78"
 EXPECTED_SOURCE_HASHES = {
     "valid-static-explained.json": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
     "valid-runtime-unresolved.json": "ff7f95e8fee726b15746474a665e14a6e5e3770955a425dbf19bd3c937bb3f11",
@@ -46,7 +46,7 @@ class EvaluationProvenanceSlice21Tests(unittest.TestCase):
     def test_conformance_manifest_passes_offline(self) -> None:
         result = run_manifest()
         self.assertTrue(result["valid"])
-        self.assertEqual(result["counts"], {"total": 28, "positive": 3, "negative": 25, "passed": 28, "failed": 0})
+        self.assertEqual(result["counts"], {"total": 29, "positive": 3, "negative": 26, "passed": 29, "failed": 0})
         self.assertEqual(result["network_attempts"], 0)
         self.assertTrue(all(result["invariants"].values()))
 
@@ -165,6 +165,26 @@ class EvaluationProvenanceSlice21Tests(unittest.TestCase):
         self.assertEqual(stage, "pass")
         self.assertEqual(exit_code, 0)
         self.assertTrue(result["valid"])
+
+    def test_passed_verifier_rejects_observed_failure(self) -> None:
+        fixture = (
+            ROOT
+            / "evalbraid"
+            / "v0"
+            / "conformance"
+            / "negative"
+            / "invalid-passed-observed-failure.json"
+        )
+        stage, exit_code, result = validate_path(fixture)
+        self.assertEqual(stage, "schema_error")
+        self.assertEqual(exit_code, 1)
+        self.assertIn(
+            {
+                "code": "profile_schema_invalid",
+                "path": "/verifier_result/first_failure_or_threshold/status",
+            },
+            [{"code": item["code"], "path": item["path"]} for item in result["findings"]],
+        )
 
 
 if __name__ == "__main__":

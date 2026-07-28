@@ -1189,6 +1189,17 @@
             "properties": {
               "failure_class": {
                 "type": "null"
+              },
+              "first_failure_or_threshold": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "const": "not_applicable"
+                  }
+                },
+                "required": [
+                  "status"
+                ]
               }
             }
           },

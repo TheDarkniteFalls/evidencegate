@@ -196,7 +196,7 @@ def main(argv: list[str] | None = None) -> int:
 
             python_core = run([str(python), "-B", str(PYTHON_CONFORMANCE), "--json"], env)
             python_json = python_core.get("json", {})
-            python_ok = python_core["passed"] and python_json.get("valid") is True and python_json.get("counts") == {"total": 28, "positive": 3, "negative": 25, "passed": 28, "failed": 0} and python_json.get("network_attempts") == 0
+            python_ok = python_core["passed"] and python_json.get("valid") is True and python_json.get("counts") == {"total": 29, "positive": 3, "negative": 26, "passed": 29, "failed": 0} and python_json.get("network_attempts") == 0
             gates["python_core"] = {**public_view(python_core), "valid": python_ok}
             if not python_ok:
                 findings.append({"code": "experimental_gate_python_core_failed", "path": "/gates/python_core", "message": "Python core conformance failed"})
@@ -208,7 +208,7 @@ def main(argv: list[str] | None = None) -> int:
 
             node_core = run([str(node), str(NODE_CONFORMANCE), "--json"], env)  # type: ignore[arg-type]
             node_json = node_core.get("json", {})
-            node_ok = node_core["passed"] and node_json.get("valid") is True and node_json.get("counts", {}).get("core") == {"total": 28, "positive": 3, "negative": 25, "passed": 28} and node_json.get("counts", {}).get("overlay") == {"total": 4, "passed": 4} and node_json.get("network_attempts") == 0
+            node_ok = node_core["passed"] and node_json.get("valid") is True and node_json.get("counts", {}).get("core") == {"total": 29, "positive": 3, "negative": 26, "passed": 29} and node_json.get("counts", {}).get("overlay") == {"total": 4, "passed": 4} and node_json.get("network_attempts") == 0
             gates["node_core_and_adversarial"] = {**public_view(node_core), "valid": node_ok}
             if not node_ok:
                 findings.append({"code": "experimental_gate_node_conformance_failed", "path": "/gates/node_core_and_adversarial", "message": "Node conformance failed"})
@@ -231,7 +231,7 @@ def main(argv: list[str] | None = None) -> int:
                 node_case = node_cases.get(case["id"])
                 if node_case is None or node_case.get("projection") != expected:
                     core_mismatches.append(case["id"])
-            cross_consumer["core"] = {"total": 28, "matched": 28 - len(core_mismatches), "mismatches": core_mismatches}
+            cross_consumer["core"] = {"total": 29, "matched": 29 - len(core_mismatches), "mismatches": core_mismatches}
             if core_mismatches:
                 findings.append({"code": "experimental_gate_cross_consumer_mismatch", "path": "/cross_consumer/core", "message": "core projection mismatch: " + ", ".join(core_mismatches)})
 
