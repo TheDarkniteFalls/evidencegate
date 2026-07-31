@@ -39,41 +39,6 @@ If you are connecting EvidenceGate to another tool, you can ask `validate` and
 integration can then use dependable finding codes instead of trying to parse
 English error text.
 
-## An Unusually Complete Proof Package
-
-One command runs every proof the maintainers can complete without inventing an
-external result. It requires Python 3.10+ and Node 24+, runs no model or network
-call, and is read-only unless `--report` is supplied:
-
-```sh
-python3 -B tools/check_remarkable_candidate.py
-```
-
-On a clean revision it checks both schemas, all Python tests, the Python and
-Node conformance consumers, the end-to-end Git lifecycle, failure semantics,
-the attestation attack corpus, and the reviewer-study machinery. Supply
-`--report path.json` to write an environment-, revision-, command-, and
-output-digest-bound evidence summary.
-
-The package adds four explicit proof surfaces:
-
-- a [separately written Node consumer](replication/node/README.md) that reaches
-  the same public corpus outcomes without importing the Python implementation;
-- an [unsigned in-toto attestation profile](attestation/v0/README.md) that
-  checks receipt-byte, revision, subject-policy, issuer-policy, and expiry
-  relationships while visibly reporting `UNAUTHENTICATED`;
-- a [blinded reviewer-study kit](study/v0/README.md) with twelve sound and
-  adverse cases, complementary arms, response preparation, and descriptive
-  scoring; and
-- an exact [claim matrix](docs/marketing-claims.md) separating candidate
-  engineering from authenticated use, measured reviewer effects, and
-  independent replication.
-
-Together, these make EvidenceGate a **remarkable candidate** after the
-aggregate gate passes on the cited clean revision. They do not support saying
-that a bare receipt is authenticated, that reviewer uplift has been measured,
-or that the project has independent endorsement.
-
 ## Quick Start
 
 Version 0.1.0 is distributed as an unsigned source tag and GitHub release, not
@@ -109,6 +74,51 @@ then proves that three known-bad variants fail. It uses no model or network and
 deletes the temporary files afterward. Human and public-safety decisions are
 prominently labelled as simulated; the passing demo does not authenticate
 them.
+
+## Is This The Right Evidence Surface?
+
+Use EvidenceGate when a reviewer needs a small final-state record that binds
+the accepted claims, checks, changed paths, human review, and public-safety
+review to one Git revision.
+
+Choose another tool first when the primary need is a complete agent-session
+history, live model-call tracing, or authenticated supply-chain identities.
+EvidenceGate can complement those systems, but it does not replace them.
+
+## An Unusually Complete Proof Package
+
+One command runs every proof the maintainers can complete without inventing an
+external result. It requires Python 3.10+ and Node 24+, runs no model or network
+call, and is read-only unless `--report` is supplied:
+
+```sh
+python3 -B tools/check_remarkable_candidate.py
+```
+
+On a clean revision it checks both schemas, all Python tests, the Python and
+Node conformance consumers, the end-to-end Git lifecycle, failure semantics,
+the attestation attack corpus, and the reviewer-study machinery. Supply
+`--report path.json` to write an environment-, revision-, command-, and
+output-digest-bound evidence summary.
+
+The package adds four explicit proof surfaces:
+
+- a [separately written Node consumer](replication/node/README.md) that reaches
+  the same public corpus outcomes without importing the Python implementation;
+- an [unsigned in-toto attestation profile](attestation/v0/README.md) that
+  checks receipt-byte, revision, subject-policy, issuer-policy, and expiry
+  relationships while visibly reporting `UNAUTHENTICATED`;
+- a [blinded reviewer-study kit](study/v0/README.md) with twelve sound and
+  adverse cases, complementary arms, response preparation, and descriptive
+  scoring; and
+- an exact [claim matrix](docs/marketing-claims.md) separating candidate
+  engineering from authenticated use, measured reviewer effects, and
+  independent replication.
+
+Together, these make EvidenceGate a **remarkable candidate** after the
+aggregate gate passes on the cited clean revision. They do not support saying
+that a bare receipt is authenticated, that reviewer uplift has been measured,
+or that the project has independent endorsement.
 
 ## Validate And Render A Static Receipt
 
