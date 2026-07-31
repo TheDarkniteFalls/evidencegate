@@ -1,8 +1,12 @@
-# Why AI-Assisted Work Should Leave a Receipt
+# Why AI-Assisted Code Review Should Leave a Receipt
 
 AI-assisted work is easier to review when the final result includes a compact
 record of what changed, what was checked, what remains uncertain, and who
 accepted it.
+
+That is the role of AI-assisted code-review evidence: help a reviewer inspect
+the accepted final state without requiring them to reconstruct it from a full
+agent session.
 
 This guide is for maintainers, solo builders, and coding-agent users who need a
 review record that is smaller and more useful than a complete chat transcript.
@@ -21,6 +25,21 @@ the final state:
 
 A receipt does not replace the transcript when the reasoning matters. It gives
 the reviewer a final, deliberately small record to verify.
+
+## Choose The Right Evidence Surface
+
+Different records answer different review questions:
+
+| Primary question | Start with |
+| --- | --- |
+| What did the agent say and do over the whole session? | A session recorder |
+| What happened during live model calls, tool calls, or evaluations? | Runtime tracing or observability |
+| Were signed supply-chain steps performed by authorized identities? | A supply-chain attestation framework |
+| Does the final review record match this Git diff and exact head revision? | An EvidenceGate receipt |
+
+These surfaces can be used together. EvidenceGate deliberately covers only
+the last question; it does not collect a full session, observe a running model,
+or authenticate an identity.
 
 ## Good Versus Incomplete
 

@@ -1,0 +1,54 @@
+name: Stable v1 reproduction report
+description: Report a public-safe run of the stable synthetic reference lifecycle
+title: "[stable v1 reproduction] "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for checking the stable EvidenceGate v1 reference lifecycle. The demo uses a temporary synthetic Git repository; you do not need to share any project code, receipt, prompt, or private data.
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system and Python version used for the run.
+      placeholder: "Ubuntu 24.04, Python 3.12.4"
+    validations:
+      required: true
+
+  - type: textarea
+    id: command_and_result
+    attributes:
+      label: Command and result
+      description: Run `python3 -B examples/run-v1-reference.py` from the v0.1.0 source and report whether the expected PASS lines appeared.
+      placeholder: "The command exited 0 and all seven expected PASS lines appeared."
+    validations:
+      required: true
+
+  - type: textarea
+    id: friction
+    attributes:
+      label: First-use friction
+      description: What, if anything, was confusing, missing, or unexpectedly difficult?
+      placeholder: "No friction, or a concise public-safe description of the problem."
+    validations:
+      required: true
+
+  - type: textarea
+    id: trust_boundary
+    attributes:
+      label: Trust-boundary clarity
+      description: Was it clear what the passing demo establishes and what it does not establish?
+      placeholder: "Yes, or identify the wording that remained unclear."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: public_safety
+    attributes:
+      label: Public-safety confirmation
+      options:
+        - label: I have not included private repository content, prompts, credentials, personal data, or unpublished material in this report.
+          required: true
