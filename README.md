@@ -75,6 +75,14 @@ deletes the temporary files afterward. Human and public-safety decisions are
 prominently labelled as simulated; the passing demo does not authenticate
 them.
 
+Reproduced the stable reference? Add a public-safe result to [issue
+#14](https://github.com/TheDarkniteFalls/evidencegate/issues/14) or use the
+[stable-v1 reproduction
+form](https://github.com/TheDarkniteFalls/evidencegate/issues/new?template=stable-v1-reproduction.yml).
+Success and failure reports are both useful; share only your environment,
+outcome, first-use friction, and trust-boundary feedback—never private project
+data.
+
 ## Is This The Right Evidence Surface?
 
 Use EvidenceGate when a reviewer needs a small final-state record that binds
