@@ -1,0 +1,341 @@
+{
+  "profile": "evalbraid_evaluation_provenance_v0",
+  "identity": {
+    "attempt_uuid": "00000000-0000-4000-8000-000000000002",
+    "task": {
+      "id": "synthetic-runtime-service",
+      "version": {
+        "status": "observed",
+        "value": "synthetic-1.0"
+      }
+    },
+    "task_image_digest": {
+      "status": "observed",
+      "value": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "agent_version": {
+      "status": "observed",
+      "value": "example-agent-1.0"
+    },
+    "harness_version": {
+      "status": "observed",
+      "value": "example-harness-1.0"
+    },
+    "verifier_digest": {
+      "status": "observed",
+      "value": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+    }
+  },
+  "trajectory": {
+    "trajectory_status": "complete",
+    "archive_status": "available",
+    "actual_exit_reason": {
+      "status": "observed",
+      "value": "finished"
+    },
+    "summary": "The synthetic agent started a service and observed one successful health check before exit.",
+    "self_checks": [
+      {
+        "check_id": "service-health",
+        "result": "passed",
+        "independence": "self_authored",
+        "repetition_group": "service-health-v1",
+        "summary": "The agent-authored health request succeeded before agent exit.",
+        "evidence_references": [
+          "ref-runtime-trajectory"
+        ]
+      }
+    ],
+    "evidence_references": [
+      "ref-runtime-trajectory"
+    ]
+  },
+  "agent_handoff": {
+    "agent_exit_time": {
+      "status": "observed",
+      "value": "2026-01-02T00:00:00Z"
+    },
+    "relevant_artifacts": [],
+    "relevant_processes": [
+      {
+        "process_id": "service-process",
+        "identifier": {
+          "status": "observed",
+          "value": "synthetic-pid-4242"
+        },
+        "liveness_at_exit": "alive",
+        "evidence_references": [
+          "ref-runtime-handoff"
+        ]
+      }
+    ],
+    "expected_lifecycle_transformation": {
+      "status": "unknown",
+      "description": "The available harness record does not state whether agent-started processes should survive teardown."
+    },
+    "evidence_references": [
+      "ref-runtime-handoff"
+    ]
+  },
+  "verifier_definition": {
+    "definition_status": "exact",
+    "verifier_digest": {
+      "status": "observed",
+      "value": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+    },
+    "policy_visibility": "visible",
+    "policy_references": [
+      "ref-runtime-policy"
+    ],
+    "summary": "The exact synthetic verifier definition connects to the service after handoff and checks a health response.",
+    "evidence_references": [
+      "ref-runtime-definition"
+    ]
+  },
+  "verifier_start": {
+    "timestamp": {
+      "status": "not_observed",
+      "reason": "No verifier-start timestamp was retained."
+    },
+    "namespace_or_container": {
+      "status": "not_observed",
+      "reason": "The verifier namespace or container was not recorded."
+    },
+    "liveness_observations": [
+      {
+        "subject_kind": "process",
+        "subject_id": "service-process",
+        "status": "not_observed",
+        "evidence_references": [
+          "ref-runtime-execution-absence"
+        ]
+      }
+    ],
+    "dependency_setup_result": {
+      "status": "not_observed",
+      "detail": "No setup log or dependency result was retained.",
+      "evidence_references": [
+        "ref-runtime-execution-absence"
+      ]
+    },
+    "evaluator_entry_point": {
+      "status": "not_observed",
+      "reason": "The definition names an evaluator, but the exact executed entry point was not recorded."
+    },
+    "evidence_references": [
+      "ref-runtime-execution-absence"
+    ]
+  },
+  "verifier_result": {
+    "execution_status": "not_observed",
+    "failure_class": "verifier_result_not_observed",
+    "exit_status": {
+      "status": "not_observed",
+      "reason": "No executed-verifier exit status was retained."
+    },
+    "reward": {
+      "status": "observed",
+      "value": 0
+    },
+    "first_failure_or_threshold": {
+      "status": "not_observed",
+      "reason": "No first failure or measured health result was retained."
+    },
+    "output_digests": {
+      "stdout": {
+        "status": "not_observed",
+        "reason": "No verifier stdout was retained."
+      },
+      "stderr": {
+        "status": "not_observed",
+        "reason": "No verifier stderr was retained."
+      }
+    },
+    "safe_excerpt": {
+      "status": "omitted",
+      "reason": "not_available",
+      "detail": "There is no executed-verifier output from which to produce a safe excerpt."
+    },
+    "evidence_references": [
+      "ref-runtime-execution-absence"
+    ]
+  },
+  "evaluation_judgment": {
+    "assessment_status": "unresolved",
+    "reward_alignment": "possible_mismatch",
+    "confidence": "medium",
+    "claim_severity": "medium",
+    "integrity_signal": "none_observed",
+    "integrity_basis": {
+      "policy_visibility": "visible",
+      "policy_references": [
+        "ref-runtime-policy"
+      ],
+      "reward_connection": "not_demonstrated",
+      "behavior_summary": "No behavior suggesting an integrity concern was observed in the synthetic trajectory."
+    },
+    "evidence_independence": "mixed",
+    "proven_facts": [
+      {
+        "statement": "The service process was observed alive and the agent-authored health request succeeded before agent exit.",
+        "evidence_references": [
+          "ref-runtime-trajectory",
+          "ref-runtime-handoff"
+        ]
+      },
+      {
+        "statement": "The exact verifier definition requires a post-handoff service health response, while the recorded reward is 0.",
+        "evidence_references": [
+          "ref-runtime-definition",
+          "ref-runtime-execution-absence"
+        ]
+      }
+    ],
+    "interpretations": [
+      {
+        "statement": "The missing verifier-start liveness, namespace, setup, and result evidence prevents locating the transition between the successful pre-exit state and reward 0.",
+        "basis_references": [
+          "ref-runtime-handoff",
+          "ref-runtime-definition",
+          "ref-runtime-execution-absence"
+        ]
+      }
+    ],
+    "unknowns": [
+      "Whether the service survived agent teardown.",
+      "Whether the verifier ran in the same namespace with working dependencies.",
+      "Whether the exact evaluator entry point ran and what it observed."
+    ],
+    "minimum_missing_evidence": "A verifier-start timestamp, namespace, service-process liveness result, dependency status, exact entry point, exit status, and bounded result record.",
+    "evidence_references": [
+      "ref-runtime-trajectory",
+      "ref-runtime-definition",
+      "ref-runtime-handoff",
+      "ref-runtime-execution-absence",
+      "ref-runtime-policy"
+    ],
+    "causal_attribution": "unknown"
+  },
+  "adjudication": {
+    "triggered": true,
+    "triggers": [
+      "possible_mismatch"
+    ],
+    "status": "resolved",
+    "adjudicator_role": {
+      "status": "observed",
+      "value": "evaluation-review-lead"
+    },
+    "timestamp": {
+      "status": "observed",
+      "value": "2026-01-02T01:00:00Z"
+    },
+    "retained_fields": [
+      "/evaluation_judgment/assessment_status",
+      "/evaluation_judgment/reward_alignment",
+      "/evaluation_judgment/causal_attribution",
+      "/evaluation_judgment/confidence"
+    ],
+    "revised_fields": [],
+    "evidence_references": [
+      "ref-runtime-adjudication"
+    ]
+  },
+  "data_handling": {
+    "classification": "synthetic",
+    "contains_personal_data": false,
+    "contains_secrets": false,
+    "contains_raw_trajectory": false,
+    "contains_task_assets": false,
+    "redactions": [],
+    "safe_excerpt_policy": "no_excerpt",
+    "redistribution_status": "cleared",
+    "redistribution_notes": "This record is synthetic and cleared within the example for public conformance use."
+  },
+  "source_references": [
+    {
+      "reference_id": "ref-runtime-trajectory",
+      "layer": "trajectory_agent_self_check",
+      "availability": "available",
+      "uri": "https://records.example.invalid/runtime/trajectory-summary",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:1212121212121212121212121212121212121212121212121212121212121212"
+      },
+      "description": "Synthetic bounded trajectory and pre-exit self-check summary.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-runtime-definition",
+      "layer": "verifier_definition",
+      "availability": "available",
+      "uri": "https://records.example.invalid/runtime/verifier-definition",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+      },
+      "description": "Synthetic exact runtime verifier definition.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-runtime-execution-absence",
+      "layer": "executed_verifier",
+      "availability": "not_observed",
+      "uri": "https://records.example.invalid/runtime/execution-absence",
+      "digest": {
+        "status": "not_observed",
+        "reason": "No executed-verifier record was retained."
+      },
+      "description": "Synthetic explicit absence record for verifier-start and result evidence.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-runtime-handoff",
+      "layer": "handoff_lifecycle",
+      "availability": "available",
+      "uri": "https://records.example.invalid/runtime/handoff-receipt",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:3434343434343434343434343434343434343434343434343434343434343434"
+      },
+      "description": "Synthetic pre-exit process-liveness record.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-runtime-policy",
+      "layer": "policy",
+      "availability": "available",
+      "uri": "https://records.example.invalid/runtime/policy",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:5656565656565656565656565656565656565656565656565656565656565656"
+      },
+      "description": "Synthetic visible evaluation policy.",
+      "redistribution": "cleared"
+    },
+    {
+      "reference_id": "ref-runtime-adjudication",
+      "layer": "adjudication",
+      "availability": "available",
+      "uri": "https://records.example.invalid/runtime/adjudication",
+      "digest": {
+        "status": "observed",
+        "value": "sha256:7878787878787878787878787878787878787878787878787878787878787878"
+      },
+      "description": "Synthetic human adjudication retaining the unresolved assessment.",
+      "redistribution": "cleared"
+    }
+  ],
+  "operational_metadata": {
+    "created_at": "2026-01-02T01:05:00Z",
+    "producer": "EvalBraid Evaluation Provenance Profile v0 synthetic example generator",
+    "workflow_id": "synthetic-runtime-example",
+    "review_duration_seconds": 120,
+    "synthetic_record": true,
+    "labels": [
+      "runtime-lifecycle",
+      "unresolved"
+    ],
+    "notes": "All identifiers, events, values, and references are synthetic."
+  }
+}
