@@ -1,35 +1,24 @@
 # EvidenceGate
 
-<!-- toolkit-trust-card:start -->
-> **Public contract:** Flagship tool · about 5 min · Python 3 · no model · no network
->
-> **Operation:** Read-only check; examples may use temporary files
->
-> **A pass establishes:** Declared claims, checks, changed paths, review, and public-safety fields are tied to the exact Git revision supplied to the verifier.
->
-> **It does not establish:** It does not authenticate a reviewer, prove semantic correctness, or approve publication.
->
-> **First check:** `python3 -B examples/run-v1-reference.py`
-<!-- toolkit-trust-card:end -->
+Check whether a review record matches the Git change it describes.
 
-AI-assisted work should leave a receipt.
+After an AI-assisted change, you still need to know what changed, which checks
+ran, and what needs a person’s judgement. EvidenceGate checks a small JSON
+record—a receipt—against one exact Git revision. It can catch an old revision,
+an omitted file, or a claim that points to a missing check.
 
-EvidenceGate is a hardened reference implementation for revision-bound
-receipts from human-reviewed agent work. It began with a practical question:
-when an AI helps change a repository, what should a person be able to inspect
-before trusting the result?
-
-A receipt records what changed, what was checked, what remains risky, and who
-reviewed it. The v1 format binds that record to one Git revision and links
-bounded claims to named checks.
+The receipt records the checks and reviews you supply. EvidenceGate compares
+that record with the repository; it does not authenticate the record or decide
+whether the change is correct. Start with the synthetic reference run below to
+see both a matching receipt and deliberate mismatches.
 
 The CLI uses only the Python standard library. It does not run the commands in
 a receipt or make publication decisions. The supported runtime is Python 3.10
 or newer.
 
-The stable Git-change receipt contract is published as a
-[JSON Schema](schemas/agent-run-receipt-v1.schema.json), relational validator,
-and portable [v1 conformance corpus](conformance/v1/README.md). The
+The stable v1 format is published as a
+[JSON Schema](schemas/agent-run-receipt-v1.schema.json), a validator that checks
+relationships between fields, and a portable [v1 test corpus](conformance/v1/README.md). The
 [architecture boundary](docs/architecture.md) distinguishes that stable
 contract from adjacent audit research.
 
@@ -68,7 +57,7 @@ PASS protected_path_rejected
 PASS v1_reference_run
 ```
 
-The reference run creates real base and head commits, runs a focused check,
+The reference run creates real starting and final Git commits, runs a focused check,
 writes a detached receipt outside the synthetic repository, verifies it, and
 then proves that three known-bad variants fail. It uses no model or network and
 deletes the temporary files afterward. Human and public-safety decisions are
@@ -83,20 +72,35 @@ Success and failure reports are both useful; share only your environment,
 outcome, first-use friction, and trust-boundary feedback—never private project
 data.
 
+<!-- toolkit-trust-card:placement -->
+
+<!-- toolkit-trust-card:start -->
+> **Public contract:** Flagship tool · about 5 min · Python 3 · no model · no network
+>
+> **Operation:** Read-only check; examples may use temporary files
+>
+> **A pass establishes:** Declared claims, checks, changed paths, review, and public-safety fields are tied to the exact Git revision supplied to the verifier.
+>
+> **It does not establish:** It does not authenticate a reviewer, prove semantic correctness, or approve publication.
+>
+> **First check:** `python3 -B examples/run-v1-reference.py`
+<!-- toolkit-trust-card:end -->
+
 ## Is This The Right Evidence Surface?
 
-Use EvidenceGate when a reviewer needs a small final-state record that binds
-the accepted claims, checks, changed paths, human review, and public-safety
-review to one Git revision.
+Use EvidenceGate when you need to hand a reviewer a compact record of the
+final change: the claims, checks, files, human review, and public-safety review
+for one Git revision.
 
 Choose another tool first when the primary need is a complete agent-session
 history, live model-call tracing, or authenticated supply-chain identities.
 EvidenceGate can complement those systems, but it does not replace them.
 
-## An Unusually Complete Proof Package
+<a id="an-unusually-complete-proof-package"></a>
 
-One command runs every proof the maintainers can complete without inventing an
-external result. It requires Python 3.10+ and Node 24+, runs no model or network
+## Run the wider checks
+
+This command runs the project’s combined local validation checks. It requires Python 3.10+ and Node 24+, runs no model or network
 call, and is read-only unless `--report` is supplied:
 
 ```sh
@@ -109,7 +113,7 @@ the attestation attack corpus, and the reviewer-study machinery. Supply
 `--report path.json` to write an environment-, revision-, command-, and
 output-digest-bound evidence summary.
 
-The package adds four explicit proof surfaces:
+You can also inspect the individual parts:
 
 - a [separately written Node consumer](replication/node/README.md) that reaches
   the same public corpus outcomes without importing the Python implementation;
@@ -123,10 +127,11 @@ The package adds four explicit proof surfaces:
   engineering from authenticated use, measured reviewer effects, and
   independent replication.
 
-Together, these make EvidenceGate a **remarkable candidate** after the
-aggregate gate passes on the cited clean revision. They do not support saying
-that a bare receipt is authenticated, that reviewer uplift has been measured,
-or that the project has independent endorsement.
+The project’s claim matrix calls this a **remarkable candidate** only after
+the aggregate gate passes on the cited clean revision. A passing run covers
+those engineering checks. It does not establish that a bare receipt is
+authenticated, that reviewer performance has improved, or that the project has
+independent endorsement.
 
 ## Validate And Render A Static Receipt
 
@@ -287,7 +292,9 @@ Existing legacy examples include:
 - [incomplete-agent-run.json](examples/incomplete-agent-run.json), an expected
   validation failure covered by the self-test
 
-## What Repository Verification Establishes
+<a id="what-repository-verification-establishes"></a>
+
+## What a passing verification tells you
 
 For the supplied receipt and local checkout, a pass establishes that:
 
@@ -303,7 +310,9 @@ For the supplied receipt and local checkout, a pass establishes that:
   receipt head; and
 - human review is recorded as approved and public-safety review as completed.
 
-## What It Does Not Establish
+<a id="what-it-does-not-establish"></a>
+
+## What you still need to review
 
 EvidenceGate does not:
 
@@ -315,8 +324,8 @@ EvidenceGate does not:
 - scan repository history for secrets or private material; or
 - approve, publish, push, merge, release, or authorize any external action.
 
-The verifier catches deterministic mismatches. A human still compares the
-receipt with command output, the complete diff, the actual result, and the
+The verifier catches mismatches it can check by rule. You still need to compare
+the receipt with command output, the complete diff, the actual result, and the
 remaining risk. Use the [review checklist](docs/review-checklist.md) for that
 decision.
 
@@ -342,12 +351,11 @@ This is a receipt validator and local consistency checker, not an attestation
 system, policy engine, sandbox, hosted platform, or autonomous approval system.
 All checked-in examples are synthetic.
 
-The [remarkable roadmap](docs/remarkable-roadmap.md) separates the complete
-maintainer-controlled candidate from real-use evidence that cannot be created
-honestly in a source repository. The [release checklist](docs/release-checklist.md)
+The [project roadmap](docs/remarkable-roadmap.md) separates checks the
+maintainers can run from evidence that requires real use. The [release checklist](docs/release-checklist.md)
 turns the local and publication gates into an explicit operator checkpoint.
-Authenticated records, measured reviewer effects, and independent replication
-remain explicitly unearned until their named evidence exists.
+Claims about authenticated records, measured reviewer effects, and independent
+replication still need the evidence named in that roadmap.
 
 ## Quality Checks
 

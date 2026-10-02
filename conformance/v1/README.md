@@ -1,7 +1,8 @@
 # EvidenceGate V1 Conformance Corpus
 
-This directory is the portable behavior contract for EvidenceGate Git-change
-receipts. Each case is synthetic. `manifest.json` declares whether a consumer
+Use these fixtures to check whether an implementation handles EvidenceGate
+Git-change receipts as specified. This is the conformance corpus: a portable
+set of inputs and expected outcomes. Each case is synthetic. `manifest.json` declares whether a consumer
 must accept the receipt, reject it during JSON loading, or reject it during v1
 validation. Negative cases also name the stable finding code that a
 machine-facing EvidenceGate result must expose, so integrations have a clear

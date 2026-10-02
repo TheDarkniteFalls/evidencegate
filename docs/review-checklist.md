@@ -1,8 +1,9 @@
 # Agent Run Receipt Review Checklist
 
-Use this checklist before trusting or publishing an AI-assisted change.
-EvidenceGate can expose deterministic mismatches; it cannot make the review
-decision for you.
+Use this checklist with the final diff, command output, and receipt in front
+of you. EvidenceGate checks whether their recorded revisions and paths agree.
+You decide whether the checks are enough and whether to accept the change.
+Publishing remains a separate decision.
 
 ## Revision And Scope
 
