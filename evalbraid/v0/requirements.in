@@ -1,0 +1,4 @@
+# Experimental profile macOS validation input.
+# `format-nongpl` is the upstream-supported extra used to enable the schema's
+# uuid, date-time, and uri format checks without the GPL-side URI dependency.
+jsonschema[format-nongpl]==4.26.0

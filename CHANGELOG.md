@@ -3,6 +3,12 @@
 All notable changes to the EvidenceGate receipt contract and reference
 implementation will be documented here.
 
+## Unreleased
+
+### Experimental
+
+- Add the isolated EvalBraid Evaluation Provenance Profile v0 with a schema, semantic validator, synthetic conformance corpus, and first-party Python and Node consumers. Author testing is macOS-only; Linux portability and independent review are not established, authentication is not provided, and stable EvidenceGate v1 is unchanged.
+
 ## 0.1.0 - 2026-07-24
 
 [Release notes](docs/v0.1.0-release-notes.md)

@@ -1,0 +1,98 @@
+{
+  "manifest_version": "evalbraid_evaluation_provenance_reviewability_overlay_v0",
+  "profile": "evalbraid_evaluation_provenance_v0",
+  "result_contract": "evalbraid_evaluation_provenance_result_v0",
+  "schema_sha256": "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78",
+  "redistribution": "public_candidate_pending_owner_authorization",
+  "cases": [
+    {
+      "id": "invalid-multiple-semantic-findings",
+      "record": "invalid-multiple-semantic-findings.json",
+      "record_sha256": "9e09975e425ac2f1c1a085558dc4c27e3e7129daff120a2eec89a49395b37cff",
+      "base": "../positive/valid-static-explained.json",
+      "base_sha256": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
+      "mutation": "append ref-missing-trajectory at trajectory evidence index 1 and move observed verifier start before observed agent exit",
+      "expected": "semantic_error",
+      "expected_code": "profile_reference_unresolved",
+      "expected_path": "/trajectory/evidence_references/1",
+      "expected_projection": {
+        "valid": false,
+        "record_sha256": "9e09975e425ac2f1c1a085558dc4c27e3e7129daff120a2eec89a49395b37cff",
+        "schema_sha256": "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78",
+        "findings": [
+          {
+            "code": "profile_reference_unresolved",
+            "path": "/trajectory/evidence_references/1"
+          },
+          {
+            "code": "profile_time_order_invalid",
+            "path": "/verifier_start/timestamp/value"
+          }
+        ],
+        "exit_class": 1
+      }
+    },
+    {
+      "id": "invalid-adjudication-noncanonical-index",
+      "record": "invalid-adjudication-noncanonical-index.json",
+      "record_sha256": "ef9eb89732348930b6ce4463d220f1fba3967e029893eac8b48202ca4c11f469",
+      "base": "../positive/valid-integrity-adjudicated.json",
+      "base_sha256": "68d8b514607660068932928f32b430bf6300253c99bde3333f5908357603f30f",
+      "mutation": "replace retained field 0 with the otherwise resolving noncanonical array index 00",
+      "expected": "semantic_error",
+      "expected_code": "profile_adjudication_pointer_invalid",
+      "expected_path": "/adjudication/retained_fields/0",
+      "expected_projection": {
+        "valid": false,
+        "record_sha256": "ef9eb89732348930b6ce4463d220f1fba3967e029893eac8b48202ca4c11f469",
+        "schema_sha256": "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78",
+        "findings": [
+          {
+            "code": "profile_adjudication_pointer_invalid",
+            "path": "/adjudication/retained_fields/0"
+          }
+        ],
+        "exit_class": 1
+      }
+    },
+    {
+      "id": "invalid-unpaired-surrogate",
+      "record": "invalid-unpaired-surrogate.json",
+      "record_sha256": "c791470abb8806edeb610501eefdc44c2a2beb431266906f4e2a0f740b9511e9",
+      "base": "../positive/valid-static-explained.json",
+      "base_sha256": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
+      "mutation": "append one lone escaped high surrogate to a non-authoritative source description",
+      "expected": "load_error",
+      "expected_code": "profile_load_invalid_unicode",
+      "expected_path": "",
+      "expected_projection": {
+        "valid": false,
+        "record_sha256": "c791470abb8806edeb610501eefdc44c2a2beb431266906f4e2a0f740b9511e9",
+        "schema_sha256": "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78",
+        "findings": [
+          {
+            "code": "profile_load_invalid_unicode",
+            "path": ""
+          }
+        ],
+        "exit_class": 2
+      }
+    },
+    {
+      "id": "valid-offset-equivalent-timestamps",
+      "record": "valid-offset-equivalent-timestamps.json",
+      "record_sha256": "5e15d36a705d02fbf87bb943ef8005b013aa94c2a2d0f996220ad8f5244ad3cf",
+      "base": "../positive/valid-static-explained.json",
+      "base_sha256": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
+      "mutation": "represent ordered verifier timestamps with +12:00 and -05:00 offsets whose lexical order differs from chronological order",
+      "expected": "pass",
+      "expected_projection": {
+        "valid": true,
+        "record_sha256": "5e15d36a705d02fbf87bb943ef8005b013aa94c2a2d0f996220ad8f5244ad3cf",
+        "schema_sha256": "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78",
+        "findings": [],
+        "exit_class": 0
+      }
+    }
+  ]
+}

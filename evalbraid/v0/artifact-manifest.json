@@ -1,0 +1,437 @@
+{
+  "contract": "evalbraid_evaluation_provenance_profile_manifest_v0",
+  "profile": "evalbraid_evaluation_provenance_v0",
+  "status": "experimental_author_tested_macos_linux_untested_review_requested",
+  "scope": "isolated experimental EvalBraid profile; stable EvidenceGate v1 unchanged",
+  "file_count": 61,
+  "file_set_sha256": "35cc5dcbe498218aa8fad167aecc8750d0b186d274e2d7c9cb2b3fde91927b4c",
+  "files": [
+    {
+      "path": "evalbraid/v0/AI_ASSISTANCE.md",
+      "sha256": "dc0411dfcc563a0681159953dc906aeae5a517696ea17141d4c252dd77dd97dd",
+      "size_bytes": 805,
+      "role": "profile_documentation",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/ATTRIBUTION.md",
+      "sha256": "1309ef4bd32ce9b7f574e05850cfb5f09735dcd2279ea04f00b2db3cb07dae92",
+      "size_bytes": 3708,
+      "role": "profile_documentation",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/README.md",
+      "sha256": "5debaf72ad2ac2b4f1fa66051bc5126022712da22feb307bfd7813f91705cbdc",
+      "size_bytes": 4323,
+      "role": "profile_documentation",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/REVIEWING.md",
+      "sha256": "6c8e0068ca6ae8afd8347c83868ede627ebd89e6fdef0aef5bc1a254e9f4fa65",
+      "size_bytes": 3675,
+      "role": "profile_documentation",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/THREAT_MODEL.md",
+      "sha256": "2935d1be0ef0d7548d4c746d266898b1a61af0bc1b8e1e80ff1e08f3d80d7519",
+      "size_bytes": 2311,
+      "role": "profile_documentation",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/adversarial/invalid-adjudication-noncanonical-index.json",
+      "sha256": "ef9eb89732348930b6ce4463d220f1fba3967e029893eac8b48202ca4c11f469",
+      "size_bytes": 11153,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/adversarial/invalid-multiple-semantic-findings.json",
+      "sha256": "9e09975e425ac2f1c1a085558dc4c27e3e7129daff120a2eec89a49395b37cff",
+      "size_bytes": 10668,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/adversarial/invalid-unpaired-surrogate.json",
+      "sha256": "c791470abb8806edeb610501eefdc44c2a2beb431266906f4e2a0f740b9511e9",
+      "size_bytes": 10643,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/adversarial/manifest.json",
+      "sha256": "da3252edaafd84e865c8b5c349d9896ac79d51f5606ed28f0efc643491119a8a",
+      "size_bytes": 4459,
+      "role": "conformance_manifest",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/adversarial/valid-offset-equivalent-timestamps.json",
+      "sha256": "5e15d36a705d02fbf87bb943ef8005b013aa94c2a2d0f996220ad8f5244ad3cf",
+      "size_bytes": 10646,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/manifest.json",
+      "sha256": "6ec68843c60171acf98978a7af8e1e2bdd88d3bb6a8663080e975074e85bcfc7",
+      "size_bytes": 15069,
+      "role": "conformance_manifest",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-adjudication-missing.json",
+      "sha256": "b552468f56b45facd3070f20c5803d433eb365cec86cba15973dcbc436aef6ed",
+      "size_bytes": 10495,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-adjudication-pointer.json",
+      "sha256": "26f1f461086105560b03fea28f9c6710c8f26f6aa9d65a61ec4f321ca517cf9f",
+      "size_bytes": 11127,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-adjudication-trigger-set.json",
+      "sha256": "925fe8317f44b8ccc9314f4153d87f0ee840aad9fa34be125fbbb947e2598d87",
+      "size_bytes": 11152,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-duplicate-field.json",
+      "sha256": "051f431f3f3f97a5d15b74e4fcc8abb21c9216aa094786b8789633fe541eacbb",
+      "size_bytes": 10687,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-duplicate-reference-id.json",
+      "sha256": "c07badc924044713c785bc94d0326542419e4ef2955045d963ba6d2be717d4b0",
+      "size_bytes": 11123,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-failure-class-format.json",
+      "sha256": "e6f5f3a1d335ede2f2a8f60425e57e5b309ea63ea71cbf35d06f348661154f83",
+      "size_bytes": 10636,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-failure-class-missing.json",
+      "sha256": "2e6a201cf362f1db6d766b9dbda9ec30dc8cbbe4c7a6ebde0297f29dc3f415e3",
+      "size_bytes": 10589,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-failure-class-nonpass-null.json",
+      "sha256": "78d4df822155d5ce94452e66d8818dfdac2bad061d7133aefa541586a2ec4c73",
+      "size_bytes": 10616,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-failure-class-passed-nonnull.json",
+      "sha256": "070a7c88ade06bdc4c5ad562273878ae3baef231488daf680b2325f6cb1b4824",
+      "size_bytes": 10636,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-format.json",
+      "sha256": "f8b30d3b235144f771f2520e790c9f3af81f5cc0862ec6bf7ee986951b3a781a",
+      "size_bytes": 10610,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-handoff-link-mismatch.json",
+      "sha256": "709092bf5e3a552e0dd9d2163bcba58b0acd6d3d4b8dd9b253703fc79b7a5aba",
+      "size_bytes": 10642,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-judgment-self-check-independence.json",
+      "sha256": "c34ec0c190ffbfb9b636cb590dcd7997d3c36bef5024fdd4d53c2bcdd1378e7c",
+      "size_bytes": 10642,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-missing-layer.json",
+      "sha256": "a623714b8904072bb38d38887fbff6a2753f3c8e2eaf311d2a612a16fb06e733",
+      "size_bytes": 10631,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-orphaned-reference.json",
+      "sha256": "11c789d3d65b0e810e6dad3d484e05c6cab74913462dec6c29f64dd332d220c1",
+      "size_bytes": 11057,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-passed-observed-failure.json",
+      "sha256": "0fb7751a63d121ca0b69a4104d7be7a79da119547fbc47d1bc5d93e08738212c",
+      "size_bytes": 10616,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-proven-fact-evidence.json",
+      "sha256": "1b77ef1abf03f173d5a9f6c3fe259da56dad841352e19b3cfb016a2d64c2c1d3",
+      "size_bytes": 11097,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-redistribution-downgrade.json",
+      "sha256": "809bf0d631ae03919d4aea04f9f381df41ff5304a0e16702e8768ea32cbef63f",
+      "size_bytes": 10666,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-reference-layer.json",
+      "sha256": "1261fa703f2e25587e45b981f20dac61712fa88547b11bfaa5dbad18fe47e706",
+      "size_bytes": 10632,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-revision-value.json",
+      "sha256": "c00739b79de71df066547414cf9c4cfd6e121affe43fa5dd52ac0fe5e851d7fd",
+      "size_bytes": 11338,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-self-check-independence.json",
+      "sha256": "b90701aa5ba60558e8c0e4ebe14bb1f4847e61678f23045dd6aff39ef62b956e",
+      "size_bytes": 10634,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-shortcut-basis.json",
+      "sha256": "9477750b5aa9bcbbcdacbcb39c5276293987a01fad76bb1695e9a9d87575586d",
+      "size_bytes": 11152,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-source-availability.json",
+      "sha256": "d66e6a02c8c099733b3444b1e9ab35fde4860b866270caaf90e9f3cf42f45190",
+      "size_bytes": 11120,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-time-order.json",
+      "sha256": "40d5231b652e95e1316638d2af16e77952f48c4781868411ed219d5bfb8db3ad",
+      "size_bytes": 10636,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-unknown-field.json",
+      "sha256": "d51b677fdbc5bbd8f57017d3d48b276ec956cf3461dd0be9110b2a1677de9284",
+      "size_bytes": 10663,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-unresolved-reference.json",
+      "sha256": "adf7ff177cf171fde036fc84fb5387522232b5cff09913c3ef44611d1ba506ad",
+      "size_bytes": 10633,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/negative/invalid-verifier-digest-mismatch.json",
+      "sha256": "d4a0b13de672e15a8f94349b17b779a47416fe5306f85a046d078f844b52f688",
+      "size_bytes": 10636,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/positive/valid-integrity-adjudicated.json",
+      "sha256": "68d8b514607660068932928f32b430bf6300253c99bde3333f5908357603f30f",
+      "size_bytes": 11144,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/positive/valid-runtime-unresolved.json",
+      "sha256": "ff7f95e8fee726b15746474a665e14a6e5e3770955a425dbf19bd3c937bb3f11",
+      "size_bytes": 11123,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/conformance/positive/valid-static-explained.json",
+      "sha256": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
+      "size_bytes": 10636,
+      "role": "conformance_fixture",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/examples/valid-integrity-adjudicated.json",
+      "sha256": "68d8b514607660068932928f32b430bf6300253c99bde3333f5908357603f30f",
+      "size_bytes": 11144,
+      "role": "synthetic_example",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/examples/valid-runtime-unresolved.json",
+      "sha256": "ff7f95e8fee726b15746474a665e14a6e5e3770955a425dbf19bd3c937bb3f11",
+      "size_bytes": 11123,
+      "role": "synthetic_example",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/examples/valid-static-explained.json",
+      "sha256": "0026208c6a4a7ec7ab638f8708d15eb16d3596bf8ebf7fc09cdbbf3871d9c741",
+      "size_bytes": 10636,
+      "role": "synthetic_example",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/requirements.in",
+      "sha256": "602412a4fb715dd06ebda6ab26950c24de517431a002f1739da3266c2cec7883",
+      "size_bytes": 237,
+      "role": "dependency_lock_or_input",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "evalbraid/v0/requirements.macos.lock",
+      "sha256": "1599e2c2cebc27814a302249697e03223cbe84d2e47dfb710c11793fd0612e5e",
+      "size_bytes": 14253,
+      "role": "dependency_lock_or_input",
+      "license_treatment": "MIT project metadata; third-party dependency licenses retained separately"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/README.md",
+      "sha256": "08cc908f7779b3fd1eb2deccb5c735c1e4fdd32ad449c09fbd15891856cd5670",
+      "size_bytes": 1672,
+      "role": "node_consumer",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/check-conformance.mjs",
+      "sha256": "37d528e0317bbac3113c236616f237eacd5a3b0a18993d295e0ad68ad7487286",
+      "size_bytes": 6671,
+      "role": "node_consumer",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/deny-network.mjs",
+      "sha256": "17dc231c5aabe66c5ecec0d04bca62dcc8ce98208eeefee591e8feeba7312b37",
+      "size_bytes": 511,
+      "role": "node_consumer",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/package-lock.json",
+      "sha256": "0fbb967a4954bf295e4f5cafc06b3e6f93ba271b67354b228f8ec4b0b66aa811",
+      "size_bytes": 3004,
+      "role": "node_consumer",
+      "license_treatment": "MIT project metadata; third-party dependency licenses retained separately"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/package.json",
+      "sha256": "cccf1d07390fc8b00bd0e6c9db02270ccd1b5461e7967d024be9a86d24e00c4e",
+      "size_bytes": 359,
+      "role": "node_consumer",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/schema-validator.mjs",
+      "sha256": "0c346b698f643d3a7676cdb0c88cd3e3b4118209043dc8a19ba376f8c08dbafd",
+      "size_bytes": 4513,
+      "role": "node_consumer",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/semantic-validator.mjs",
+      "sha256": "76d7f0081661d8382390e05edfa12984842da63b7279c0ecb105778c985f3c19",
+      "size_bytes": 14476,
+      "role": "node_consumer",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/strict-json.mjs",
+      "sha256": "a05008b75151cba15318a3a6158f3a84561b3cbfdbad7bcc8588e463118ed7bb",
+      "size_bytes": 5702,
+      "role": "node_consumer",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/test-consumer.mjs",
+      "sha256": "4d32d3bd09c8a9e20d5d57add1829478d21bd33a6e6ee9f3d3a282093469d177",
+      "size_bytes": 6680,
+      "role": "node_consumer",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "replication/node/evalbraid-v0/validate-record.mjs",
+      "sha256": "c61e809b2f83f2e3be75241270e3ad290c55dca09b29fef15be58a6864ad2c9b",
+      "size_bytes": 3699,
+      "role": "node_consumer",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "schemas/evalbraid-evaluation-provenance-v0.schema.json",
+      "sha256": "a73118a8e44980a4f0c1cac7b57ec49db581c796cbeb6c3ca108281bc4daef78",
+      "size_bytes": 46824,
+      "role": "json_schema",
+      "license_treatment": "MIT via repository LICENSE and profile attribution map"
+    },
+    {
+      "path": "tests/test_evalbraid.py",
+      "sha256": "743abf9377998da3102c9651b18e7abcdf818d61f91b19623cf37dbdaea6d9ab",
+      "size_bytes": 8105,
+      "role": "regression_test",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "tests/test_evalbraid_adversarial.py",
+      "sha256": "96077c50e1ca4e7e9b5b9a398abee615495a2633b7fa0967f8ec353f84ff03de",
+      "size_bytes": 3982,
+      "role": "regression_test",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "tools/check_evalbraid_conformance.py",
+      "sha256": "46c7b3d6478e842b5397e5e8167799b05fdbde72fadd0cc18228fd8631f33575",
+      "size_bytes": 8574,
+      "role": "validator_or_gate",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "tools/check_evalbraid_experimental.py",
+      "sha256": "349e2297d0a08d77a7a1174654a22abe66ac90c3ad831734b7c159d666437cbf",
+      "size_bytes": 16424,
+      "role": "validator_or_gate",
+      "license_treatment": "MIT; inline SPDX required"
+    },
+    {
+      "path": "tools/evalbraid_contract.py",
+      "sha256": "21b7d87625aff9ef8fa4d9e9f2d1a26087100add1ded10786aa9f45e077947b7",
+      "size_bytes": 23942,
+      "role": "validator_or_gate",
+      "license_treatment": "MIT; inline SPDX required"
+    }
+  ]
+}

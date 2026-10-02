@@ -24,7 +24,7 @@ dependencies = []
 
 [project.optional-dependencies]
 test = [
-  "jsonschema==4.26.0"
+  "jsonschema[format-nongpl]==4.26.0"
 ]
 
 [project.urls]
