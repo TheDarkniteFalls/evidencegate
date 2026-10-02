@@ -1,7 +1,9 @@
 # EvidenceGate CLI Integration Contract
 
-EvidenceGate v0.1 exposes one stable JSON result shape for `validate` and
-`verify`. Integrations should branch on `ok`, exit status, and finding `code`.
+If you are calling EvidenceGate from another tool, request JSON output with
+the commands below. EvidenceGate v0.1 uses one stable result shape for
+`validate` and `verify`. Use `ok`, exit status, and finding `code` to decide
+what your integration does next.
 Human-readable finding messages may become clearer without a contract change.
 
 ## JSON Results
@@ -100,9 +102,8 @@ This copyable job checks receipt structure and internal evidence references; it
 does not compare the receipt with repository state. A `verify --repo` CI job
 must instead receive a detached receipt from an earlier trusted step, check out
 its exact head revision with full history, and preserve the receipt outside the
-checkout so it does not create a self-reference problem. That producer is
-workflow-specific, so EvidenceGate does not pretend one generic recipe can
-create it safely.
+checkout so it does not create a self-reference problem. How you produce and review that detached receipt depends on your workflow;
+this recipe does not create it.
 
 Neither form reruns arbitrary commands recorded inside a receipt, authenticates
 a reviewer, or authorizes a merge or publication.

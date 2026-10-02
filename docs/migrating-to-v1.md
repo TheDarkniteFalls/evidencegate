@@ -4,6 +4,10 @@ Legacy receipts remain valid for structural checks. They are labelled legacy
 and cannot use `verify --repo` because they do not identify a revision or link
 claims to evidence.
 
+Use v1 when you want to compare the receipt with a specific Git change. Keep
+the recorded commands and results, then add the revision and evidence fields
+below. A commit SHA is the full identifier of a Git revision.
+
 To migrate one:
 
 1. Add `"schema_version": 1`.
@@ -44,6 +48,6 @@ Then compare it with the reviewed checkout:
 python3 evidencegate.py verify path/to/receipt.json --repo /path/to/repository
 ```
 
-Migration strengthens deterministic consistency checks. It does not turn the
-receipt into proof that recorded commands ran or that supplied evidence and
-review identities are authentic.
+After migration, the verifier can catch disagreements between the receipt and
+the checkout. You still need to check that recorded commands actually ran and
+that the supplied evidence and reviewer identities are authentic.

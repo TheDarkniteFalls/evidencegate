@@ -1,7 +1,8 @@
 # EvidenceGate Attestation Profile V0
 
-This experimental profile places an EvidenceGate predicate in an in-toto
-Statement. It binds the raw SHA-256 digest of one v1 receipt to the receipt's
+This experimental profile lets you package a receipt in an in-toto Statement,
+a standard structure for describing an artifact. The EvidenceGate predicate
+is the part that records the receipt’s details. It binds the raw SHA-256 digest of one v1 receipt to the receipt's
 base and head revisions, one expected Git repository subject, one expected
 issuer claim, and a validity window of at most 24 hours.
 
@@ -11,7 +12,8 @@ Production use must wrap the statement with an established Sigstore, DSSE, or
 platform attestation mechanism and apply verifier policy to the envelope before
 trusting the claimed issuer.
 
-Run the attack corpus:
+Start by running the synthetic cases that check valid and deliberately invalid
+statements:
 
 ```sh
 python3 -B tools/check_attestation_conformance.py

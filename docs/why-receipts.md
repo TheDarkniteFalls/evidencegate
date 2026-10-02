@@ -1,15 +1,12 @@
 # Why AI-Assisted Code Review Should Leave a Receipt
 
-AI-assisted work is easier to review when the final result includes a compact
-record of what changed, what was checked, what remains uncertain, and who
-accepted it.
+A reviewer needs to know which files changed, which checks apply to the final
+revision, and what still needs judgement. A receipt puts that information in
+one place so you can compare it with the diff and actual command output.
 
-That is the role of AI-assisted code-review evidence: help a reviewer inspect
-the accepted final state without requiring them to reconstruct it from a full
-agent session.
-
-This guide is for maintainers, solo builders, and coding-agent users who need a
-review record that is smaller and more useful than a complete chat transcript.
+Use this guide if you maintain a repository, build on your own, or work with a
+coding agent. Start with the two synthetic examples below, then use the v1
+template for a record you can compare with Git state.
 
 ## Chat History Is Not A Review Record
 
@@ -119,8 +116,8 @@ that, for the supplied receipt and local checkout:
 - required checks are recorded as passing; and
 - human and public-safety review are recorded against the same head.
 
-That is a useful deterministic consistency gate. It makes stale evidence,
-unsupported claims, path drift, and missing review state visible.
+These checks expose evidence from an older revision, claims without supporting
+checks, changed files outside the recorded scope, and missing review state.
 
 ## What It Does Not Prove
 
@@ -139,9 +136,8 @@ A valid receipt does not prove that:
 A polished but dishonest receipt can still pass a structural validator. The
 v1 verifier catches more mismatches, but a coordinated or fabricated receipt
 can still mislead it. The human reviewer must compare the receipt with the
-complete diff, actual command output, and observed result. EvidenceGate makes
-accountability easier to inspect; it does not automate accountability away or
-authorize publication.
+complete diff, actual command output, and observed result. You remain responsible for the review and for any separate decision to
+publish.
 
 ## When To Use It
 
